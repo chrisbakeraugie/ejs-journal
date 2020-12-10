@@ -1,0 +1,24 @@
+{
+  "name": "ejs-journal",
+  "version": "1.0.0",
+  "description": "A multipage journal app using EJS, Express.js, MongoDB, Mongoose, and Node",
+  "main": "journal.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "journal",
+    "ejs",
+    "mongodb.js",
+    "mongoose.js",
+    "node.js",
+    "express.js"
+  ],
+  "author": "Chris Baker",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.11.6"
+  }
+}
