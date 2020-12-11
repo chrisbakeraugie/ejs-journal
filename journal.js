@@ -8,7 +8,14 @@ const express = require('express'); // Initialize our express app
 const app = express(); 
 const port = 3005; // Basic port setup. Updated later
 const routes = require('./routes/index'); // Moving routes away from our main (journal.js) file
+const expressLayout = require('express-ejs-layouts');
 
+/**
+ * These adjustments to the app prepare the app for use
+ * with an EJS layout. 
+ */
+app.set('view engine', 'ejs');
+app.use(expressLayout);
 /**
  * This route will match with everything.
  * Because it will match with everything, it will
