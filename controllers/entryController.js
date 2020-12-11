@@ -21,11 +21,13 @@ module.exports = {
   },
 
   /**
-   * Uses .find() to find all entries and places them into the res.locals object
-   * Passes next()
+   * Uses .find() to find all entries, .sort() organizes by writtenDate in descending order,
+   * and places them into the res.locals object
+   * Passes next().
+   * 
    */
   getAllEntries: (req, res, next) => {
-    Entry.find({}).then(entries => {
+    Entry.find({}).sort({writtenDate: 'descending'}).then(entries => {
       res.locals.entries = entries;
       next();
     }).catch(err => {
