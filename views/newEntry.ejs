@@ -1,8 +1,8 @@
 <h3>Post a new entry</h3>
-<form>
+<form action="/new-entry" method="POST">
   <label for="title">Title</label>
-  <input id="title" type="text">
+  <input id="title" type="text" name="title" required>
   <label for="description">Description</label>
-  <input id="description" type="text">
-  <input type="submit">
+  <input id="description" type="text" name="description" required>
+ <button type="submit">Submit</button>
 </form>

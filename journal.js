@@ -16,6 +16,13 @@ const expressLayout = require('express-ejs-layouts');
  */
 app.set('view engine', 'ejs');
 app.use(expressLayout);
+
+/**
+ * Similar to body-parser, allows app to read the
+ * req.body values when using forms (and does other things)
+ */
+app.use(express.urlencoded({extended: true}));
+
 /**
  * This route will match with everything.
  * Because it will match with everything, it will
