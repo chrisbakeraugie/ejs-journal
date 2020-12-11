@@ -1,7 +1,11 @@
 <h1>All project entries</h1>
 
 <% entries.forEach(entry => { %>
-  <h4><%= entry.title %></h4>
-  <p><%= entry.writtenDate%></p>
-  <p><%= entry.description %></p>
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title"><%= entry.title %></h4>
+    <p class="card-subtitle mb-2 text-muted"><%= entry.writtenDate%></p>
+    <p class="card-text"><%= entry.description %></p>
+  </div>
+</div>
 <%}); %>
