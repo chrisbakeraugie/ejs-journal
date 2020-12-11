@@ -11,6 +11,10 @@ const routes = require('./routes/index'); // Moving routes away from our main (j
 const expressLayout = require('express-ejs-layouts');
 const mongoose = require('mongoose'); // Handles models/Schemas, connections to mongoDB
 
+/**
+ * Use mongoose to connect to mongoDB
+ * Change the connection string to use env variables in the future
+ */
 mongoose.connect('mongodb://localhost:27017/journal_db', {useNewUrlParser: true});
 const db = mongoose.connection;
 db.once('open', () => {
