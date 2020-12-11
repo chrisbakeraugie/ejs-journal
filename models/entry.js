@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const journalEntry = new mongoose.Schema({
+const entry = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -25,8 +25,8 @@ const journalEntry = new mongoose.Schema({
   //   required: true
   // }
 
-});
+}, {timestamps: true});
 
-const JournalEntry = mongoose.model('JournalEntry', journalEntry);
+const Entry = mongoose.model('entry', entry);
 
-module.exports = JournalEntry;
+module.exports = Entry;

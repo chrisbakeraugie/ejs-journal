@@ -9,6 +9,13 @@ const app = express();
 const port = 3005; // Basic port setup. Updated later
 const routes = require('./routes/index'); // Moving routes away from our main (journal.js) file
 const expressLayout = require('express-ejs-layouts');
+const mongoose = require('mongoose'); // Handles models/Schemas, connections to mongoDB
+
+mongoose.connect('mongodb://localhost:27017/journal_db', {useNewUrlParser: true});
+const db = mongoose.connection;
+db.once('open', () => {
+  console.log('\nConnection to mongoDB successful!\n');
+});
 
 /**
  * These adjustments to the app prepare the app for use

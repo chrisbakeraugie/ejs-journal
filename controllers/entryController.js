@@ -1,3 +1,4 @@
+const Entry = require('../models/entry');
 module.exports = {
 
   /**
@@ -8,10 +9,14 @@ module.exports = {
   },
 
   /**
-   * Receives posted form, submits to database, loads entryHome
+   * Receives posted form, 'creates' to database, loads entryHome
    */
   entryPost: (req, res, next) => {
-    console.log(req.body);
+    Entry.create({
+      title: req.body.title,
+      description: req.body.description,
+      writtenDate: new Date(),
+    }).catch(error => console.log('entryController.entryPost error ' + error.message));
     next();
   }
 };
