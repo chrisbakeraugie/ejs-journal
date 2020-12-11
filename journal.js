@@ -7,7 +7,7 @@
 const express = require('express'); // Initialize our express app
 const app = express(); 
 const port = 3005; // Basic port setup. Updated later
-const routes = require('./routes/index');
+const routes = require('./routes/index'); // Moving routes away from our main (journal.js) file
 
 /**
  * This route will match with everything.
@@ -17,6 +17,10 @@ const routes = require('./routes/index');
  */
 app.use('/', routes);
 
+/**
+ * Uses an integer value (port) and a callback
+ * to start your server.
+ */
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
