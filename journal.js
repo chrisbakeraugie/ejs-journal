@@ -35,6 +35,14 @@ app.use(expressLayout);
 app.use(express.urlencoded({extended: true}));
 
 /**
+ * This route will render the homepage, and any other routes will match with
+ * the app.use('/') below, including errors.
+ */
+app.get('/', (req, res) => {
+  res.send('The homepage');
+});
+
+/**
  * This route will match with everything.
  * Because it will match with everything, it will
  * use the mainRoutes file, where we can separate are routes even further.
