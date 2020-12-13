@@ -51,7 +51,7 @@ module.exports = {
 
   /**
    * Checks whether a project title exists, and if it does, will not create a new one.
-   * Done create is in callback to manage async behavior
+   * The .create is in callback to manage async behavior
    */
   createProject: (req, res, next) => {
     Project.exists({ title: req.body.title }, function (err, doesExist) {
