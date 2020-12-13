@@ -27,6 +27,6 @@ const entry = new mongoose.Schema({
 
 }, {timestamps: true});
 
-const Entry = mongoose.model('entry', entry);
+const Entry = mongoose.model('Entry', entry);
 
 module.exports = Entry;

@@ -1,4 +1,5 @@
 const Entry = require('../models/entry');
+const Project = require('../models/project');
 module.exports = {
 
   /**
@@ -27,7 +28,7 @@ module.exports = {
    * 
    */
   getAllEntries: (req, res, next) => {
-    Entry.find({}).sort({writtenDate: 'descending'}).then(entries => {
+    Entry.find({}).sort({ writtenDate: 'descending' }).then(entries => {
       res.locals.entries = entries;
       next();
     }).catch(err => {
@@ -42,5 +43,33 @@ module.exports = {
    */
   showAllEntries: (req, res) => {
     res.render('project/project');
+  },
+
+  newProject: (req, res) => {
+    res.render('project/newProject');
+  },
+
+  /**
+   * Checks whether a project title exists, and if it does, will not create a new one.
+   * Done create is in callback to manage async behavior
+   */
+  createProject: (req, res, next) => {
+    Project.exists({ title: req.body.title }, function (err, doesExist) {
+      if (err) {
+        console.log('projectExists ' + err);
+        return;
+      } else {
+        if (doesExist) {
+          console.log(`entryController.createProject: Project title "${req.body.title}" already in use.`);
+        } else {
+          Project.create({
+            title: req.body.title
+          }).catch(err => {
+            console.log('entryController.createProject Error: ' + err.message);
+          });
+        }
+      }
+    });
+    next();
   }
 };
