@@ -10,15 +10,19 @@ module.exports = {
   },
 
   /**
-   * Receives posted form, 'creates' to database, loads entryHome
+   * Receives posted form, 'creates' to database, links new entry to the project that it 
+   * was posted from, and calls the next middleware
    */
   entryPost: (req, res, next) => {
     Entry.create({
       title: req.body.title,
       description: req.body.description,
       writtenDate: new Date(),
-    }).catch(error => console.log('projectController.entryPost error ' + error.message));
-    next();
+    }).then(newEntry => {
+      Project.findByIdAndUpdate(req.params.id, {$push: {entries: newEntry._id}}).then(() => {
+        next();
+      }).catch(err => console.log('projectController.entryPost error ' + err.message));
+    }).catch(err => console.log('projectController.entryPost error ' + err.message));
   },
 
   /**
@@ -30,6 +34,7 @@ module.exports = {
   getAllEntries: (req, res, next) => {
 
     Project.findById(req.params.id).then(project => {
+      res.locals.project = project;
       Entry.find({
         '_id': { $in: project.entries }
       }).sort({ writtenDate: 'descending' }).then(entries => {

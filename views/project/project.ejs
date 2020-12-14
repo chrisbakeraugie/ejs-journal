@@ -1,4 +1,13 @@
-<h1>All project entries</h1>
+<h1><%= project.title %></h1>
+
+<h3>Post a new entry</h3>
+<form action="/projects/<%= project._id %>" method="POST">
+  <label for="title">Title</label>
+  <input id="title" type="text" name="title" required>
+  <label for="description">Description</label>
+  <input id="description" type="text" name="description" required>
+ <button type="submit">Submit</button>
+</form>
 
 <% entries.forEach(entry => { %>
 <div class="card">
