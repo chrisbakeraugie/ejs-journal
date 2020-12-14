@@ -17,7 +17,7 @@ module.exports = {
       title: req.body.title,
       description: req.body.description,
       writtenDate: new Date(),
-    }).catch(error => console.log('entryController.entryPost error ' + error.message));
+    }).catch(error => console.log('projectController.entryPost error ' + error.message));
     next();
   },
 
@@ -28,14 +28,32 @@ module.exports = {
    * 
    */
   getAllEntries: (req, res, next) => {
-    Entry.find({}).sort({ writtenDate: 'descending' }).then(entries => {
-      res.locals.entries = entries;
-      next();
-    }).catch(err => {
-      console.log('Error finding entries at entryController.showAllEntries ' + err.message);
-      next(err);
-    }
-    );
+    let projectEntries = [];
+
+    Project.findById(req.params.id).then(project => {
+      // if(project.entries.length < 1){
+      //   next();
+      // }
+      Entry.find({
+        '_id': { $in: project.entries }
+      }).sort({ writtenDate: 'descending' }).then(entries => {
+        res.locals.entries = entries;
+        next();
+      }).catch(err => {
+        console.log('Error finding entries at projectController.getAllEntries ' + err.message);
+        next(err);
+      }
+      );
+    }).catch(err => console.log('Error: projectController.getAllEntries error: ' + err.message));
+
+    // Entry.find({}).sort({ writtenDate: 'descending' }).then(entries => {
+    //   res.locals.entries = entries;
+    //   next();
+    // }).catch(err => {
+    //   console.log('Error finding entries at projectController.getAllEntries ' + err.message);
+    //   next(err);
+    // }
+    // );
   },
 
   /**
@@ -60,12 +78,12 @@ module.exports = {
         return;
       } else {
         if (doesExist) {
-          console.log(`entryController.createProject: Project title "${req.body.title}" already in use.`);
+          console.log(`projectController.createProject: Project title "${req.body.title}" already in use.`);
         } else {
           Project.create({
             title: req.body.title
           }).catch(err => {
-            console.log('entryController.createProject Error: ' + err.message);
+            console.log('projectController.createProject Error: ' + err.message);
           });
         }
       }
