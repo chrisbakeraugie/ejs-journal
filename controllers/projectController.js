@@ -22,18 +22,14 @@ module.exports = {
   },
 
   /**
-   * Uses .find() to find all entries, .sort() organizes by writtenDate in descending order,
-   * and places them into the res.locals object
-   * Passes next().
+   * Starts by finding the project by id (in the url params),
+   * finding entries associated to that project, and then uses the
+   * local.entries varablie to associate with ejs view
    * 
    */
   getAllEntries: (req, res, next) => {
-    let projectEntries = [];
 
     Project.findById(req.params.id).then(project => {
-      // if(project.entries.length < 1){
-      //   next();
-      // }
       Entry.find({
         '_id': { $in: project.entries }
       }).sort({ writtenDate: 'descending' }).then(entries => {
@@ -45,15 +41,6 @@ module.exports = {
       }
       );
     }).catch(err => console.log('Error: projectController.getAllEntries error: ' + err.message));
-
-    // Entry.find({}).sort({ writtenDate: 'descending' }).then(entries => {
-    //   res.locals.entries = entries;
-    //   next();
-    // }).catch(err => {
-    //   console.log('Error finding entries at projectController.getAllEntries ' + err.message);
-    //   next(err);
-    // }
-    // );
   },
 
   /**
