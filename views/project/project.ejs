@@ -15,6 +15,7 @@
     <h4 class="card-title"><%= entry.title %></h4>
     <p class="card-subtitle mb-2 text-muted"><%= entry.writtenDate%></p>
     <p class="card-text"><%= entry.description %></p>
+    <div><a href="/projects/<%= project._id%>/<%= entry._id %>?_method=DELETE">Delete</a></div>
   </div>
 </div>
 <%}); %>

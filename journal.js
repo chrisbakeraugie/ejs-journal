@@ -10,6 +10,8 @@ const port = 3005; // Basic port setup. Updated later
 const routes = require('./routes/index'); // Moving routes away from our main (journal.js) file
 const expressLayout = require('express-ejs-layouts');
 const mongoose = require('mongoose'); // Handles models/Schemas, connections to mongoDB
+const methodOverride = require('method-override');// Required to handle different HTTP verbs like PUT or DELETE
+
 
 /**
  * Use mongoose to connect to mongoDB
@@ -34,6 +36,14 @@ app.use(expressLayout);
  */
 app.use(express.urlencoded({extended: true}));
 
+/**
+ * By using methodOverride, we can have more HTTP verb/methods.
+ * This will enable DELETE and PUT verbs, for example
+ */
+app.use(methodOverride('_method', {
+  methods: ['POST', 'GET'] // The allowed methods the original request must be in to check for a method override value.
+                           // this can be considered a "security requirement".
+}));
 /**
  * This route will render the homepage, and any other routes will match with
  * the app.use('/') below, including errors.

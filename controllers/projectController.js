@@ -19,7 +19,7 @@ module.exports = {
       description: req.body.description,
       writtenDate: new Date(),
     }).then(newEntry => {
-      Project.findByIdAndUpdate(req.params.id, {$push: {entries: newEntry._id}}).then(() => {
+      Project.findByIdAndUpdate(req.params.projectId, { $push: { entries: newEntry._id } }).then(() => {
         next();
       }).catch(err => console.log('projectController.entryPost error ' + err.message));
     }).catch(err => console.log('projectController.entryPost error ' + err.message));
@@ -33,7 +33,7 @@ module.exports = {
    */
   getAllEntries: (req, res, next) => {
 
-    Project.findById(req.params.id).then(project => {
+    Project.findById(req.params.projectId).then(project => {
       res.locals.project = project;
       Entry.find({
         '_id': { $in: project.entries }
@@ -81,5 +81,25 @@ module.exports = {
       }
     });
     next();
+  },
+
+  deleteEntry: (req, res, next) => {
+    Entry.findByIdAndRemove(req.params.entryId)
+    .then(() => {
+      res.locals.redirect = req.params.projectId;
+      next();
+    })
+    //   .then(
+    //     entry => {
+    //     console.log(`Entry id: ${entry._id} removed`);
+    //     next();
+    // })
+    .catch(err => {
+        console.log(`Error at projectController.deleteEntry: ${err.message}`);
+      });
+  },
+
+  redirectPath: (req, res) => {
+    res.redirect(`/projects/${res.locals.redirect}`);
   }
 };
