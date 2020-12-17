@@ -71,6 +71,7 @@ module.exports = {
       } else {
         if (doesExist) {
           console.log(`projectController.createProject: Project title "${req.body.title}" already in use.`);
+          // Add a rendered view for "Project already exists"
         } else {
           Project.create({
             title: req.body.title
@@ -89,16 +90,14 @@ module.exports = {
       res.locals.redirect = req.params.projectId;
       next();
     })
-    //   .then(
-    //     entry => {
-    //     console.log(`Entry id: ${entry._id} removed`);
-    //     next();
-    // })
     .catch(err => {
         console.log(`Error at projectController.deleteEntry: ${err.message}`);
       });
   },
 
+  /**
+   * Redirects based on res.locals.redirect path.
+   */
   redirectPath: (req, res) => {
     res.redirect(`/projects/${res.locals.redirect}`);
   }
