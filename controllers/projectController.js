@@ -47,7 +47,10 @@ module.exports = {
         next(err);
       }
       );
-    }).catch(err => console.log('Error: projectController.getAllEntries error: ' + err.message));
+    }).catch(err => {
+      console.log('Error: projectController.getAllEntries error: ' + err.message);
+      next(err);
+    });
   },
 
   /**
@@ -66,7 +69,7 @@ module.exports = {
    * The .create is in callback to manage async behavior
    */
   createProject: (req, res, next) => {
-    Project.exists({ title: req.body.title }, function (err, doesExist) {
+    Project.exists({ title: req.body.title, owner: res.locals.currentUser._id }, function (err, doesExist) {
       if (err) {
         console.log('projectExists ' + err);
         return;
@@ -80,6 +83,7 @@ module.exports = {
             owner: res.locals.currentUser._id
           })
           .then(project => {
+            res.locals.redirect = '/'; // Redirects to the homepage
             User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { projects: project._id }})
             .then(() => { 
               next(); 
@@ -91,6 +95,7 @@ module.exports = {
         }
       }
     });
+    res.locals.redirect = '/';
     next();
   },
 
@@ -109,6 +114,6 @@ module.exports = {
    * Redirects based on res.locals.redirect path.
    */
   redirectPath: (req, res) => {
-    res.redirect(`/projects/${res.locals.redirect}`);
+    res.redirect(res.locals.redirect);
   }
 };
