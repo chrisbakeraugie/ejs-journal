@@ -75,12 +75,26 @@ app.use(methodOverride('_method', {
   methods: ['POST', 'GET'] // The allowed methods the original request must be in to check for a method override value.
                            // this can be considered a "security requirement".
 }));
+
+/**
+ * This is middleware that will run every time, which reads the 
+ * whether there is currently an authenticated user logged in,
+ * and who that current user is. The locals variables will be accessible
+ * every request, then deleted
+ */
+app.use( (req, res, next) => {
+  // res.locals.flashMessages TODO!
+  res.locals.loggedIn = req.isAuthenticated();
+  res.locals.currentUser = req.user;
+  next();
+});
+
 /**
  * This route will render the homepage, and any other routes will match with
  * the app.use('/') below, including errors.
  */
 app.get('/', (req, res) => {
-  res.send('The homepage');
+  res.render('home');
 });
 
 /**

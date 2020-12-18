@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const passport = require('passport');
 
 module.exports ={
   createNewUser: (req, res, next) => {
@@ -22,36 +23,17 @@ module.exports ={
         next();
       }
     });
-  //   User.exists({email : req.body.email}, function (err, doesExist) {
-  //     if(err){
-  //       console.log('userController.createUser error: ' + err);
-  //       next();
-  //     } else {
-  //       if (doesExist) {
-  //         console.log(`userController.createUser: User email "${req.body.email}" already in use.`);
-  //         // Add a rendered view for "User already exists"
-  //       } else {
-  //         User.create({
-  //           name: {
-  //             first: req.body.firstName,
-  //             middle: req.body.middleName,
-  //             last: req.body.lastName
-  //           },
-  //           email: req.body.email
-  //         }).then(user => {
-  //           console.log(`User ${user.fullName} was created`);
-  //           res.locals.redirect = '/users/new-user';
-  //           next();
-  //         }).catch(err => {
-  //           console.log('projectController.createProject Error: ' + err.message);
-  //         });
-  //       }
-  //     }
-  //   });
   },
 
+  authenticate: passport.authenticate('local', {
+    failureRedirect: '/users/login',
+    // failureFlash :  Add flash messages to inform user of status
+    successRedirect: '/',
+    // successFlash:  Add flash messages to inform user of status
+  }),
+
   newUserView: (req, res) => {
-    res.render('newUser');
+    res.render('users/newUser');
   },
 
    /**
@@ -59,5 +41,25 @@ module.exports ={
    */
   redirectPath: (req, res) => {
     res.redirect(res.locals.redirect);
+  },
+
+  /**
+   * Shows login form
+   */
+  showLogin: (req, res) => {
+    res.render('users/loginUser');
+  },
+
+  /**
+   * Controlls the logout function.
+   * req.logout() is exposed by PassportJS.
+   * Invoking logout() will remove the req.user property 
+   * and clear the login session (if any).
+   */
+  logout: (req, res, next) => {
+    req.logout();
+    // Add a flash message
+    res.locals.redirect = '/';
+    next();
   }
 };
