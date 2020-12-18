@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const projectController = require('../controllers/projectController');
 
+router.get('', projectController.getAllProjects, projectController.showAllProjects);
 router.get('/new-project', projectController.newProject);
 router.post('/new-project', projectController.createProject, projectController.redirectPath);
 router.get('/:projectId', projectController.getAllEntries, projectController.showAllEntries); // Move to bottom to prevent matching with everything

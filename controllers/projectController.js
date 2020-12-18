@@ -99,6 +99,26 @@ module.exports = {
     });
   },
 
+  /**
+   * Uses the current logged in user id to find relevant projects,
+   * and puts them in the res.locals object 
+   */
+  getAllProjects: (req, res, next) => {
+    User.findById(res.locals.currentUser._id).then(user => {
+      Project.find({
+        '_id': { '$in': user.projects}
+      }).then(projects => {
+        res.locals.projects = projects;
+        next();
+      })
+      .catch(err => {
+        console.log('Error finding projects at projectController.getAllProjects ' + err.message);
+      });
+    }).catch(err => {
+      console.log('Error: projectController.getAllProjects error' + err.message);
+    });
+  },
+
   newProject: (req, res) => {
     res.render('project/newProject');
   },
@@ -115,5 +135,9 @@ module.exports = {
    */
   showAllEntries: (req, res) => {
     res.render('project/project');
+  },
+
+  showAllProjects: (req, res) => {
+    res.render('project/allProjects');
   }
 };

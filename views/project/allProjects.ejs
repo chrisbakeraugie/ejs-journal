@@ -1,1 +1,7 @@
-<
+<% projects.forEach(project => { %>
+  <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><%= project.title %></h4>
+      </div>
+    </div>
+<% }); %>
