@@ -5,6 +5,52 @@ const User = require('../models/user');
 module.exports = {
 
   /**
+   * Checks whether a project title exists, and if it does, will not create a new one.
+   * The .create is in callback to manage async behavior
+   */
+  createProject: (req, res, next) => {
+    Project.exists({ title: req.body.title, owner: res.locals.currentUser._id }, function (err, doesExist) {
+      if (err) {
+        console.log('projectExists ' + err);
+        return;
+      } else {
+        if (doesExist) {
+          console.log(`projectController.createProject: Project title "${req.body.title}" already in use.`);
+          // Add a rendered view for "Project already exists"
+        } else {
+          Project.create({
+            title: req.body.title,
+            owner: res.locals.currentUser._id
+          })
+          .then(project => {
+            res.locals.redirect = '/'; // Redirects to the homepage
+            User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { projects: project._id }})
+            .then(() => { 
+              next(); 
+            });
+          })
+          .catch(err => {
+            console.log('projectController.createProject Error: ' + err.message);
+          });
+        }
+      }
+    });
+    res.locals.redirect = '/';
+    next();
+  },
+
+  deleteEntry: (req, res, next) => {
+    Entry.findByIdAndRemove(req.params.entryId)
+    .then(() => {
+      res.locals.redirect = req.params.projectId;
+      next();
+    })
+    .catch(err => {
+        console.log(`Error at projectController.deleteEntry: ${err.message}`);
+      });
+  },
+
+   /**
    * Renders the home entry page
    */
   entryHome: (req, res) => {
@@ -53,61 +99,8 @@ module.exports = {
     });
   },
 
-  /**
-   * Renders the project page, which is currently a list of all submissions in order
-   */
-  showAllEntries: (req, res) => {
-    res.render('project/project');
-  },
-
   newProject: (req, res) => {
     res.render('project/newProject');
-  },
-
-  /**
-   * Checks whether a project title exists, and if it does, will not create a new one.
-   * The .create is in callback to manage async behavior
-   */
-  createProject: (req, res, next) => {
-    Project.exists({ title: req.body.title, owner: res.locals.currentUser._id }, function (err, doesExist) {
-      if (err) {
-        console.log('projectExists ' + err);
-        return;
-      } else {
-        if (doesExist) {
-          console.log(`projectController.createProject: Project title "${req.body.title}" already in use.`);
-          // Add a rendered view for "Project already exists"
-        } else {
-          Project.create({
-            title: req.body.title,
-            owner: res.locals.currentUser._id
-          })
-          .then(project => {
-            res.locals.redirect = '/'; // Redirects to the homepage
-            User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { projects: project._id }})
-            .then(() => { 
-              next(); 
-            });
-          })
-          .catch(err => {
-            console.log('projectController.createProject Error: ' + err.message);
-          });
-        }
-      }
-    });
-    res.locals.redirect = '/';
-    next();
-  },
-
-  deleteEntry: (req, res, next) => {
-    Entry.findByIdAndRemove(req.params.entryId)
-    .then(() => {
-      res.locals.redirect = req.params.projectId;
-      next();
-    })
-    .catch(err => {
-        console.log(`Error at projectController.deleteEntry: ${err.message}`);
-      });
   },
 
   /**
@@ -115,5 +108,12 @@ module.exports = {
    */
   redirectPath: (req, res) => {
     res.redirect(res.locals.redirect);
+  },
+
+   /**
+   * Renders the project page, which is currently a list of all submissions in order
+   */
+  showAllEntries: (req, res) => {
+    res.render('project/project');
   }
 };
