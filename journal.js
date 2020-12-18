@@ -11,6 +11,10 @@ const routes = require('./routes/index'); // Moving routes away from our main (j
 const expressLayout = require('express-ejs-layouts');
 const mongoose = require('mongoose'); // Handles models/Schemas, connections to mongoDB
 const methodOverride = require('method-override');// Required to handle different HTTP verbs like PUT or DELETE
+const passport= require('passport');
+const expressSession = require('express-session');
+const cookieParser = require('cookie-parser');
+const User = require('./models/user');
 
 
 /**
@@ -35,6 +39,33 @@ app.use(expressLayout);
  * req.body values when using forms (and does other things)
  */
 app.use(express.urlencoded({extended: true}));
+
+/**
+ * Creating a session to be used by passportJS after login authentifcation
+ */
+app.use(cookieParser('longcomplicatedcode'));
+app.use(expressSession({
+  secret: 'longcomplicatedcode',
+  cookie: {
+    maxAge: 400000 // About one hour (in milliseconds)
+  },
+  resave: false,
+  saveUninitialized: false
+}));
+
+/**
+ * The below is initializing the passportJS
+ * strategy, and including the existing cookie session methods 
+ */
+app.use(passport.initialize());  // initializes passport
+app.use(passport.session()); // Use the sessions included earlier
+
+ // Use the User model/schema for local strategy. Will be used for authentication
+passport.use(User.createStrategy());
+// Serial/deserial are complicated ways of delivering  the user model to a client safely
+passport.serializeUser(User.serializeUser()); 
+passport.deserializeUser(User.deserializeUser());
+
 
 /**
  * By using methodOverride, we can have more HTTP verb/methods.

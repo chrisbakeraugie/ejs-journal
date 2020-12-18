@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose');
 
 const userSchema = mongoose.Schema({
 
@@ -30,6 +31,16 @@ const userSchema = mongoose.Schema({
 
 userSchema.virtual('fullName').get(function () {
   return (`${this.name.first} ${this.name.last}`);
+});
+
+/**
+ * Implementation of passport local mongoose strategy.
+ * The option "usernameField" configures passport to use
+ * the email address and the username. It will handle password
+ * salting and hashing itself.
+ */
+userSchema.plugin(passportLocalMongoose, {
+  usernameField: 'email'
 });
 
 const User = mongoose.model('User', userSchema);
