@@ -7,7 +7,15 @@ const projectSchema = mongoose.Schema({
     unique: true
   },
 
-  entries: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Entry' }]
+  owner: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User'
+  },
+
+  entries: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Entry' 
+  }]
 
 },
   { timestamps: true });

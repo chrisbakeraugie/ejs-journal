@@ -1,5 +1,7 @@
 const Entry = require('../models/entry');
 const Project = require('../models/project');
+const User = require('../models/user');
+
 module.exports = {
 
   /**
@@ -28,7 +30,7 @@ module.exports = {
   /**
    * Starts by finding the project by id (in the url params),
    * finding entries associated to that project, and then uses the
-   * local.entries varablie to associate with ejs view
+   * local.entries variable to associate with ejs view
    * 
    */
   getAllEntries: (req, res, next) => {
@@ -74,8 +76,16 @@ module.exports = {
           // Add a rendered view for "Project already exists"
         } else {
           Project.create({
-            title: req.body.title
-          }).catch(err => {
+            title: req.body.title,
+            owner: res.locals.currentUser._id
+          })
+          .then(project => {
+            User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { projects: project._id }})
+            .then(() => { 
+              next(); 
+            });
+          })
+          .catch(err => {
             console.log('projectController.createProject Error: ' + err.message);
           });
         }
