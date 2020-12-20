@@ -35,6 +35,12 @@ app.set('view engine', 'ejs');
 app.use(expressLayout);
 
 /**
+ * Tells the app to use the 'public' folder
+ * for static files
+ */
+app.use(express.static('public'));
+
+/**
  * Similar to body-parser, allows app to read the
  * req.body values when using forms (and does other things)
  */
