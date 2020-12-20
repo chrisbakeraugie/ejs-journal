@@ -9,8 +9,10 @@
  <button type="submit">Submit</button>
 </form>
 
+<div class="d-flex flex-column align-items-center">
 <% entries.forEach(entry => { %>
-<div class="card">
+<div class="card w-50">
+  <img class="card-img-top" src="<%= randImgs[Math.floor(Math.random() * (randImgs.length - 0 + 1) + 0)] %>"  style="max-height: 500px; max-width: 500px;">
   <div class="card-body">
     <h4 class="card-title"><%= entry.title %></h4>
     <p class="card-subtitle mb-2 text-muted"><%= entry.writtenDate%></p>
@@ -19,3 +21,4 @@
   </div>
 </div>
 <%}); %>
+</div>

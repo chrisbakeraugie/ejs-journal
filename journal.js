@@ -5,13 +5,13 @@
  * and routes are introduced
  */
 const express = require('express'); // Initialize our express app
-const app = express(); 
+const app = express();
 const port = 3005; // Basic port setup. Updated later
 const routes = require('./routes/index'); // Moving routes away from our main (journal.js) file
 const expressLayout = require('express-ejs-layouts');
 const mongoose = require('mongoose'); // Handles models/Schemas, connections to mongoDB
 const methodOverride = require('method-override');// Required to handle different HTTP verbs like PUT or DELETE
-const passport= require('passport');
+const passport = require('passport');
 const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
 const User = require('./models/user');
@@ -21,7 +21,7 @@ const User = require('./models/user');
  * Use mongoose to connect to mongoDB
  * Change the connection string to use env variables in the future
  */
-mongoose.connect('mongodb://localhost:27017/journal_db', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost:27017/journal_db', { useNewUrlParser: true });
 const db = mongoose.connection;
 db.once('open', () => {
   console.log('\nConnection to mongoDB successful!\n');
@@ -44,7 +44,7 @@ app.use(express.static('public'));
  * Similar to body-parser, allows app to read the
  * req.body values when using forms (and does other things)
  */
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 /**
  * Creating a session to be used by passportJS after login authentifcation
@@ -66,10 +66,10 @@ app.use(expressSession({
 app.use(passport.initialize());  // initializes passport
 app.use(passport.session()); // Use the sessions included earlier
 
- // Use the User model/schema for local strategy. Will be used for authentication
+// Use the User model/schema for local strategy. Will be used for authentication
 passport.use(User.createStrategy());
 // Serial/deserial are complicated ways of delivering  the user model to a client safely
-passport.serializeUser(User.serializeUser()); 
+passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
@@ -79,7 +79,7 @@ passport.deserializeUser(User.deserializeUser());
  */
 app.use(methodOverride('_method', {
   methods: ['POST', 'GET'] // The allowed methods the original request must be in to check for a method override value.
-                           // this can be considered a "security requirement".
+  // this can be considered a "security requirement".
 }));
 
 /**
@@ -88,10 +88,13 @@ app.use(methodOverride('_method', {
  * and who that current user is. The locals variables will be accessible
  * every request, then deleted
  */
-app.use( (req, res, next) => {
+app.use((req, res, next) => {
   // res.locals.flashMessages TODO!
   res.locals.loggedIn = req.isAuthenticated();
   res.locals.currentUser = req.user;
+
+  // Array to be used for random images. NOT essential
+  res.locals.randImgs = ['/img/0.jpg', '/img/1.jpg', '/img/2.jpg', '/img/3.jpg', '/img/4.jpg', '/img/5.jpg', '/img/6.jpg', '/img/7.jpg', '/img/8.jpg'];
   next();
 });
 
