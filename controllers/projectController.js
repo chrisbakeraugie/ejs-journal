@@ -90,12 +90,14 @@ module.exports = {
         next();
       }).catch(err => {
         console.log('Error finding entries at projectController.getAllEntries ' + err.message);
-        next(err);
+        res.locals.code = 404;
+        res.render('error');
       }
       );
     }).catch(err => {
       console.log('Error: projectController.getAllEntries error: ' + err.message);
-      next(err);
+      res.locals.code = 404;
+      res.render('error');
     });
   },
 
