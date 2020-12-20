@@ -1,8 +1,10 @@
-<div class="d-flex flex-column align-items-center">
+<div class="d-flex flex-column align-items-center" style="min-height: 80vh;" >
+  <% if (projects.length > 0){ %>
   <% projects.forEach(project => { %>
   <div class="w-25 project-card">
     <div class="card">
-      <img class="card-img-top" src="<%=randImgs[Math.floor(Math.random() * (randImgs.length - 0 + 1) + 0)]%>" style="max-height: 500px; max-width: 500px;">
+      <img class="card-img-top" src="<%=randImgs[Math.floor(Math.random() * (randImgs.length + 1) + 0)]%>"
+        style="max-height: 500px; max-width: 500px;">
       <div class="card-body">
         <h4 class="card-title"><%= project.title %></h4>
         <a class="btn btn-primary" href="projects/<%=project._id%>">Work on <%= project.title %></a>
@@ -10,4 +12,7 @@
     </div>
   </div>
   <% }); %>
+  <% } else { %>
+    <a class="btn btn-success" href="projects/new-project" style="margin: auto;">Start a Project</a>
+  <% } %>
 </div>
