@@ -12,6 +12,6 @@ router.use((req, res, next) => {
   }
 });
 router.use('/projects', projectRoutes);
-router.use('/', errorRoutes);
+// router.use('/', errorRoutes);
 
 module.exports = router;

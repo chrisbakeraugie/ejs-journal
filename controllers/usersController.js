@@ -22,6 +22,8 @@ module.exports ={
         res.locals.redirect = '/users/new-user';
         next();
       }
+    }).catch(err => {
+      console.log('Error: usersController.createNewUser register error: ' + err.message);
     });
   },
 

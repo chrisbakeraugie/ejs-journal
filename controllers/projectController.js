@@ -35,7 +35,8 @@ module.exports = {
         }
       }
     });
-    res.locals.redirect = '/';
+    // Redirects if project already exists
+    res.locals.redirect = '/projects';
     next();
   },
 
@@ -90,14 +91,12 @@ module.exports = {
         next();
       }).catch(err => {
         console.log('Error finding entries at projectController.getAllEntries ' + err.message);
-        res.locals.code = 404;
-        res.render('error');
+        next(err);
       }
       );
     }).catch(err => {
       console.log('Error: projectController.getAllEntries error: ' + err.message);
-      res.locals.code = 404;
-      res.render('error');
+      next(err);
     });
   },
 
@@ -115,9 +114,11 @@ module.exports = {
       })
         .catch(err => {
           console.log('Error finding projects at projectController.getAllProjects ' + err.message);
+          next(err);
         });
     }).catch(err => {
       console.log('Error: projectController.getAllProjects error' + err.message);
+      next(err);
     });
   },
 

@@ -15,6 +15,7 @@ const passport = require('passport');
 const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
 const User = require('./models/user');
+const errorController = require('./controllers/errorController');
 
 
 /**
@@ -113,6 +114,11 @@ app.get('/', (req, res) => {
  * This keeps our main (journal.js) entry point easier to read.
  */
 app.use('/', routes);
+/**
+ * Handles errors, renders error pages
+ */
+app.use(errorController.respondNoResourceFound); // 404
+app.use(errorController.respondInternalError); // 500
 
 /**
  * Uses an integer value (port) and a callback
