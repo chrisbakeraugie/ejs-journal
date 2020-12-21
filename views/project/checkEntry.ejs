@@ -1,0 +1,14 @@
+<h1>Your edited entry</h1>
+
+<div class="card w-25">
+    <img class="card-img-top" src="<%= randImgs[Math.floor(Math.random() * (randImgs.length - 1))] %>"
+      style="max-height: 500px; max-width: 500px;">
+    <div class="card-body">
+      <h4 class="card-title"><%= entry.title %></h4>
+      <p class="card-subtitle mb-2 text-muted"><%= entry.writtenDate%></p>
+      <p class="card-text"><%= entry.description %></p>
+      <div>
+        <a class="btn" href="/projects/<%= entry._id %>/edit">Edit</a>
+      </div>
+    </div>
+  </div>

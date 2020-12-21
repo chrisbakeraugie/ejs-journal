@@ -6,19 +6,23 @@
   <input id="title" type="text" name="title" required>
   <label for="description">Description</label>
   <input id="description" type="text" name="description" required>
- <button type="submit">Submit</button>
+  <button type="submit">Submit</button>
 </form>
 
 <div class="d-flex flex-column align-items-center">
-<% entries.forEach(entry => { %>
-<div class="card w-50">
-  <img class="card-img-top" src="<%= randImgs[Math.floor(Math.random() * (randImgs.length - 0 + 1) + 0)] %>"  style="max-height: 500px; max-width: 500px;">
-  <div class="card-body">
-    <h4 class="card-title"><%= entry.title %></h4>
-    <p class="card-subtitle mb-2 text-muted"><%= entry.writtenDate%></p>
-    <p class="card-text"><%= entry.description %></p>
-    <div><a href="/projects/<%= project._id%>/<%= entry._id %>?_method=DELETE">Delete</a></div>
+  <% entries.forEach(entry => { %>
+  <div class="card w-25">
+    <img class="card-img-top" src="<%= randImgs[Math.floor(Math.random() * (randImgs.length - 0 + 1) + 0)] %>"
+      style="max-height: 500px; max-width: 500px;">
+    <div class="card-body">
+      <h4 class="card-title"><%= entry.title %></h4>
+      <p class="card-subtitle mb-2 text-muted"><%= entry.writtenDate%></p>
+      <p class="card-text"><%= entry.description %></p>
+      <div>
+        <a class="btn" href="/projects/<%= entry._id %>/edit">Edit</a>
+        <a class="btn btn-danger" href="/projects/<%= project._id%>/<%= entry._id %>?_method=DELETE">Delete</a>
+      </div>
+    </div>
   </div>
-</div>
-<%}); %>
+  <%}); %>
 </div>

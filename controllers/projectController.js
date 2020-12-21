@@ -22,16 +22,16 @@ module.exports = {
             title: req.body.title,
             owner: res.locals.currentUser._id
           })
-          .then(project => {
-            res.locals.redirect = '/'; // Redirects to the homepage
-            User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { projects: project._id }})
-            .then(() => { 
-              next(); 
+            .then(project => {
+              res.locals.redirect = '/'; // Redirects to the homepage
+              User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { projects: project._id }})
+                .then(() => {
+                  next();
+                });
+            })
+            .catch(err => {
+              console.log('projectController.createProject Error: ' + err.message);
             });
-          })
-          .catch(err => {
-            console.log('projectController.createProject Error: ' + err.message);
-          });
         }
       }
     });
@@ -41,18 +41,18 @@ module.exports = {
 
   deleteEntry: (req, res, next) => {
     Entry.findByIdAndRemove(req.params.entryId)
-    .then(() => {
-      res.locals.redirect = req.params.projectId;
-      next();
-    })
-    .catch(err => {
+      .then(() => {
+        res.locals.redirect = req.params.projectId;
+        next();
+      })
+      .catch(err => {
         console.log(`Error at projectController.deleteEntry: ${err.message}`);
       });
   },
 
-   /**
-   * Renders the home entry page
-   */
+  /**
+  * Renders the home entry page
+  */
   entryHome: (req, res) => {
     res.render('project/newEntry');
   },
@@ -108,16 +108,30 @@ module.exports = {
   getAllProjects: (req, res, next) => {
     User.findById(res.locals.currentUser._id).then(user => {
       Project.find({
-        '_id': { '$in': user.projects}
+        '_id': { '$in': user.projects }
       }).then(projects => {
         res.locals.projects = projects;
         next();
       })
-      .catch(err => {
-        console.log('Error finding projects at projectController.getAllProjects ' + err.message);
-      });
+        .catch(err => {
+          console.log('Error finding projects at projectController.getAllProjects ' + err.message);
+        });
     }).catch(err => {
       console.log('Error: projectController.getAllProjects error' + err.message);
+    });
+  },
+
+  /**
+   * Accepts a URL parameter for id, 
+   * and returns the entry in the res.locals object
+   */
+  getSingleEntry: (req, res, next) => {
+    Entry.findById(req.params.entryId).then(entry => {
+      res.locals.entry = entry;
+      next();
+    }).catch(err => {
+      console.log('Error: projectController.showEditEntry ' + err.message);
+      next(err);
     });
   },
 
@@ -132,14 +146,45 @@ module.exports = {
     res.redirect(res.locals.redirect);
   },
 
-   /**
-   * Renders the project page, which is currently a list of all submissions in order
-   */
+  /**
+  * Renders the project page, which is currently a list of all submissions in order
+  */
   showAllEntries: (req, res) => {
     res.render('project/project');
   },
 
   showAllProjects: (req, res) => {
     res.render('project/allProjects');
+  },
+
+  /**
+   * Renders entry confirmation page
+   */
+  showCheckEntry: (req, res) => {
+    res.render('project/checkEntry');
+  },
+
+  /**
+   * Renders the editEntry view
+   */
+  showEditEntry: (req, res) => {
+    res.render('project/editEntry');
+  },
+
+  /**
+   * Finds entry to be updated by id, updates,
+   * and returns the updated entry
+   */
+  updateEntry: (req, res, next) => {
+    Entry.findByIdAndUpdate(req.params.entryId, {
+      title: req.body.title,
+      description: req.body.description
+    }).then(entry => {
+      res.locals.redirect = `/projects/${entry._id}/check-entry`;
+      next();
+    }).catch(err => {
+      console.log('Error: projectController.updateEntry error ' + err.message);
+      next(err);
+    });
   }
 };
