@@ -20,10 +20,10 @@ const entry = new mongoose.Schema({
     type: [String]
   },
 
-  // Link each entry with a project
-  // project:{
-  //   required: true
-  // }
+  project: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Project' 
+  }
 
 }, {timestamps: true});
 

@@ -2,6 +2,14 @@ const User = require('../models/user');
 const passport = require('passport');
 
 module.exports ={
+
+  authenticate: passport.authenticate('local', {
+    failureRedirect: '/users/login',
+    // failureFlash :  Add flash messages to inform user of status
+    successRedirect: '/',
+    // successFlash:  Add flash messages to inform user of status
+  }),
+
   createNewUser: (req, res, next) => {
     let newUser = new User({
       name: {
@@ -27,12 +35,19 @@ module.exports ={
     });
   },
 
-  authenticate: passport.authenticate('local', {
-    failureRedirect: '/users/login',
-    // failureFlash :  Add flash messages to inform user of status
-    successRedirect: '/',
-    // successFlash:  Add flash messages to inform user of status
-  }),
+  
+  /**
+   * Controls the logout function.
+   * req.logout() is exposed by PassportJS.
+   * Invoking logout() will remove the req.user property 
+   * and clear the login session (if any).
+   */
+  logout: (req, res, next) => {
+    req.logout();
+    // Add a flash message
+    res.locals.redirect = '/';
+    next();
+  },
 
   newUserView: (req, res) => {
     res.render('users/newUser');
@@ -53,15 +68,9 @@ module.exports ={
   },
 
   /**
-   * Controlls the logout function.
-   * req.logout() is exposed by PassportJS.
-   * Invoking logout() will remove the req.user property 
-   * and clear the login session (if any).
+   * Display user information
    */
-  logout: (req, res, next) => {
-    req.logout();
-    // Add a flash message
-    res.locals.redirect = '/';
-    next();
+  showUserProfile: (req, res) => {
+    res.render('users/userProfile');
   }
 };

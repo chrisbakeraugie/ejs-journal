@@ -67,6 +67,7 @@ module.exports = {
       title: req.body.title,
       description: req.body.description,
       writtenDate: new Date(),
+      project: req.params.projectId
     }).then(newEntry => {
       Project.findByIdAndUpdate(req.params.projectId, { $push: { entries: newEntry._id } }).then(() => {
         next();
@@ -99,6 +100,7 @@ module.exports = {
       next(err);
     });
   },
+
 
   /**
    * Uses the current logged in user id to find relevant projects,
