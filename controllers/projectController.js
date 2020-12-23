@@ -20,7 +20,7 @@ module.exports = {
           console.log(`projectController.createProject: Project title "${req.body.title}" already in use.`);
           res.locals.redirectStatus = httpStatus.SEE_OTHER;
           res.locals.redirectPath = '/projects/new-project';
-          req.flash('error', 'A project with that title already exists in your account. Please choose a unique title');
+          req.flash('danger', 'A project with that title already exists in your account. Please choose a unique title');
           next();
 
         } else {
@@ -55,7 +55,7 @@ module.exports = {
       })
       .catch(err => {
         console.log(`Error at projectController.deleteEntry: ${err.message}`);
-        req.flash('error', 'Error - Entry not deleted');
+        req.flash('danger', 'Error - Entry not deleted');
         next(err);
       });
   },
@@ -212,7 +212,7 @@ module.exports = {
       next();
     }).catch(err => {
       console.log('Error: projectController.updateEntry error ' + err.message);
-      req.flash('error', 'Entry failed to update');
+      req.flash('danger', 'Entry failed to update');
       next(err);
     });
   }

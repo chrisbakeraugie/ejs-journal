@@ -27,11 +27,13 @@ module.exports ={
         next();
       } else {
         console.log(`Error: Failed to create user account because: ${err.message}.`);
+        req.flash('danger', 'User account not created. Please try again');
         res.locals.redirect = '/users/new-user';
         next();
       }
     }).catch(err => {
       console.log('Error: usersController.createNewUser register error: ' + err.message);
+      req.flash('danger', 'User account not created. Please try again');
     });
   },
 
@@ -46,6 +48,7 @@ module.exports ={
     req.logout();
     // Add a flash message
     res.locals.redirect = '/';
+    req.flash('info', 'Logged out');
     next();
   },
 

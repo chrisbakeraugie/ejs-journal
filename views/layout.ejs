@@ -40,15 +40,11 @@
 </nav>
 
 <div class="flashes">
-    <% if(flashMessage) { %>
-    <% if(flashMessage.success) { %>
-        <div class="flash success alert alert-success" role="alert"><%=flashMessage.success %></div>
-  <% } else if (flashMessage.error) { %>
-  <div class="flash error alert alert-warning" role="alert"><%=flashMessage.error %></div>
+  <% if(flashMessage[Object.keys(flashMessage)]) { %>
+  <div class="flash alert alert-<%=Object.keys(flashMessage)%>" role="alert">
+    <%=flashMessage[Object.keys(flashMessage)]%></div>
   <% } %>
-  <% } %>
-  </div>
-  
+</div>
 
 <body>
 
