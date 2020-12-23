@@ -164,11 +164,8 @@ module.exports = {
    */
   redirectPath: (req, res) => {
     if(res.locals.redirectStatus){
-      console.log('\n\nRan redirect WITH status\n\n');
       res.redirect(res.locals.redirectStatus, res.locals.redirectPath);
     } else {
-      console.log('\n\nRan JUST redirect\n\n');
-
       res.redirect(res.locals.redirectPath);
     }
   },

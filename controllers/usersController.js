@@ -23,12 +23,12 @@ module.exports ={
     User.register(newUser, req.body.password, (err, user) => {
       if (user) {
         console.log(`Successfully created ${user.fullName}'s account.`);
-        res.locals.redirect = '/';
+        res.locals.redirectPath = '/';
         next();
       } else {
         console.log(`Error: Failed to create user account because: ${err.message}.`);
         req.flash('danger', 'User account not created. Please try again');
-        res.locals.redirect = '/users/new-user';
+        res.locals.redirectPath = '/users/new-user';
         next();
       }
     }).catch(err => {
@@ -47,7 +47,7 @@ module.exports ={
   logout: (req, res, next) => {
     req.logout();
     // Add a flash message
-    res.locals.redirect = '/';
+    res.locals.redirectPath = '/';
     req.flash('info', 'Logged out');
     next();
   },
@@ -57,10 +57,16 @@ module.exports ={
   },
 
    /**
-   * Redirects based on res.locals.redirect path.
+   * Redirects based on given status and path.
+   * If only res.locals.redirectPath is clarified, it
+   * will NOT change the original http method to redirect
    */
   redirectPath: (req, res) => {
-    res.redirect(res.locals.redirect);
+    if(res.locals.redirectStatus){
+      res.redirect(res.locals.redirectStatus, res.locals.redirectPath);
+    } else {
+      res.redirect(res.locals.redirectPath);
+    }
   },
 
   /**
