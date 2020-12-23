@@ -16,7 +16,7 @@ const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
 const User = require('./models/user');
 const errorController = require('./controllers/errorController');
-
+const connectFlash  = require('connect-flash');
 
 /**
  * Use mongoose to connect to mongoDB
@@ -59,6 +59,7 @@ app.use(expressSession({
   resave: false,
   saveUninitialized: false
 }));
+app.use(connectFlash()); // Initializing flash messages
 
 /**
  * The below is initializing the passportJS
@@ -90,9 +91,9 @@ app.use(methodOverride('_method', {
  * every request, then deleted
  */
 app.use((req, res, next) => {
-  // res.locals.flashMessages TODO!
   res.locals.loggedIn = req.isAuthenticated();
   res.locals.currentUser = req.user;
+  res.locals.flashMessage = req.flash();
 
   // Array to be used for random images. NOT essential
   res.locals.randImgs = ['/img/0.jpg', '/img/1.jpg', '/img/2.jpg', '/img/3.jpg', '/img/4.jpg', '/img/5.jpg', '/img/6.jpg', '/img/7.jpg', '/img/8.jpg'];

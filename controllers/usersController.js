@@ -5,9 +5,9 @@ module.exports ={
 
   authenticate: passport.authenticate('local', {
     failureRedirect: '/users/login',
-    // failureFlash :  Add flash messages to inform user of status
+    failureFlash :  'Login failed',
     successRedirect: '/',
-    // successFlash:  Add flash messages to inform user of status
+    successFlash:  'Welcome'
   }),
 
   createNewUser: (req, res, next) => {
