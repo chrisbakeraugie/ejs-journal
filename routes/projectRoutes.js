@@ -2,6 +2,7 @@ const router = require('express').Router();
 const projectController = require('../controllers/projectController');
 
 router.get('', projectController.getAllProjects, projectController.showAllProjects);
+router.get('/data', projectController.getData);
 router.get('/new-project', projectController.newProject);
 router.post('/new-project', projectController.createProject, projectController.redirectPath);
 router.get('/:entryId/check-entry', projectController.getSingleEntry, projectController.showCheckEntry);

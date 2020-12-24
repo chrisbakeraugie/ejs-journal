@@ -23,6 +23,12 @@ const entry = new mongoose.Schema({
   project: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Project' 
+  },
+
+  mood: {
+    type: Number,
+    min: [0,'No negative moods'],
+    max: 100
   }
 
 }, {timestamps: true});

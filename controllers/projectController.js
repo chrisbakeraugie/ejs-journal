@@ -2,8 +2,19 @@ const Entry = require('../models/entry');
 const Project = require('../models/project');
 const User = require('../models/user');
 const httpStatus = require('http-status-codes');
+const fetch = require('node-fetch');
 
 module.exports = {
+
+  getData: (req, res) => {
+    fetch('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json').then(response => {
+      return (response.json());
+    }).then(data => {
+      // res.send(data);
+      res.locals.fetchData = data;
+      res.render('users/moodData');
+    });
+  },
 
   /**
    * Checks whether a project title exists, and if it does, will not create a new one.
@@ -31,7 +42,7 @@ module.exports = {
             .then(project => {
               res.locals.redirectStatus = httpStatus.SEE_OTHER;
               res.locals.redirectPath = '/projects/' + project._id;
-              User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { projects: project._id }})
+              User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { projects: project._id } })
                 .then(() => {
                   req.flash('success', 'Project successfully created');
                   next();
@@ -49,7 +60,7 @@ module.exports = {
     Entry.findByIdAndRemove(req.params.entryId)
       .then(() => {
         res.locals.redirectStatus = httpStatus.SEE_OTHER;
-        res.locals.redirectPath = '/projects/'+ req.params.projectId;
+        res.locals.redirectPath = '/projects/' + req.params.projectId;
         req.flash('success', 'Entry successfully deleted');
         next();
       })
@@ -76,7 +87,8 @@ module.exports = {
       title: req.body.title,
       description: req.body.description,
       writtenDate: new Date(),
-      project: req.params.projectId
+      project: req.params.projectId,
+      mood: req.body.mood
     }).then(newEntry => {
       Project.findByIdAndUpdate(req.params.projectId, { $push: { entries: newEntry._id } }).then(() => {
         next();
@@ -163,7 +175,7 @@ module.exports = {
    * will NOT change the original http method to redirect
    */
   redirectPath: (req, res) => {
-    if(res.locals.redirectStatus){
+    if (res.locals.redirectStatus) {
       res.redirect(res.locals.redirectStatus, res.locals.redirectPath);
     } else {
       res.redirect(res.locals.redirectPath);

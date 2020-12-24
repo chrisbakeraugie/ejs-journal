@@ -8,13 +8,17 @@
       </div>
       <div class="card-text" id="entry-description"><textarea id="description" type="text" name="description"
           placeholder="Talk about what you accomplished and how you did it" required></textarea></div>
-      <button class="btn btn-primary" id="entry-submit" type="submit">Submit</button>
+      <div class="card-text" id="entry-range">
+        <label for="mood-range" style="margin: 10px 10px 0px 10px;">Confidence</label>
+        <input class="range" type="range" min="1" max="100" value="50" name="mood" id="mood-range">
+      </div>
+      <button class="btn btn-primary" id="entry-submit" type="submit">Post</button>
     </div>
   </form>
 
 
   <% entries.forEach(entry => { %>
-  <div class="card w-50 entry-card">
+  <div class="card w-50 entry-card" style="background-color:rgba(70, 130, 180, <%= entry.mood %>%)">
     <img class="card-img-top" src="<%= randImgs[Math.floor(Math.random() * (randImgs.length - 0 + 1) + 0)] %>"
       style="max-height: 500px; max-width: 500px;">
     <div class="card-body">

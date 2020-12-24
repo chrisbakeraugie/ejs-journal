@@ -18,6 +18,11 @@
   width: 75%;
 }
 
+#entry-range, #mood-range{
+  margin: 10px;
+  width: 95%;
+}
+
 #entry-submit{
   margin: 10px;
 }
