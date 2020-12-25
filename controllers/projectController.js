@@ -11,6 +11,7 @@ module.exports = {
       return (response.json());
     }).then(data => {
       // res.send(data);
+      // console.log(data.data);
       res.locals.fetchData = data;
       res.render('users/moodData');
     });
