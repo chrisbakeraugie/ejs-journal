@@ -2,7 +2,6 @@ const Entry = require('../models/entry');
 const Project = require('../models/project');
 const User = require('../models/user');
 const httpStatus = require('http-status-codes');
-const fetch = require('node-fetch');
 
 module.exports = {
 

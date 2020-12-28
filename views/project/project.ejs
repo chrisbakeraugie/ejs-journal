@@ -19,7 +19,7 @@
 
 
   <% entries.forEach(entry => { %>
-  <div class="card w-50 entry-card" style="background-color:rgba(70, 130, 180, <%= entry.mood %>%)">
+  <div class="card w-50 entry-card">
     <img class="card-img-top" src="<%= randImgs[Math.floor(Math.random() * (randImgs.length - 0 + 1) + 0)] %>"
       style="max-height: 500px; max-width: 500px;">
     <div class="card-body">
