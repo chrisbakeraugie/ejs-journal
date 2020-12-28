@@ -6,15 +6,16 @@ const fetch = require('node-fetch');
 
 module.exports = {
 
-  getData: (req, res) => {
-    fetch('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json').then(response => {
-      return (response.json());
-    }).then(data => {
-      // res.send(data);
-      // console.log(data.data);
-      res.locals.fetchData = data;
-      res.render('users/moodData');
+  getMoodData: (req, res) => {
+    let entryData = [];
+    res.locals.entries.forEach(entry => {
+      entryData.push({
+        date: entry.writtenDate,
+        value: entry.mood
+      });
     });
+    res.locals.entries = entryData;
+    res.render('project/moodData');
   },
 
   /**

@@ -1,5 +1,6 @@
 <div class="d-flex flex-column align-items-center">
   <h1><%= project.title %></h1>
+  <a class="btn btn-info" href="/projects/<%= project._id %>/data">Confidence Tracker</a>
 
   <form class="card w-50" id="new-entry" action="/projects/<%= project._id %>" method="POST">
     <div class="card-body">
