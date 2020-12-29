@@ -1,32 +1,117 @@
+:root {
+  --animation-width: 439px;
+  --animation-container-width: 480px
+}
+
+/* ----------- Home page ----------- */
+
+.frosted-background {
+  background-color: rgba(255, 255, 255, .3);
+  min-width: var(--animation-container-width);
+  padding: 20px;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2);
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
+}
+
+#home-container {
+  min-height: 93vh;
+  background-size: cover;
+  max-width: 101vw;
+}
+
+#home-title {
+  align-self: center;
+}
+
+#home-animation {
+  align-self: center;
+  font-family: monospace;
+  font-size: 1.3rem;
+  height: 1.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: solid 3px rgba(34, 34, 34, 0.75);
+  animation: animated-text 4s steps(43, end) 2.5s 1 normal both, animated-cursor-blink 1s steps(2, end) infinite;
+}
+
+@keyframes animated-text {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--animation-width);
+  }
+}
+
+@keyframes animated-cursor-blink {
+  from {
+    border-right-color: rgba(7, 8, 7, 0.75);
+  }
+  to {
+    border-right-color: transparent;
+  }
+}
+
+/* ----------- Navbar ----------- */
+
+nav {
+  height: 7vh;
+  padding: 5px;
+}
+
+/* ----------- Flashes ----------- */
+
+.flashes {
+  position: absolute;
+  width: 25vw;
+  max-height: 10px;
+}
+
+/* ----------- Login ----------- */
+
+#login-container {
+  min-height: 93vh;
+  background-size: cover;
+  max-width: 101vw;
+}
+/* 
+#login-form{
+  min-height: 60vh;
+  max-width: 50vh;
+} */
+
+/* ----------- Projects ----------- */
+
 .project-card {
   margin: 10px;
 }
 
-.entry-card{
+.entry-card {
   margin: 20px;
 }
 
-#entry-description, #description{
+#entry-description, #description {
   margin: 10px;
   width: 95%;
   height: 100px;
   resize: none;
 }
 
-#entry-title, #title{
+#entry-title, #title {
   margin: 10px;
   width: 75%;
 }
 
-#entry-range, #mood-range{
+#entry-range, #mood-range {
   margin: 10px;
   width: 95%;
 }
 
-#entry-submit{
+#entry-submit {
   margin: 10px;
 }
 
-#new-entry{
+#new-entry {
   margin: 50px;
 }
