@@ -75,11 +75,12 @@ nav {
   background-size: cover;
   max-width: 101vw;
 }
-/* 
+
 #login-form{
+  margin: auto;
   min-height: 60vh;
   max-width: 50vh;
-} */
+}
 
 /* ----------- Projects ----------- */
 
