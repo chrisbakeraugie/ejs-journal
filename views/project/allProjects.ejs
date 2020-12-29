@@ -1,4 +1,4 @@
-<div class="d-flex flex-column align-items-center" style="min-height: 80vh;" >
+<!-- <div class="d-flex flex-column align-items-center" style="min-height: 80vh;" >
   <a class="btn btn-success" href="/projects/new-project">Start a new project</a>
   <% if (projects.length > 0){ %>
   <% projects.forEach(project => { %>
@@ -16,4 +16,39 @@
   <% } else { %>
     <a class="btn btn-success" href="projects/new-project" style="margin: auto;">Start a Project</a>
   <% } %>
+</div> -->
+<div class="row">
+  <a class="btn btn-success" id="project-start-new" href="/projects/new-project">Start a new project</a>
 </div>
+
+<% let projectIndex = 0; for(let i = 0; i< Math.ceil(projects.length/2); i++){ %>
+<div class="row">
+  <% if(typeof projects[projectIndex] != 'undefined') { %>
+  <div class="col-sm-6">
+    <div class="card project-card">
+      <!-- <img class="card-img-top project-image" src="<%=randImgs[Math.floor(Math.random() * (randImgs.length + 1) + 0)]%>"
+        style="max-height: 500px; max-width: 500px;"> -->
+      <div class="card-body row">
+        <h4 class="card-title"><%= projects[projectIndex].title %></h4>
+        <a class="btn btn-primary" href="projects/<%=projects[projectIndex]._id%>">Work on
+          <%= projects[projectIndex].title %></a>
+      </div>
+    </div>
+  </div>
+  <% } %>
+  <% if(typeof projects[projectIndex + 1] != 'undefined') { %>
+  <div class="col-sm-6">
+    <div class="card project-card card">
+      <!-- <img class="card-img-top project-image" src="<%=randImgs[Math.floor(Math.random() * (randImgs.length + 1) + 0)]%>"
+        style="max-height: 500px; max-width: 500px;"> -->
+      <div class="card-body row">
+        <h4 class="card-title"><%= projects[projectIndex + 1].title %></h4>
+        <a class="btn btn-primary" href="projects/<%=projects[projectIndex + 1]._id%>">Work on
+          <%= projects[projectIndex + 1].title %></a>
+      </div>
+    </div>
+  </div>
+  <% } %>
+</div>
+
+<% projectIndex = projectIndex + 2; } %>

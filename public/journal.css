@@ -3,6 +3,12 @@
   --animation-container-width: 480px
 }
 
+#main-container{
+  /* background-image: url(/img/main-background.jpg); */
+  background-color: rgba(0, 0, 0, 0.1);
+  background-size: cover;
+}
+
 /* ----------- Home page ----------- */
 
 .frosted-background {
@@ -14,7 +20,7 @@
   backdrop-filter: blur(2px);
 }
 
-#home-container {
+.home-container {
   min-height: 93vh;
   background-size: cover;
   max-width: 101vw;
@@ -63,9 +69,9 @@ nav {
 /* ----------- Flashes ----------- */
 
 .flashes {
-  position: absolute;
-  width: 25vw;
-  max-height: 10px;
+  /* position: absolute;
+  width: 25vw; */
+  /* max-height: 10px; */
 }
 
 /* ----------- Login ----------- */
@@ -76,16 +82,43 @@ nav {
   max-width: 101vw;
 }
 
+#login-title{
+  font-size: 3rem;
+}
+
 #login-form{
   margin: auto;
-  min-height: 60vh;
   max-width: 50vh;
+}
+
+#login-new-user-link{
+  padding-top: 10px;
+  color: rgba(17, 29, 29, 0.9); 
+  text-decoration: none;
 }
 
 /* ----------- Projects ----------- */
 
 .project-card {
   margin: 10px;
+  /* min-height: 40vh; */
+  max-width:  45vw;
+}
+
+.project-card-image {
+  text-align: center;
+  justify-content: center;
+  margin: 10px;
+  /* min-height: 40vh; */
+  max-width:  45vw;
+}
+
+.project-image{
+  max-width: 45vw;
+  max-height: 45vh;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .entry-card {
@@ -115,4 +148,9 @@ nav {
 
 #new-entry {
   margin: 50px;
+}
+
+#project-start-new{
+margin: auto;  
+max-width: 75vw;
 }

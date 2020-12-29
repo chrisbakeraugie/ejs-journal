@@ -3,7 +3,6 @@
 
 <head>
   <title>Project Journal</title>
-  <!-- Add scripts and styling links later -->
   <link rel="stylesheet" type="text/css" href="/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/journal.css">
 
@@ -11,7 +10,10 @@
 
 <nav class="navbar navbar-expand navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">Project Journal</a>
+    <!-- <a class="navbar-brand" href="/">Project Journal</a> -->
+    <% if (loggedIn) { %>
+    <a class="navbar-brand" href="#">Hi, <%= currentUser.name.first %></a>
+    <% } %>
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       <li class="nav-item">
         <a href="/projects" class="nav-link">My Projects</a>
@@ -24,9 +26,6 @@
       </li>
       <% if (loggedIn) { %>
       <li class="nav-item">
-        <a class="nav-link" href="#">Hi, <%= currentUser.name.first %></a>
-      </li>
-      <li class="nav-item">
         <a href="/users/logout" class="nav-link">Log Out</a>
       </li>
       <% } else { %>
@@ -34,20 +33,17 @@
         <a href="/users/login" class="nav-link">Log In?</a>
       </li>
       <% } %>
-    </ul>
+      <li class="flashes nav-item">
+        <% if(flashMessage[Object.keys(flashMessage)]) { %>
+        <div class="flash nav-link alert-<%=Object.keys(flashMessage)%>" role="alert">
+          <%=flashMessage[Object.keys(flashMessage)]%></div>
+        <% } %>
+  </div>
+  </ul>
   </div>
 </nav>
 
-<div class="flashes">
-  <% if(flashMessage[Object.keys(flashMessage)]) { %>
-  <div class="flash alert alert-<%=Object.keys(flashMessage)%>" role="alert">
-    <%=flashMessage[Object.keys(flashMessage)]%></div>
-  <% } %>
-</div>
-
-<body>
-
-
+<body id="main-container">
   <%- body %>
   <!-- footer -->
 </body>
