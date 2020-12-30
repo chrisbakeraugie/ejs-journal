@@ -54,7 +54,7 @@ app.use(cookieParser('longcomplicatedcode'));
 app.use(expressSession({
   secret: 'longcomplicatedcode',
   cookie: {
-    maxAge: 400000 // About one hour (in milliseconds)
+    maxAge: 1000 * 60 * 60 * 2 // About two hours in milliseconds
   },
   resave: false,
   saveUninitialized: false
