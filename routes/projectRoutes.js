@@ -10,6 +10,8 @@ router.put('/:entryId/edit', projectController.updateEntry, projectController.re
 router.get('/:projectId/data', projectController.getAllEntries, projectController.getMoodData);
 router.get('/:projectId', projectController.getAllEntries, projectController.showAllEntries); // Move to bottom to prevent matching with everything
 router.post('/:projectId', projectController.entryPost, projectController.getAllEntries, projectController.showAllEntries);
+router.get('/:projectId/delete-confirm', projectController.getSingleProject,projectController.showDeleteConfirm);
+router.delete('/:projectId/delete', projectController.deleteProject, projectController.redirectPath);
 router.delete('/:projectId/:entryId', projectController.deleteEntry, projectController.redirectPath);
 
 module.exports = router;

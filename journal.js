@@ -10,13 +10,14 @@ const port = 3005; // Basic port setup. Updated later
 const routes = require('./routes/index'); // Moving routes away from our main (journal.js) file
 const expressLayout = require('express-ejs-layouts');
 const mongoose = require('mongoose'); // Handles models/Schemas, connections to mongoDB
-const methodOverride = require('method-override');// Required to handle different HTTP verbs like PUT or DELETE
 const passport = require('passport');
 const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
 const User = require('./models/user');
 const errorController = require('./controllers/errorController');
 const connectFlash  = require('connect-flash');
+const methodOverride = require('method-override');// Required to handle different HTTP verbs like PUT or DELETE
+
 
 /**
  * Use mongoose to connect to mongoDB
@@ -48,7 +49,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
 /**
- * Creating a session to be used by passportJS after login authentifcation
+ * Creating a session to be used by passportJS after login authentication
  */
 app.use(cookieParser('longcomplicatedcode'));
 app.use(expressSession({
@@ -80,8 +81,10 @@ passport.deserializeUser(User.deserializeUser());
  * This will enable DELETE and PUT verbs, for example
  */
 app.use(methodOverride('_method', {
-  methods: ['POST', 'GET'] // The allowed methods the original request must be in to check for a method override value.
+  methods: ['POST', 'GET']// The allowed methods the original request must be in to check for a method override value.
   // this can be considered a "security requirement".
+  // let method = req.body._method;
+
 }));
 
 /**

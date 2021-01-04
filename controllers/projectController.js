@@ -73,6 +73,52 @@ module.exports = {
   },
 
   /**
+   * Finds a project by the url parameter, which is an id, and returns the project.
+   * It then removes the project and then next()
+   */
+  deleteProject: (req, res, next) => {
+    Project.findById(req.params.projectId).then((project) => {
+      /**EXPLANATION - the current logic obviously isn't the best way to do this, however, 
+       * in the future, i'd like to implement a requirement to type the title of the project before deleting,
+       * so I'm leaving my first logic here to be referenced. 
+       */
+      // if (project.title.equals(req.body.titleToDelete)) {
+      //   Project.findByIdAndRemove(req.params.projectId).then(() => {
+      //     // eslint-disable-next-line quotes
+      //     req.flash('info', `The project '${project.title}' has been deleted`);
+      //     res.locals.redirectStatus = httpStatus.SEE_OTHER;
+      //     res.locals.redirectPath = '/projects';
+      //     next();
+      //   }).catch((err) => {
+      //     console.log('Error at projectController.deleteProject Project.findbyIdandRemove: ' + err.message);
+      //     req.flash('danger', 'Error - Project not deleted. Please wait and try again');
+      //     next(err);
+      //   });
+      // } else {
+      //   req.flash('warning', 'Your input did not match the project title. Please try again');
+      //   res.locals.redirectStatus = httpStatus.SEE_OTHER;
+      //   res.locals.redirectPath = `/projects/${req.params.projectId}/delete-confirm`;
+      //   next();
+      // }
+      Project.findByIdAndRemove(req.params.projectId).then(() => {
+        // eslint-disable-next-line quotes
+        req.flash('info', `The project '${project.title}' has been deleted`);
+        res.locals.redirectStatus = httpStatus.SEE_OTHER;
+        res.locals.redirectPath = '/projects';
+        next();
+      }).catch((err) => {
+        console.log('Error at projectController.deleteProject Project.findbyIdandRemove: ' + err.message);
+        req.flash('danger', 'Error - Project not deleted. Please wait and try again');
+        next(err);
+      });
+    }).catch(err => {
+      console.log('Error at projectController.deleteProject: ' + err.message);
+      req.flash('danger', 'Error - Project not deleted. Please wait and try again');
+      next(err);
+    });
+  },
+
+  /**
   * Renders the home entry page
   */
   entryHome: (req, res) => {
@@ -166,6 +212,15 @@ module.exports = {
     });
   },
 
+  getSingleProject: (req, res, next) => {
+    Project.findById(req.params.projectId).then((project) => {
+      res.locals.project = project;
+      next();
+    }).catch(err => {
+      console.log('Error: projectController.getSingleProject findById error' + err.message);
+    });
+  },
+
   newProject: (req, res) => {
     res.render('project/newProject');
   },
@@ -188,6 +243,10 @@ module.exports = {
   */
   showAllEntries: (req, res) => {
     res.render('project/project');
+  },
+
+  showDeleteConfirm: (req, res) => {
+    res.render('project/deleteConfirm');
   },
 
   showAllProjects: (req, res) => {
