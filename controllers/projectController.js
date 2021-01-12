@@ -5,18 +5,6 @@ const httpStatus = require('http-status-codes');
 
 module.exports = {
 
-  getMoodData: (req, res) => {
-    let entryData = [];
-    res.locals.entries.forEach(entry => {
-      entryData.push({
-        date: entry.writtenDate,
-        value: entry.mood
-      });
-    });
-    res.locals.entries = entryData;
-    res.render('project/moodData');
-  },
-
   /**
    * Checks whether a project title exists, and if it does, will not create a new one.
    * The .create is in callback to manage async behavior
@@ -138,10 +126,14 @@ module.exports = {
       mood: req.body.mood,
       owner: res.locals.currentUser._id
     }).then(newEntry => {
-      Project.findByIdAndUpdate(req.params.projectId, { $push: { entries: newEntry._id } }).then(() => {
+      Project.findByIdAndUpdate(req.params.projectId, { $push: { entries: newEntry._id } }).catch(err => {
+        console.log('projectController.entryPost Project update error ' + err.message);
+        next(err);
+      });
+      User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { entries: newEntry._id } }).then(() => {
         next();
       }).catch(err => {
-        console.log('projectController.entryPost error ' + err.message);
+        console.log('projectController.entryPost User update error ' + err.message);
         next(err);
       });
     }).catch(err => {
@@ -198,6 +190,18 @@ module.exports = {
     });
   },
 
+  getMoodData: (req, res) => {
+    let entryData = [];
+    res.locals.entries.forEach(entry => {
+      entryData.push({
+        date: entry.writtenDate,
+        value: entry.mood
+      });
+    });
+    res.locals.entries = entryData;
+    res.render('project/moodData');
+  },
+
   /**
    * Accepts a URL parameter for id, 
    * and returns the entry in the res.locals object
@@ -218,6 +222,27 @@ module.exports = {
       next();
     }).catch(err => {
       console.log('Error: projectController.getSingleProject findById error' + err.message);
+    });
+  },
+
+  /**
+   * This method references the current logged-in user, and finds all entries related to them.
+   * 
+   */
+  getUserEntries: (req, res, next) => {
+    User.findById(res.locals.currentUser._id).then(user => {
+      Entry.find({
+        '_id': { '$in': user.entries }
+      }).then(entries => {
+        res.locals.entries = entries;
+        next();
+      }).catch(err => {
+          console.log('Error finding entries at projectController.getUserEntries ' + err.message);
+          next(err);
+        });
+    }).catch(err => {
+      console.log('Error: projectController.getUserEntries error' + err.message);
+      next(err);
     });
   },
 

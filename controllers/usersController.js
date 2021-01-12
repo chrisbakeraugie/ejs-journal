@@ -20,9 +20,15 @@ module.exports ={
       email: req.body.email
     });
 
-    User.register(newUser, req.body.password, (err, user) => {
+    User.register(newUser, req.body.password, function (err, user) {
+      if (err) {
+        console.log('Error: usersController.createNewUser register error: ' + err.message);
+        req.flash('danger', 'User account not created. Please try again');
+        next(err);
+      }
       if (user) {
         console.log(`Successfully created ${user.fullName}'s account.`);
+        req.flash('success', 'Account Created! Login, then visit the \'About\' page to learn about this website.');
         res.locals.redirectPath = '/';
         next();
       } else {
@@ -31,10 +37,12 @@ module.exports ={
         res.locals.redirectPath = '/users/new-user';
         next();
       }
-    }).catch(err => {
-      console.log('Error: usersController.createNewUser register error: ' + err.message);
-      req.flash('danger', 'User account not created. Please try again');
     });
+    // Removed because this is not type Promise
+    // .catch(err => {
+    //   console.log('Error: usersController.createNewUser register error: ' + err.message);
+    //   req.flash('danger', 'User account not created. Please try again');
+    // });
   },
 
   

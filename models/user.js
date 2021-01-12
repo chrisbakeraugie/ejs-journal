@@ -23,9 +23,10 @@ const userSchema = mongoose.Schema({
     unique: true
   },
 
-  projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }]
+  projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
 
-
+  entries: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Entry' }]
+  
 },
   { timestamps: true });
 

@@ -5,7 +5,8 @@
 <p>Joined: <%= currentUser.createdAt %></p>
 <p></p>
 <% if (currentUser.projects.length > 0) { %>
-<h4>You have <%= projects.length %> projects</h5>
+<h4>You have <%= projects.length %> projects</h4>
   <% projects.forEach(project => { %>
-  <h6><a href="/projects/<%= project._id %>"><%= project.title %></a></h6>
+  <h6><a href="/projects/<%= project._id %>"><%= project.title %></a>, which has <%= project.entries.length %> entries</h6>
   <% })} %>
+  <h4>You have <%= entries.length %> total entries</h4>
