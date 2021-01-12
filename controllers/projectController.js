@@ -135,7 +135,8 @@ module.exports = {
       description: req.body.description,
       writtenDate: new Date(),
       project: req.params.projectId,
-      mood: req.body.mood
+      mood: req.body.mood,
+      owner: res.locals.currentUser._id
     }).then(newEntry => {
       Project.findByIdAndUpdate(req.params.projectId, { $push: { entries: newEntry._id } }).then(() => {
         next();
@@ -156,7 +157,6 @@ module.exports = {
    * 
    */
   getAllEntries: (req, res, next) => {
-
     Project.findById(req.params.projectId).then(project => {
       res.locals.project = project;
       Entry.find({

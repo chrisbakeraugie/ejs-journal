@@ -29,6 +29,11 @@ const entry = new mongoose.Schema({
     type: Number,
     min: [0,'No negative moods'],
     max: 100
+  },
+
+  owner: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User'
   }
 
 }, {timestamps: true});
