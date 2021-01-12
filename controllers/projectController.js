@@ -6,6 +6,36 @@ const httpStatus = require('http-status-codes');
 module.exports = {
 
   /**
+   * If there is information in the url, this middleware must be used in
+   * order to prevent authenticated users from seeing OTHER authenticated users' information.
+   */
+  authenticateUser: (req, res, next) => {
+    if(req.params.entryId){
+      Entry.findById(req.params.entryId).then(entry => {
+        if(entry.owner.equals(res.locals.currentUser._id)){
+          next();
+        } else {
+          next(Error('Not Authorized'));
+        }
+      }).catch(err => {
+        console.log('Error at authenticateUser - entry: ' + err.message );
+        next(err);
+      });
+    } else if (req.params.projectId){
+      Project.findById(req.params.projectId).then(project => {
+        if(project.owner.equals(res.locals.currentUser._id)){
+          next();
+        } else {
+          next(Error('Not Authorized'));
+        }
+      }).catch(err => {
+        console.log('Error at authenticateUser - project: ' + err.message );
+        next(err);
+      });
+    }
+  },
+
+  /**
    * Checks whether a project title exists, and if it does, will not create a new one.
    * The .create is in callback to manage async behavior
    */
@@ -146,7 +176,6 @@ module.exports = {
    * Starts by finding the project by id (in the url params),
    * finding entries associated to that project, and then uses the
    * local.entries variable to associate with ejs view
-   * 
    */
   getAllEntries: (req, res, next) => {
     Project.findById(req.params.projectId).then(project => {
@@ -237,9 +266,9 @@ module.exports = {
         res.locals.entries = entries;
         next();
       }).catch(err => {
-          console.log('Error finding entries at projectController.getUserEntries ' + err.message);
-          next(err);
-        });
+        console.log('Error finding entries at projectController.getUserEntries ' + err.message);
+        next(err);
+      });
     }).catch(err => {
       console.log('Error: projectController.getUserEntries error' + err.message);
       next(err);
