@@ -23,7 +23,15 @@ module.exports = {
       .trim();
 
     req.check('email', 'Email is invalid').isEmail();
-    req.check('password', 'Password cannot be empty').notEmpty();
+    // req.check('password', 'Password cannot be empty').notEmpty();
+    req.check('password')
+      .isLength({ min: 8, max: 15 })
+      .withMessage('your password should have min and max length between 8-15')
+      .matches(/\d/)
+      .withMessage('your password should have at least one number')
+      .matches(/[!@#$%^&*(),.?":{}|<>]/)
+      .withMessage('your password should have at least one special character');
+    // 
     req.getValidationResult().then(err => {
       if (!err.isEmpty()) {
         let messages = err.array().map(e => e.msg);
@@ -110,6 +118,30 @@ module.exports = {
    * (see user model)
    */
   resetPassword: (req, res, next) => {
+    /**
+     * Progress 1/14/2021 - Successfully checks password on account creation.
+     * Currently working on checking the password when being changed - check not working the same for some reason
+     */
+    // let skip = false;
+    // req.check('newPassword')
+    //   .isLength({ min: 8, max: 15 })
+    //   .withMessage('your password should have min and max length between 8-15')
+    //   .matches(/\d/)
+    //   .withMessage('your password should have at least one number')
+    //   .matches(/[!@#$%^&*(),.?":{}|<>]/)
+    //   .withMessage('your password should have at least one special character');
+    // req.getValidationResult().then(err => {
+    //   if (!err.isEmpty()) {
+    //     let messages = err.array().map(e => e.msg);
+    //     req.flash('warning', messages.join(' and '));
+    //     skip = true;
+    //     res.locals.redirectPath = '/users/new-user';
+    //   }
+    // });
+
+    // if(skip === true){
+    //   next();
+    // }
     User.findById(res.locals.currentUser._id).then((user) => {
       user.changePassword(req.body.currentPassword, req.body.newPassword, function (err) {
         if (err) {
@@ -117,6 +149,7 @@ module.exports = {
           next(err);
         }
         res.locals.redirectPath = '/users/profile';
+        req.flash('success', 'New password has been saved');
         next();
       });
     }).catch(err => {
