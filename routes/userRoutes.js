@@ -6,7 +6,7 @@ router.get('/login', usersController.showLogin);
 router.post('/login', usersController.authenticate);
 router.get('/logout', usersController.logout, usersController.redirectPath);
 router.get('/new-user', usersController.newUserView);
-router.post('/new-user', usersController.createNewUser, usersController.redirectPath);
+router.post('/new-user', usersController.validateUser ,usersController.createNewUser, usersController.redirectPath);
 router.use((req, res, next) => {
   if (res.locals.loggedIn) {
     next();

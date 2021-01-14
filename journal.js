@@ -17,7 +17,7 @@ const User = require('./models/user');
 const errorController = require('./controllers/errorController');
 const connectFlash  = require('connect-flash');
 const methodOverride = require('method-override');// Required to handle different HTTP verbs like PUT or DELETE
-
+const expressValidator = require('express-validator');
 
 /**
  * Use mongoose to connect to mongoDB
@@ -86,6 +86,11 @@ app.use(methodOverride('_method', {
   // let method = req.body._method;
 
 }));
+
+/**
+ * Middleware to be used to 'clean' data that comes through express
+ */
+app.use(expressValidator());
 
 /**
  * This is middleware that will run every time, which reads the 

@@ -1,17 +1,44 @@
 const User = require('../models/user');
 const passport = require('passport');
-// const passportLocalMongoose = require('passport-local-mongoose');
 
-module.exports ={
+
+module.exports = {
 
   authenticate: passport.authenticate('local', {
     failureRedirect: '/users/login',
-    failureFlash :  'Login failed',
+    failureFlash: 'Login failed',
     successRedirect: '/',
-    successFlash:  'Welcome'
+    successFlash: 'Welcome'
   }),
 
+  /**
+   * This method "cleans" the data before it is passed to the createNewUser function,
+   * which is vital in ensuring that data is uniform before submitting.
+   */
+  validateUser: (req, res, next) => {
+    req.sanitizeBody('email')
+      .normalizeEmail({
+        all_lowercase: true
+      })
+      .trim();
+
+    req.check('email', 'Email is invalid').isEmail();
+    req.check('password', 'Password cannot be empty').notEmpty();
+    req.getValidationResult().then(err => {
+      if (!err.isEmpty()) {
+        let messages = err.array().map(e => e.msg);
+        req.flash('warning', messages.join(' and '));
+        res.locals.skip = true;
+        res.locals.redirectPath = '/users/new-user';
+      }
+      next();
+    });
+  },
+
   createNewUser: (req, res, next) => {
+    if (res.locals.skip === true) {
+      next();
+    }
     let newUser = new User({
       name: {
         first: req.body.firstName,
@@ -46,7 +73,7 @@ module.exports ={
     // });
   },
 
-  
+
   /**
    * Controls the logout function.
    * req.logout() is exposed by PassportJS.
@@ -65,13 +92,13 @@ module.exports ={
     res.render('users/newUser');
   },
 
-   /**
-   * Redirects based on given status and path.
-   * If only res.locals.redirectPath is clarified, it
-   * will NOT change the original http method to redirect
-   */
+  /**
+  * Redirects based on given status and path.
+  * If only res.locals.redirectPath is clarified, it
+  * will NOT change the original http method to redirect
+  */
   redirectPath: (req, res) => {
-    if(res.locals.redirectStatus){
+    if (res.locals.redirectStatus) {
       res.redirect(res.locals.redirectStatus, res.locals.redirectPath);
     } else {
       res.redirect(res.locals.redirectPath);
@@ -84,8 +111,8 @@ module.exports ={
    */
   resetPassword: (req, res, next) => {
     User.findById(res.locals.currentUser._id).then((user) => {
-      user.changePassword(req.body.currentPassword, req.body.newPassword, function(err) {
-        if(err){
+      user.changePassword(req.body.currentPassword, req.body.newPassword, function (err) {
+        if (err) {
           console.log('changePassword err' + err.message);
           next(err);
         }
