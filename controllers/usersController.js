@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const passport = require('passport');
+// const passportLocalMongoose = require('passport-local-mongoose');
 
 module.exports ={
 
@@ -78,6 +79,26 @@ module.exports ={
   },
 
   /**
+   * Method to reset the password for an account. Uses the local-mongoose plugin
+   * (see user model)
+   */
+  resetPassword: (req, res, next) => {
+    User.findById(res.locals.currentUser._id).then((user) => {
+      user.changePassword(req.body.currentPassword, req.body.newPassword, function(err) {
+        if(err){
+          console.log('changePassword err' + err.message);
+          next(err);
+        }
+        res.locals.redirectPath = '/users/profile';
+        next();
+      });
+    }).catch(err => {
+      console.log('Error: resetPassword User.findById: ' + err.message);
+      next(err);
+    });
+  },
+
+  /**
    * Shows login form
    */
   showLogin: (req, res) => {
@@ -89,5 +110,13 @@ module.exports ={
    */
   showUserProfile: (req, res) => {
     res.render('users/userProfile');
+  },
+
+  /**
+   * Display reset password page
+   */
+  showResetPassword: (req, res) => {
+    res.render('users/resetPassword');
   }
+
 };
