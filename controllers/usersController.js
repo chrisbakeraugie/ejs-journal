@@ -11,38 +11,6 @@ module.exports = {
     successFlash: 'Welcome'
   }),
 
-  /**
-   * This method "cleans" the data before it is passed to the createNewUser function,
-   * which is vital in ensuring that data is uniform before submitting.
-   */
-  validateUser: (req, res, next) => {
-    req.sanitizeBody('email')
-      .normalizeEmail({
-        all_lowercase: true
-      })
-      .trim();
-
-    req.check('email', 'Email is invalid').isEmail();
-    // req.check('password', 'Password cannot be empty').notEmpty();
-    req.check('password')
-      .isLength({ min: 8, max: 15 })
-      .withMessage('your password should have min and max length between 8-15')
-      .matches(/\d/)
-      .withMessage('your password should have at least one number')
-      .matches(/[!@#$%^&*(),.?":{}|<>]/)
-      .withMessage('your password should have at least one special character');
-    // 
-    req.getValidationResult().then(err => {
-      if (!err.isEmpty()) {
-        let messages = err.array().map(e => e.msg);
-        req.flash('warning', messages.join(' and '));
-        res.locals.skip = true;
-        res.locals.redirectPath = '/users/new-user';
-      }
-      next();
-    });
-  },
-
   createNewUser: (req, res, next) => {
     if (res.locals.skip === true) {
       next();
@@ -118,6 +86,32 @@ module.exports = {
    * (see user model)
    */
   resetPassword: (req, res, next) => {
+    if (res.locals.skip === true) {
+      res.locals.redirectPath = '/users/reset-password';
+      next();
+    } else {
+      User.findById(res.locals.currentUser._id).then((user) => {
+        user.changePassword(req.body.currentPassword, req.body.newPassword, function (err) {
+          if (err) {
+            if (err.message === 'Password or username is incorrect') {
+              res.locals.redirectPath = '/users/reset-password';
+              req.flash('danger', 'Your current password was incorrect. Please try again.');
+              next();
+            }
+            console.log('changePassword err: ' + err.message);
+          } else {
+            res.locals.redirectPath = '/users/profile';
+            req.flash('success', 'New password has been saved');
+            console.log('\n reset password');
+            next();
+            console.log('\n');
+          }
+        });
+      }).catch(err => {
+        console.log('Error: resetPassword User.findById: ' + err.message);
+        next(err);
+      });
+    }
     /**
      * Progress 1/14/2021 - Successfully checks password on account creation.
      * Currently working on checking the password when being changed - check not working the same for some reason
@@ -142,20 +136,7 @@ module.exports = {
     // if(skip === true){
     //   next();
     // }
-    User.findById(res.locals.currentUser._id).then((user) => {
-      user.changePassword(req.body.currentPassword, req.body.newPassword, function (err) {
-        if (err) {
-          console.log('changePassword err' + err.message);
-          next(err);
-        }
-        res.locals.redirectPath = '/users/profile';
-        req.flash('success', 'New password has been saved');
-        next();
-      });
-    }).catch(err => {
-      console.log('Error: resetPassword User.findById: ' + err.message);
-      next(err);
-    });
+
   },
 
   /**
@@ -177,6 +158,66 @@ module.exports = {
    */
   showResetPassword: (req, res) => {
     res.render('users/resetPassword');
+  },
+
+  /**
+   * Checks that the password being submitted matches the requirements for a password
+   * before passing it on to be used as the main password
+   */
+  validatePassword: (req, res, next) => {
+    if(req.body.newPassword !== req.body.newPasswordConfirm){
+      req.flash('danger', 'Your passwords did not match. Please try again.');
+      res.locals.skip = true;
+      next();
+    }
+
+    req.check('newPassword')
+      .isLength({ min: 8, max: 15 })
+      .withMessage('your password should have min and max length between 8-15')
+      .matches(/\d/)
+      .withMessage('your password should have at least one number')
+      .matches(/[!@#$%^&*(),.?":{}|<>]/)
+      .withMessage('your password should have at least one special character');
+    req.getValidationResult().then(err => {
+      if (!err.isEmpty()) {
+        let messages = err.array().map(e => e.msg);
+        req.flash('warning', messages.join(' and '));
+        res.locals.skip = true;
+      }
+      next();
+    });
+  },
+
+  /**
+   * This method "cleans" the data before it is passed to the createNewUser function,
+   * which is vital in ensuring that data is uniform before submitting.
+   */
+  validateUser: (req, res, next) => {
+    req.sanitizeBody('email')
+      .normalizeEmail({
+        all_lowercase: true
+      })
+      .trim();
+
+    req.check('email', 'Email is invalid').isEmail();
+    // req.check('password', 'Password cannot be empty').notEmpty();
+    req.check('password')
+      .isLength({ min: 8, max: 15 })
+      .withMessage('your password should have min and max length between 8-15')
+      .matches(/\d/)
+      .withMessage('your password should have at least one number')
+      .matches(/[!@#$%^&*(),.?":{}|<>]/)
+      .withMessage('your password should have at least one special character');
+    // 
+    req.getValidationResult().then(err => {
+      if (!err.isEmpty()) {
+        let messages = err.array().map(e => e.msg);
+        req.flash('warning', messages.join(' and '));
+        res.locals.skip = true;
+        res.locals.redirectPath = '/users/new-user';
+      }
+      next();
+    });
   }
 
 };

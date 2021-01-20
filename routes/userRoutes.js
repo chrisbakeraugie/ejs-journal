@@ -16,6 +16,6 @@ router.use((req, res, next) => {
 });
 router.get('/profile', projectController.getAllProjects, projectController.getUserEntries, usersController.showUserProfile);
 router.get('/reset-password', usersController.showResetPassword);
-router.post('/reset-password', usersController.resetPassword, usersController.redirectPath);
+router.post('/reset-password', usersController.validatePassword, usersController.resetPassword, usersController.redirectPath);
 
 module.exports = router;
