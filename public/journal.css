@@ -4,6 +4,7 @@
 }
 
 #main-container{
+  font-family: Comfortaa;
   /* background-image: url(/img/main-background.jpg); */
   background-color: rgba(0, 0, 0, 0.1);
   background-size: cover;
