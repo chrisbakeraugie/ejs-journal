@@ -6,6 +6,7 @@
  */
 const express = require('express'); // Initialize our express app
 const app = express();
+const {credentials} = require('./config');
 const port = 3005; // Basic port setup. Updated later
 const routes = require('./routes/index'); // Moving routes away from our main (journal.js) file
 const expressLayout = require('express-ejs-layouts');
@@ -51,9 +52,9 @@ app.use(express.urlencoded({ extended: true }));
 /**
  * Creating a session to be used by passportJS after login authentication
  */
-app.use(cookieParser('longcomplicatedcode'));
+app.use(cookieParser(credentials.cookieSecret));
 app.use(expressSession({
-  secret: 'longcomplicatedcode',
+  secret: credentials.cookieSecret,
   cookie: {
     maxAge: 1000 * 60 * 60 * 2 // About two hours in milliseconds
   },
@@ -134,5 +135,6 @@ app.use(errorController.respondInternalError); // 500
  * to start your server.
  */
 app.listen(port, () => {
-  console.log(`Server is running on ${port}`);
+  // eslint-disable-next-line no-undef
+  console.log(`Server is running on ${port} and in environment '${process.env.NODE_ENV}'`);
 });

@@ -3,7 +3,7 @@
   <h3>Your information:</h3>
   <p>Name: <%= currentUser.name.first %> <%= currentUser.name.middle %> <%= currentUser.name.last %></p>
   <p>Joined: <%= currentUser.createdAt.toDateString() %></p>
-  <a href="/users/reset-password"><div class="btn btn-info">Reset My Password</div></a>
+  <a href="/users/reset-password"><div class="btn btn-info">Change My Password</div></a>
   <% if (currentUser.projects.length > 0) { %>
   <h4>You have <%= projects.length %> projects</h4>
   <% projects.forEach(project => { %>

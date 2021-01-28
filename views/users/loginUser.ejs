@@ -3,7 +3,7 @@
   <div class="col-sm-12 my-auto d-flex justify-content-center">
     <div class="d-flex flex-column frosted-background">
       <h2 class="align-self-center" id="login-title">Welcome Back</h2>
-      
+
       <form class="d-flex flex-column" id="login-form" action="/users/login" method="POST">
         <h2 class="align-self-center">Login:</h2>
         <br />
@@ -13,6 +13,9 @@
         <br />
         <button class="btn btn-primary" type="submit">Submit</button>
       </form>
+      <div class="col-sm-12 my-auto d-flex justify-content-center" id="login-new-user">
+          <a href="/users/forgot-password" class="btn btn-danger">I forgot my password</a>
+        </div>
       <div class="col-sm-12 my-auto d-flex justify-content-center" id="login-new-user">
         <a href="/users/new-user" id="login-new-user-link">Haven't logged in before?</a>
       </div>

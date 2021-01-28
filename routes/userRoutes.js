@@ -7,6 +7,8 @@ router.post('/login', usersController.authenticate);
 router.get('/logout', usersController.logout, usersController.redirectPath);
 router.get('/new-user', usersController.newUserView);
 router.post('/new-user', usersController.validateUser ,usersController.createNewUser, usersController.redirectPath);
+router.get('/forgot-password', usersController.showForgotPassword);
+router.post('/forgot-password', usersController.sendPasswordReset, usersController.redirectPath);
 router.use((req, res, next) => {
   if (res.locals.loggedIn) {
     next();
