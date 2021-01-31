@@ -1,14 +1,15 @@
 <div class="d-flex flex-column align-items-center">
-  <h2><%= currentUser.fullName %></h2>
+  <h2 id="profile-username"><%= currentUser.fullName %></h2>
   <h3>Your information:</h3>
-  <p>Name: <%= currentUser.name.first %> <%= currentUser.name.middle %> <%= currentUser.name.last %></p>
-  <p>Joined: <%= currentUser.createdAt.toDateString() %></p>
-  <a href="/users/reset-password"><div class="btn btn-info">Change My Password</div></a>
+  <p id="profile-user-fullname">Name: <%= currentUser.name.first %> <%= currentUser.name.middle %> <%= currentUser.name.last %></p>
+  <p id="profile-join-date">Joined: <%= currentUser.createdAt.toDateString() %></p>
+  <a href="/users/reset-password" class="btn btn-info" id="profile-change-password">Change My Password</a>
   <% if (currentUser.projects.length > 0) { %>
-  <h4>You have <%= projects.length %> projects</h4>
+  <h4 id="profile-project-list-header">You have <%= projects.length %> projects</h4>
   <% projects.forEach(project => { %>
-  <h6><a href="/projects/<%= project._id %>"><%= project.title %></a>, which has <%= project.entries.length %> entries
-  </h6>
+  <h6><a href="/projects/<%= project._id %>"><%= project.title %></a>, which has <%= project.entries.length %> entries</h6>
+  <a class="btn btn-danger" href="/projects/<%= project._id%>/delete-confirm" style="font-size: x-small;">Delete this project</a>
+
   <% })} %>
   <h4>You have <%= entries.length %> total entries</h4>
 </div>

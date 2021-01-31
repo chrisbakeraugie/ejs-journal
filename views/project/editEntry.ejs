@@ -1,7 +1,16 @@
-<form action="/projects/<%= entry._id %>/edit?_method=PUT" method="POST">
-  <label for="title">Title</label>
-  <input type="text" name="title" value="<%= entry.title %>">
-  <label for="description"></label>
-  <input type="text" name="description" value="<%= entry.description %>">
-  <button class="btn btn-light" type="submit">Update</button>
-</form>
+<div class="d-flex flex-column align-items-center">
+  <form class="card w-50" id="new-entry" action="/projects/<%= entry._id %>/edit?_method=PUT" method="POST">
+    <div class="card-body">
+      <h3 class="card-title">Edit post</h3>
+      <div class="card-text" id="entry-title"><input id="title" type="text" name="title"
+          value="<%= entry.title %>" >
+      </div>
+      <div class="card-text" id="entry-description"><textarea id="description" type="text" name="description"><%= entry.description %></textarea></div>
+      <div class="card-text" id="entry-range">
+        <label for="mood-range" style="margin: 10px 10px 0px 10px;">Confidence</label>
+        <input class="range" type="range" min="1" max="100" value="<%= entry.mood %>" name="mood" id="mood-range">
+      </div>
+      <button class="btn btn-primary" id="entry-submit" type="submit">Update</button>
+    </div>
+  </form>
+</div>

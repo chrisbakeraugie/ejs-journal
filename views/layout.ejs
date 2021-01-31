@@ -14,14 +14,11 @@
   <div class="container-fluid">
     <!-- <a class="navbar-brand" href="/">Project Journal</a> -->
     <% if (loggedIn) { %>
-    <a class="navbar-brand" href="#">Hi, <%= currentUser.name.first %></a>
+    <a class="navbar-brand" href="/users/profile">Hi, <%= currentUser.name.first %></a>
     <% } %>
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       <li class="nav-item">
         <a href="/projects" class="nav-link">My Projects</a>
-      </li>
-      <li class="nav-item">
-        <a href="/users/profile" class="nav-link">My Profile</a>
       </li>
       <li class="nav-item">
         <a href="#" class="nav-link">About</a>

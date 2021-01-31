@@ -2,12 +2,22 @@
   <script src="https://d3js.org/d3.v6.min.js" charset="utf-8"></script>
 </head>
 
-<div>
-  <input type="hidden" name="data" id="entryData" value="<%= JSON.stringify(entries) %>">
+<div class="d-flex flex-column align-items-center">
+  <div class="row">
+    <h3 style="text-align: center;">
+      Welcome to the confidence tracker.
+    </h3>
+    <h6 style="text-align: center;">Use this to track how you're feeling about your project as you post. Additional features will be added as time goes on.</h6>
+
+  </div>
+  <div class="row">
+    <!-- <img class="col-sm-6" src="/img/vertical-arrow.svg" alt="Arrow labelled 'Better' at top, and 'worse' at bottom" id="mood-graph-scale" style="max-height: 600px; max-width: 100px; object-fit: cover;"> -->
+    <div class="chartContainer col-sm-6"></div>
+
+    <input type="hidden" name="data" id="entryData" value="<%= JSON.stringify(entries) %>">
+  </div>
 </div>
 
-
-<div class="chartContainer"></div>
 
 <script type="text/javascript" src="/js/lineChart.js">
 </script>

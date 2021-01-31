@@ -29,10 +29,10 @@
 //       title: 'Post number ' + i,
 //       description: 'This is the description for post',
 //       writtenDate: new Date(getRandomInt(early, later)),
-//       project: '5fe24f7e4f312e52f95fbb5d',
+//       project: '60132134b3907d3b55f2d417',
 //       mood: getRandomInt(1, 100)
 //     }).then(newEntry => {
-//       Project.findByIdAndUpdate('5fe24f7e4f312e52f95fbb5d', { $push: { entries: newEntry._id } }).then(() => {
+//       Project.findByIdAndUpdate('60132134b3907d3b55f2d417', { $push: { entries: newEntry._id } }).then(() => {
 //         console.log(i);
 //       }).catch(err => {
 //         console.log('projectController.entryPost error ' + err.message);

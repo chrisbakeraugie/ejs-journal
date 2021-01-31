@@ -1,37 +1,49 @@
-<div class="d-flex flex-column align-items-center">
-  <h1><%= project.title %></h1>
-  <a class="btn btn-info" href="/projects/<%= project._id %>/data">Confidence Tracker</a>
+<div class="container align-items-center" style="margin: 0; min-width: 100vw;">
+  <div class="row" style="text-align: center;">
+    <h1 style="margin: auto; margin-bottom: 15px;"><%= project.title %></h1>
 
-  <form class="card w-50" id="new-entry" action="/projects/<%= project._id %>" method="POST">
-    <div class="card-body">
-      <h3 class="card-title">What did you do today?</h3>
-      <div class="card-text" id="entry-title"><input id="title" type="text" name="title" placeholder="Title" required>
-      </div>
-      <div class="card-text" id="entry-description"><textarea id="description" type="text" name="description"
-          placeholder="Talk about what you accomplished and how you did it" required></textarea></div>
-      <div class="card-text" id="entry-range">
-        <label for="mood-range" style="margin: 10px 10px 0px 10px;">Confidence</label>
-        <input class="range" type="range" min="1" max="100" value="50" name="mood" id="mood-range">
-      </div>
-      <button class="btn btn-primary" id="entry-submit" type="submit">Post</button>
+  </div>
+  <div class="row">
+    <div class="col-sm my-auto" style="text-align: center;">
+      <h5 ><%= project.description %></h5>
     </div>
-  </form>
-
-
-  <% entries.forEach(entry => { %>
-  <div class="card w-50 entry-card">
-    <img class="card-img-top" src="<%= randImgs[Math.floor(Math.random() * (randImgs.length - 0 + 1) + 0)] %>"
-      style="max-height: 500px; max-width: 500px;">
-    <div class="card-body">
-      <h4 class="card-title"><%= entry.title %></h4>
-      <p class="card-subtitle mb-2 text-muted"><%= entry.writtenDate%></p>
-      <p class="card-text"><%= entry.description %></p>
-      <div>
-        <a class="btn" href="/projects/<%= entry._id %>/edit">Edit</a>
-        <a class="btn btn-danger" href="/projects/<%= project._id%>/<%= entry._id %>?_method=DELETE">Delete</a>
-      </div>
+    <div class="col-sm-6" style="padding: 0; margin: 0;">
+      <form class="card" id="new-entry" style="width: 50vw; margin: auto;" action="/projects/<%= project._id %>"
+        method="POST">
+        <div class="card-body">
+          <h3 class="card-title">What did you do today?</h3>
+          <div class="card-text" id="entry-title"><input id="title" type="text" name="title" placeholder="Title"
+              required>
+          </div>
+          <div class="card-text" id="entry-description"><textarea id="description" type="text" name="description"
+              placeholder="Talk about what you accomplished and how you did it" required></textarea></div>
+          <div class="card-text" id="entry-range">
+            <label for="mood-range" style="margin: 10px 10px 0px 10px;">Confidence</label>
+            <input class="range" type="range" min="1" max="100" value="50" name="mood" id="mood-range">
+          </div>
+          <button class="btn btn-primary" id="entry-submit" type="submit">Post</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm my-auto" style="text-align: center;">
+      <a class="btn btn-info" href="/projects/<%= project._id %>/data">Confidence Tracker</a>
     </div>
   </div>
-  <%}); %>
-  <a class="btn btn-danger" href="/projects/<%= project._id%>/delete-confirm">Delete this project</a>
+
+  <div class="row" style="justify-content: center;">
+    <% entries.forEach(entry => { %>
+    <div class="card w-50 entry-card">
+      <div class="card-body">
+        <h4 class="card-title"><%= entry.title %></h4>
+        <p class="card-subtitle mb-2 text-muted"><%= entry.writtenDate.toDateString()%></p>
+        <p class="card-text"><%= entry.description %></p>
+        <div>
+          <a class="btn" href="/projects/<%= entry._id %>/edit">Edit</a>
+          <a class="btn btn-danger" href="/projects/<%= project._id%>/<%= entry._id %>?_method=DELETE"
+            onclick='return confirm(`Are you sure you want to delete "<%= entry.title %>"? This cannot be reversed!`)'>Delete</a>
+        </div>
+      </div>
+    </div>
+    <%}); %>
+  </div>
 </div>
