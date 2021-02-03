@@ -11,7 +11,8 @@
           <input type="text" id="projectToDelete" name="projectToDelete" placeholder="title" required>
         <br />
         <button id='matchProjectTitle' class="btn btn-danger" disabled hidden style='padding: 0; font-size: small;'>Your title must match</button>
-        <a href="#" class="btn btn-danger" id="deleteProject">Delete Project</a>
+        <br />
+        <a href="#" class="btn btn-danger" id="deleteProject" onclick='return confirm(`Are you sure you want to delete "<%=project.title%>"? This cannot be reversed!`)'>Delete Project</a>
       </form>
       
     </div>
@@ -24,7 +25,6 @@
         form.matchProjectTitle.hidden = false;
       } else {
         form.matchProjectTitle.hidden = true;
-        // form.deleteProject.style = "opacity: 100%;";
         document.getElementById('deleteProject').href = "/projects/<%= project._id%>/delete?_method=DELETE";
         document.getElementById('deleteProject').color = "red";
       }

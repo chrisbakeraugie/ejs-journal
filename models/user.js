@@ -31,7 +31,7 @@ const userSchema = mongoose.Schema({
   { timestamps: true });
 
 userSchema.virtual('fullName').get(function () {
-  return (`${this.name.first} ${this.name.last}`);
+  return (`${this.name.first} ${this.name.middle} ${this.name.last}`);
 });
 
 /**
