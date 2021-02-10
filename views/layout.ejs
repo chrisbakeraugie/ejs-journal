@@ -21,7 +21,7 @@
         <a href="/projects" class="nav-link">My Projects</a>
       </li>
       <li class="nav-item">
-        <a href="#" class="nav-link">About</a>
+        <a href="/about" class="nav-link">About</a>
       </li>
       <% if (loggedIn) { %>
       <li class="nav-item">
@@ -37,8 +37,7 @@
         <div class="flash nav-link alert-<%=Object.keys(flashMessage)%>" role="alert">
           <%=flashMessage[Object.keys(flashMessage)]%></div>
         <% } %>
-  </div>
-  </ul>
+    </ul>
   </div>
 </nav>
 

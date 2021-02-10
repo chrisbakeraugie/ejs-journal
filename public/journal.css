@@ -1,6 +1,8 @@
 :root {
   --animation-width: 439px;
-  --animation-container-width: 480px
+  --animation-container-width: 480px;
+  --bs-danger: #dc3546ea;
+  --bs-info: #0895b1ea;
 }
 
 h1{
@@ -178,4 +180,46 @@ g.tick {
 
 path.domain {
   stroke: none;
+}
+
+/* ----------- About ----------- */
+#about-page-body{
+  background-size: cover;
+  background-image: url('/img/main-background.jpg');
+  max-width: 100vw;
+}
+
+#about-page-container{
+  margin: 0;
+  padding: 20px;
+  max-width: 100vw;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+#about-warning{
+  color: var(--bs-danger);
+}
+
+.about-page-img {
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: white;
+}
+
+.about-paragraph {
+  margin-left: 30px;
+}
+
+.about-row{
+  margin-top: 20px;
+}
+.credit-list {
+  list-style: none;
+}
+
+.credit-list-link {
+  text-decoration: none;
+  color: var(--bs-info);
+
 }
