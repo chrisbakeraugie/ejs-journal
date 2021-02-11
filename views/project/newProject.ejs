@@ -1,10 +1,11 @@
 <div class="d-flex flex-column align-items-center">
   <h3>Start a new project</h3>
-  <form class="card w-50 entry-card" action="/projects/new-project" method="POST" style="padding: 15px;">
+  <form class="card w-50 entry-card" id="new-project-card" action="/projects/new-project" method="POST">
     <label for="title">Title</label>
     <input id="title" type="text" name="title" required>
     <label for="description">Description</label>
-    <textarea name="description" id="new-project-description" cols="30" rows="10" placeholder="What is this project? What are your goals? Why are you undertaking it? Describe your project!"></textarea>
+    <textarea name="description" id="new-project-description" cols="30" rows="10"
+      placeholder="What is this project? What are your goals? Why are you undertaking it? Describe your project!"></textarea>
     <button class="btn btn-success" type="submit">Get Started</button>
   </form>
 </div>

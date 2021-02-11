@@ -1,13 +1,13 @@
-<div class="container align-items-center" style="margin: 0; min-width: 100vw;">
-  <div class="row" style="text-align: center;">
-    <h1 style="margin: auto; margin-bottom: 15px;"><%= project.title %></h1>
+<div class="container align-items-center" id="project-container" >
+  <div class="row" id="project-first-row">
+    <h1 id="project-page-title"><%= project.title %></h1>
   </div>
-  <div class="row">
-    <div class="col-sm my-auto" style="text-align: center;">
+  <div class="row" id="project-second-row">
+    <div class="col-sm my-auto" >
       <h5 ><%= project.description %></h5>
     </div>
-    <div class="col-sm-6" style="padding: 0; margin: 0;">
-      <form class="card" id="new-entry" style="width: 50vw; margin: auto;" action="/projects/<%= project._id %>"
+    <div class="col-sm-6" id="new-entry-div">
+      <form class="card" id="new-entry-card" action="/projects/<%= project._id %>"
         method="POST">
         <div class="card-body">
           <h3 class="card-title">What did you do today?</h3>
@@ -17,19 +17,19 @@
           <div class="card-text" id="entry-description"><textarea id="description" type="text" name="description"
               placeholder="Talk about what you accomplished and how you did it" required></textarea></div>
           <div class="card-text" id="entry-range">
-            <label for="mood-range" style="margin: 10px 10px 0px 10px;">Confidence</label>
+            <label for="mood-range" id="confidence-tracker-label">Confidence</label>
             <input class="range" type="range" min="1" max="100" value="50" name="mood" id="mood-range">
           </div>
           <button class="btn btn-primary" id="entry-submit" type="submit">Post</button>
         </div>
       </form>
     </div>
-    <div class="col-sm my-auto" style="text-align: center;">
+    <div class="col-sm my-auto" >
       <a class="btn btn-info" href="/projects/<%= project._id %>/data">Confidence Tracker</a>
     </div>
   </div>
 
-  <div class="row" style="justify-content: center;">
+  <div class="row" id="prev-entries-row">
     <% entries.forEach(entry => { %>
     <div class="card w-50 entry-card">
       <div class="card-body">

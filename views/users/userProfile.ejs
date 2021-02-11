@@ -1,47 +1,40 @@
-<!-- <div class="d-flex flex-column align-items-center">
-  <h2 id="profile-username"><%= currentUser.fullName %></h2>
-  <h3>Your information:</h3>
-  <p id="profile-user-fullname">Name: <%= currentUser.name.first %> <%= currentUser.name.middle %>
-    <%= currentUser.name.last %></p>
-  <p id="profile-join-date">Joined: <%= currentUser.createdAt.toDateString() %></p>
-  <a href="/users/reset-password" class="btn btn-info" id="profile-change-password">Change My Password</a>
-  <% if (currentUser.projects.length > 0) { %>
-  <h4>You have <%= projects.length %> projects</h4>
-  
-  <h4>You have <%= entries.length %> total entries</h4>
-</div> -->
-
-<div class="container" style="margin: 0; padding: 50px; max-width: 100vw;">
+<div class="container" id="user-profile-container">
   <div class="row">
     <div class="row">
-      <h2 style="margin-bottom: 20px;">Your Information</h2>
+      <h2 id="user-profile-title">Your Information</h2>
     </div>
     <div class="col">
       <h3 id="profile-user-fullName">Full name: <%= currentUser.fullName %></h3>
       <p>Joined: <%= currentUser.createdAt.toDateString() %></p>
     </div>
-    <div class="col" style="text-align: center;">
+    <div class="col" id="user-profile-options-col">
       <p><a href="/users/reset-password" class="btn btn-info" id="profile-change-password">Change My Password</a></p>
-      <p><a href="#" style="color: rgba(17, 29, 29, 0.9);">How do I delete my account?</a></p>
+      <p><a href="#" id="delete-account-link">How do I delete my account?</a></p>
     </div>
   </div>
   <hr>
   <div class="row">
     <h3 id="profile-project-list-header">You have You have <%= projects.length %> projects, and <%= entries.length %>
-      total entries</h3>
+      total entries.
+      <% if (projects.length < 1){ %>
+      <a href="/projects/new-project">Why not start one?</a>
+      <% } %>
+    </h3>
   </div>
+
   <% projects.forEach(project => { %>
-  <div class="row" style="margin-top: 10px;">
+  <div class="row" id="user-profile-project-row">
     <div class="col">
-      <p style="font-size: 1.2rem;"><a style="color: rgba(17, 29, 29, 0.9);"
+      <p class="user-profile-project-details"><a class="user-profile-project-link"
           href="/projects/<%= project._id %>"><%= project.title %></a>, which has <%= project.entries.length %>
         entries </p>
     </div>
-    <div class="col" style="text-align: center;">
-      <p><a class="btn btn-danger" href="/projects/<%= project._id%>/delete-confirm" style="font-size: x-small; background-color: #dc3546ea;">Delete this project</a>
+    <div class="col user-profile-delete-project-col">
+      <p><a class="btn btn-danger delete-project-button" href="/projects/<%= project._id%>/delete-confirm">Delete this
+          project</a>
       </p>
     </div>
   </div>
 
-  <% })} %>
+  <% }) %>
 </div>

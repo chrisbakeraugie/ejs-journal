@@ -7,7 +7,7 @@
       </div>
       <div class="card-text" id="entry-description"><textarea id="description" type="text" name="description"><%= entry.description %></textarea></div>
       <div class="card-text" id="entry-range">
-        <label for="mood-range" style="margin: 10px 10px 0px 10px;">Confidence</label>
+        <label for="mood-range" id="edit-entry-confidence-label">Confidence</label>
         <input class="range" type="range" min="1" max="100" value="<%= entry.mood %>" name="mood" id="mood-range">
       </div>
       <button class="btn btn-primary" id="entry-submit" type="submit">Update</button>
