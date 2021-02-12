@@ -1,0 +1,12 @@
+<div class="row h-100 home-container">
+  <div class="col-sm-12 my-auto d-flex justify-content-center">
+    <div class="d-flex flex-column frosted-background">
+      <p></p>
+      <form class="d-flex flex-column" id="login-form" action="/users/delete-user" method="POST">
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <br />
+        <button class="btn btn-danger" type="submit" onclick="return confirm('Last check - this will permanently delete everything under your account, and it cannot be reversed! Continue?')">Delete Everything</button>
+      </form>
+      </div>
+    </div>
+  </div>

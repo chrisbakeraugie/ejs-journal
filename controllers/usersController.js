@@ -14,6 +14,31 @@ module.exports = {
     successFlash: 'Welcome'
   }),
 
+  confirmPassword: (req, res, next) => {
+    User.findById(res.locals.currentUser._id).then(user => {
+      user.authenticate(req.body.password, function (err, result) {
+        if (err) {
+          console.log('user authentication error ' + err.message);
+          req.flash('danger', 'User account could not be deleted due to an error. Please try again');
+          next(err);
+        } else {
+          if (result === false) {
+            req.flash('danger', 'Password did not match. Please try again.');
+            console.log('Password mismatch');
+            res.locals.skip = true;
+            res.locals.redirectPath = '/';
+            next();
+          } else {
+            next();
+          }
+        }
+      });
+    }).catch(err => {
+      console.log('usersController confirmPassword err: ' + err.message);
+      next(err);
+    });
+  },
+
   createNewUser: (req, res, next) => {
     if (res.locals.skip === true) {
       next();
@@ -52,6 +77,23 @@ module.exports = {
     // });
   },
 
+  deleteUser: (req, res, next) => {
+    if (res.locals.skip === true) {
+      next();
+    } else {
+      User.findByIdAndDelete(res.locals.currentUser._id).then(() => {
+        req.flash('success', 'User account successfully deleted');
+        res.locals.redirectPath = '/';
+        next();
+      }).catch(err => {
+        req.flash('danger', 'Error: User account NOT deleted');
+        console.log('usersController deleteUser error: ' + err.message);
+        next(err);
+      });
+    }
+
+
+  },
 
   /**
    * Controls the logout function.
@@ -61,7 +103,6 @@ module.exports = {
    */
   logout: (req, res, next) => {
     req.logout();
-    // Add a flash message
     res.locals.redirectPath = '/';
     req.flash('info', 'Logged out');
     next();
@@ -105,9 +146,7 @@ module.exports = {
           } else {
             res.locals.redirectPath = '/users/profile';
             req.flash('success', 'New password has been saved');
-            console.log('\n reset password');
             next();
-            console.log('\n');
           }
         });
       }).catch(err => {
@@ -126,9 +165,9 @@ module.exports = {
    */
   sendPasswordReset: (req, res, next) => {
     req.sanitizeBody('email')
-    .normalizeEmail({
-      all_lowercase: true
-    }).trim();
+      .normalizeEmail({
+        all_lowercase: true
+      }).trim();
     User.findOne({ 'email': req.body.email }).then(user => {
       if (user === null) {
         res.locals.redirectPath = '/users/forgot-password';
@@ -170,6 +209,10 @@ module.exports = {
       console.log('sendPassword reset error, User.findOne: ' + err);
       next(err);
     });
+  },
+
+  showDeleteUser: (req, res) => {
+    res.render('users/deleteUser');
   },
 
   showForgotPassword: (req, res) => {

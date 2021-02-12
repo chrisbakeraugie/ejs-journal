@@ -19,5 +19,7 @@ router.use((req, res, next) => {
 router.get('/profile', projectController.getAllProjects, projectController.getUserEntries, usersController.showUserProfile);
 router.get('/reset-password', usersController.showResetPassword);
 router.post('/reset-password', usersController.validatePassword, usersController.resetPassword, usersController.redirectPath);
+router.get('/delete-user', usersController.showDeleteUser);
+router.post('/delete-user', usersController.confirmPassword, usersController.deleteUser, usersController.redirectPath);
 
 module.exports = router;
