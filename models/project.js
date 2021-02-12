@@ -7,6 +7,10 @@ const projectSchema = mongoose.Schema({
     unique: true
   },
 
+  description: {
+    type: String,
+  },
+
   owner: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User'

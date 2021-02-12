@@ -56,6 +56,7 @@ module.exports = {
         } else {
           Project.create({
             title: req.body.title,
+            description: req.body.description,
             owner: res.locals.currentUser._id
           })
             .then(project => {
@@ -308,13 +309,6 @@ module.exports = {
   },
 
   /**
-   * Renders entry confirmation page
-   */
-  showCheckEntry: (req, res) => {
-    res.render('project/checkEntry');
-  },
-
-  /**
    * Renders the editEntry view
    */
   showEditEntry: (req, res) => {
@@ -328,9 +322,10 @@ module.exports = {
   updateEntry: (req, res, next) => {
     Entry.findByIdAndUpdate(req.params.entryId, {
       title: req.body.title,
-      description: req.body.description
+      description: req.body.description,
+      mood: req.body.mood
     }).then(entry => {
-      res.locals.redirectPath = `/projects/${entry._id}/check-entry`;
+      res.locals.redirectPath = `/projects/${entry.project}`;
       req.flash('success', 'Entry updated successfully');
       next();
     }).catch(err => {

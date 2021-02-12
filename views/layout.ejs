@@ -2,27 +2,25 @@
 <html>
 
 <head>
-  <title>Project Journal</title>
+  <title>Skriftr</title>
   <link rel="stylesheet" type="text/css" href="/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/journal.css">
-
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap" rel="stylesheet">
 </head>
 
 <nav class="navbar navbar-expand navbar-light bg-light">
   <div class="container-fluid">
     <!-- <a class="navbar-brand" href="/">Project Journal</a> -->
     <% if (loggedIn) { %>
-    <a class="navbar-brand" href="#">Hi, <%= currentUser.name.first %></a>
+    <a class="navbar-brand" href="/users/profile">Hi, <%= currentUser.name.first %></a>
     <% } %>
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       <li class="nav-item">
         <a href="/projects" class="nav-link">My Projects</a>
       </li>
       <li class="nav-item">
-        <a href="/users/profile" class="nav-link">My Profile</a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link">About</a>
+        <a href="/about" class="nav-link">About</a>
       </li>
       <% if (loggedIn) { %>
       <li class="nav-item">
@@ -38,8 +36,7 @@
         <div class="flash nav-link alert-<%=Object.keys(flashMessage)%>" role="alert">
           <%=flashMessage[Object.keys(flashMessage)]%></div>
         <% } %>
-  </div>
-  </ul>
+    </ul>
   </div>
 </nav>
 
