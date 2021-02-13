@@ -1,6 +1,7 @@
 :root {
   --animation-width: 439px;
   --animation-container-width: 480px;
+  --journal-background: #0000001a;
   --journal-danger: #dc3546ea;
   --journal-info: #0895b1ea;
   --journal-gray: #6c757dea;
@@ -32,7 +33,7 @@ h1 {
 #main-container {
   font-family: Comfortaa;
   /* background-image: url(/img/main-background.jpg); */
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--journal-background);
   background-size: cover;
 }
 
