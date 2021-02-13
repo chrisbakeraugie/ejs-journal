@@ -3,28 +3,26 @@
   --animation-container-width: 480px;
   --journal-danger: #dc3546ea;
   --journal-info: #0895b1ea;
-  --journal-gray: #6c757d;
-  --journal-blue: #0d6efd;
-  --journal-indigo: #6610f2;
-  --journal-purple: #6f42c1;
-  --journal-pink: #d63384;
-  --journal-red: #dc3545;
-  --journal-orange: #fd7e14;
-  --journal-yellow: #ffc107;
-  --journal-green: #198754;
-  --journal-teal: #20c997;
-  --journal-cyan: #0dcaf0;
+  --journal-gray: #6c757dea;
+  --journal-blue: #0d6efdea;
+  --journal-indigo: #6610f2ea;
+  --journal-purple: #6f42c1ea;
+  --journal-pink: #d63384ea;
+  --journal-red: #dc3545ea;
+  --journal-orange: #fd7e14ea;
+  --journal-yellow: #ffc107ea;
+  --journal-green: #198754ea;
+  --journal-teal: #20c997ea;
+  --journal-cyan: #0dcaf0ea;
   --journal-white: #fff;
-  --journal-gray: #6c757d;
-  --journal-gray-dark: #343a40;
-  --journal-primary: #0d6efd;
-  --journal-secondary: #6c757d;
-  --journal-success: #198754;
-  --journal-info: #0dcaf0;
-  --journal-warning: #ffc107;
-  --journal-danger: #dc3545;
-  --journal-light: #f8f9fa;
-  --journal-dark: #212529;
+  --journal-gray: #6c757dea;
+  --journal-gray-dark: #343a40ea;
+  --journal-primary: #0d6efdea;
+  --journal-secondary: #6c757dea;
+  --journal-success: #198754ea;
+  --journal-warning: #ffc107ea;
+  --journal-light: #f8f9faea;
+  --journal-dark: #212529ea;
 }
 
 h1 {
@@ -121,6 +119,15 @@ nav {
 #new-user-to-login-link {
   color: var(--journal-gray);
   text-decoration: underline;
+}
+
+#user-delete-account-div{
+  max-width: 50vw;
+  text-align: center;
+}
+
+#user-delete-account-header{
+  color: var(--journal-danger);
 }
 
 .user-profile-delete-project-col {
