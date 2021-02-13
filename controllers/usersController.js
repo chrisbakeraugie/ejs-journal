@@ -14,6 +14,10 @@ module.exports = {
     successFlash: 'Welcome'
   }),
 
+  /**
+   * Checks that submitted password matches the password in the system,
+   * setting 'skip' to 'true' if the user's password and submitted password don't match
+   */
   confirmPassword: (req, res, next) => {
     User.findById(res.locals.currentUser._id).then(user => {
       user.authenticate(req.body.password, function (err, result) {
@@ -51,7 +55,7 @@ module.exports = {
         },
         email: req.body.email
       });
-  
+
       User.register(newUser, req.body.password, function (err, user) {
         if (err) {
           console.log('Error: usersController.createNewUser register error: ' + err.message);
@@ -71,14 +75,13 @@ module.exports = {
         }
       });
     }
- 
-    // Removed because this is not type Promise
-    // .catch(err => {
-    //   console.log('Error: usersController.createNewUser register error: ' + err.message);
-    //   req.flash('danger', 'User account not created. Please try again');
-    // });
   },
 
+  /**
+   * Deletes a user account.
+   * 
+   * TODO: delete all associated entries and projects
+   */
   deleteUser: (req, res, next) => {
     if (res.locals.skip === true) {
       next();
@@ -95,6 +98,17 @@ module.exports = {
     }
 
 
+  },
+
+  /**
+   * Middleware that redirects users when the access resources that shouldn't be visible when logged in.
+   */
+  loggedInRedirect: (req, res, next) => {
+    if (res.locals.loggedIn) {
+      res.redirect('/projects');
+    } else {
+      next();
+    }
   },
 
   /**
