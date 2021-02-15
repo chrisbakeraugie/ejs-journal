@@ -10,26 +10,26 @@ module.exports = {
    * order to prevent authenticated users from seeing OTHER authenticated users' information.
    */
   authenticateUser: (req, res, next) => {
-    if(req.params.entryId){
+    if (req.params.entryId) {
       Entry.findById(req.params.entryId).then(entry => {
-        if(entry.owner.equals(res.locals.currentUser._id)){
+        if (entry.owner.equals(res.locals.currentUser._id)) {
           next();
         } else {
           next(Error('Not Authorized'));
         }
       }).catch(err => {
-        console.log('Error at authenticateUser - entry: ' + err.message );
+        console.log('Error at authenticateUser - entry: ' + err.message);
         next(err);
       });
-    } else if (req.params.projectId){
+    } else if (req.params.projectId) {
       Project.findById(req.params.projectId).then(project => {
-        if(project.owner.equals(res.locals.currentUser._id)){
+        if (project.owner.equals(res.locals.currentUser._id)) {
           next();
         } else {
           next(Error('Not Authorized'));
         }
       }).catch(err => {
-        console.log('Error at authenticateUser - project: ' + err.message );
+        console.log('Error at authenticateUser - project: ' + err.message);
         next(err);
       });
     }
@@ -92,33 +92,22 @@ module.exports = {
   },
 
   /**
-   * Finds a project by the url parameter, which is an id, and returns the project.
-   * It then removes the project and then next()
+   * Starts by finding the User and removing the project from the project array.
+   * At the same time, it finds the project document and removes any entries (entry collection) that match the entry id.
+   * Finally it removes the project from the project collection.
    */
   deleteProject: (req, res, next) => {
+    User.findByIdAndUpdate(res.locals.currentUser._id, { $pull: { projects: req.params.projectId } }).catch(err => {
+      console.log('Error removing project from User document ' + err.message);
+      next(err);
+    });
     Project.findById(req.params.projectId).then((project) => {
-      /**EXPLANATION - the current logic obviously isn't the best way to do this, however, 
-       * in the future, i'd like to implement a requirement to type the title of the project before deleting,
-       * so I'm leaving my first logic here to be referenced. 
-       */
-      // if (project.title.equals(req.body.titleToDelete)) {
-      //   Project.findByIdAndRemove(req.params.projectId).then(() => {
-      //     // eslint-disable-next-line quotes
-      //     req.flash('info', `The project '${project.title}' has been deleted`);
-      //     res.locals.redirectStatus = httpStatus.SEE_OTHER;
-      //     res.locals.redirectPath = '/projects';
-      //     next();
-      //   }).catch((err) => {
-      //     console.log('Error at projectController.deleteProject Project.findbyIdandRemove: ' + err.message);
-      //     req.flash('danger', 'Error - Project not deleted. Please wait and try again');
-      //     next(err);
-      //   });
-      // } else {
-      //   req.flash('warning', 'Your input did not match the project title. Please try again');
-      //   res.locals.redirectStatus = httpStatus.SEE_OTHER;
-      //   res.locals.redirectPath = `/projects/${req.params.projectId}/delete-confirm`;
-      //   next();
-      // }
+      project.entries.forEach(entry => {
+        Entry.findByIdAndRemove(entry._id).catch(err => {
+          console.log('Error at Entry.findByIdAndRemove of deleteProject ' + err.message);
+          next(err);
+        });
+      });
       Project.findByIdAndRemove(req.params.projectId).then(() => {
         // eslint-disable-next-line quotes
         req.flash('info', `The project '${project.title}' has been deleted`);
