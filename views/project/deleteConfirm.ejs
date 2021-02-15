@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-center">
-      <form class="d-flex w-25 flex-column" action='/users/reset-password' method='POST' onkeyup="return titleCheck(this, '<%=project.title%>')">
+      <form class="d-flex w-25 flex-column" action='/users/reset-password' method='POST' onkeyup="return titleCheck(this, `<%=project.title%>`)">
         <label for="currentPassword">Title</label>
           <input type="text" id="projectToDelete" name="projectToDelete" placeholder="title" required>
         <br />
