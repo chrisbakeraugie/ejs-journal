@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const Project = require('../models/project');
+const Entry = require('../models/entry');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
 const nodemailerSendgrid = require('nodemailer-sendgrid');
@@ -78,15 +80,28 @@ module.exports = {
   },
 
   /**
-   * Deletes a user account.
+   * Removes a user account from the users collection.
+   * Then iterates through each project in a users account and removes it from the projects collection
+   * Then iterates each entry that belongs  
    * 
-   * TODO: delete all associated entries and projects
+   * TODO: Find a method to remove the nested forEach loops
    */
   deleteUser: (req, res, next) => {
     if (res.locals.skip === true) {
       next();
     } else {
-      User.findByIdAndDelete(res.locals.currentUser._id).then(() => {
+      User.findByIdAndRemove(res.locals.currentUser._id).then((user) => {
+        user.projects.forEach(project => {
+          Project.findByIdAndRemove(project._id).then(project => {
+            project.entries.forEach(entry => {
+              Entry.findByIdAndRemove(entry._id).catch(err => {
+                console.log(err.message);
+              });
+            });
+          }).catch(err => {
+            console.log(err.message);
+          });
+        });
         req.flash('success', 'User account successfully deleted');
         res.locals.redirectPath = '/';
         next();

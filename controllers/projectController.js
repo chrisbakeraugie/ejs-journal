@@ -76,15 +76,29 @@ module.exports = {
     });
   },
 
+  /**
+   * Starts by removing the entry from the 'entry' collection.
+   * Then removes the entry reference from the User collection.
+   * Then removed the entry reference from the project collection.
+   */
   deleteEntry: (req, res, next) => {
     Entry.findByIdAndRemove(req.params.entryId)
-      .then(() => {
+      .then((entry) => {
+        User.findByIdAndUpdate(res.locals.currentUser._id, { $pull: { entries: entry._id } })
+          .then(() => {
+            Project.findByIdAndUpdate(req.params.projectId, { $pull: { entries: entry._id } }).catch(err => {
+              console.log('' + err.message);
+              next(err);
+            });
+          }).catch(err => {
+            console.log('' + err.message);
+            next(err);
+          });
         res.locals.redirectStatus = httpStatus.SEE_OTHER;
         res.locals.redirectPath = '/projects/' + req.params.projectId;
         req.flash('success', 'Entry successfully deleted');
         next();
-      })
-      .catch(err => {
+      }).catch(err => {
         console.log(`Error at projectController.deleteEntry: ${err.message}`);
         req.flash('danger', 'Error - Entry not deleted');
         next(err);
@@ -110,7 +124,7 @@ module.exports = {
           console.log('Error at Entry.findByIdAndRemove of deleteProject: ' + err.message);
           next(err);
         });
-        
+
         User.findByIdAndUpdate(res.locals.currentUser._id, { $pull: { entries: entry._id } }).catch(err => {
           console.log('Error at User.findByIdAndUpdate entries of deleteProject: ' + err.message);
           next(err);
