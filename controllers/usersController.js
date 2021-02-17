@@ -166,11 +166,6 @@ module.exports = {
     res.render('users/newUser');
   },
 
-
-  reachedLoginReqLimit: (req, res, next) => {
-
-  },
-
   /**
   * Redirects based on given status and path.
   * If only res.locals.redirectPath is clarified, it
@@ -251,7 +246,7 @@ module.exports = {
           transport.sendMail({
             from: credentials.fromSendgridEmail,
             to: user.email,
-            subject: 'Password reset for Project Journal',
+            subject: 'Password reset for Skriftr',
             html: `<h1>Howdy, here is your temporary password</h1>
           <br/>
           <p>${tempPass}</p>`
