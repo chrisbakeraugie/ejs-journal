@@ -166,11 +166,6 @@ module.exports = {
     res.render('users/newUser');
   },
 
-
-  reachedLoginReqLimit: (req, res, next) => {
-
-  },
-
   /**
   * Redirects based on given status and path.
   * If only res.locals.redirectPath is clarified, it
