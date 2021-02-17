@@ -9,12 +9,35 @@ const genPassword = require('generate-password');
 
 module.exports = {
 
-  authenticate: passport.authenticate('local', {
-    failureRedirect: '/users/login',
-    failureFlash: 'Login failed',
-    successRedirect: '/projects',
-    successFlash: 'Welcome'
-  }),
+  authenticate: function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+      if (info) {
+        let infoArr = info.toString().split(': ');
+        if (infoArr[0] === 'IncorrectPasswordError' || infoArr[0] === 'IncorrectUsernameError') {
+          req.flash('warning', 'Incorrect password and/or email. Please try again');
+        } else if (infoArr[0] === 'TooManyAttemptsError'){
+          req.flash('danger', 'Your account has been locked for too many failed attempts. An email has been sent with instructions');
+        } else {
+          req.flash('warning', 'Login failed, please try again');
+        }
+      }
+      if (err) {
+        console.log(err + ' error');
+        return next(err);
+      }
+      if (!user) {
+        return res.redirect('/users/login');
+      }
+      req.logIn(user, function (err) {
+        if (err) {
+          console.log('error ' + err);
+          return next(err);
+        }
+        req.flash('success', 'Welcome');
+        return res.redirect('/projects');
+      });
+    })(req, res, next);
+  },
 
   /**
    * Checks that submitted password matches the password in the system,
@@ -141,6 +164,11 @@ module.exports = {
 
   newUserView: (req, res) => {
     res.render('users/newUser');
+  },
+
+
+  reachedLoginReqLimit: (req, res, next) => {
+
   },
 
   /**

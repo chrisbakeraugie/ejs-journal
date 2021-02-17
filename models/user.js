@@ -41,7 +41,9 @@ userSchema.virtual('fullName').get(function () {
  * salting and hashing itself.
  */
 userSchema.plugin(passportLocalMongoose, {
-  usernameField: 'email'
+  usernameField: 'email',
+  limitAttempts: true,
+  maxAttempts: 10
 });
 
 const User = mongoose.model('User', userSchema);
