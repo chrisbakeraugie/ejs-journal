@@ -15,8 +15,9 @@ module.exports = {
         let infoArr = info.toString().split(': ');
         if (infoArr[0] === 'IncorrectPasswordError' || infoArr[0] === 'IncorrectUsernameError') {
           req.flash('warning', 'Incorrect password and/or email. Please try again');
-        } else if (infoArr[0] === 'TooManyAttemptsError'){
-          req.flash('danger', 'Your account has been locked for too many failed attempts. An email has been sent with instructions');
+        } else if (infoArr[0] === 'TooManyAttemptsError') {
+          // eslint-disable-next-line quotes
+          req.flash('danger', `Your account has been locked for too many failed attempts. Please use the 'Forgot Password' link`);
         } else {
           req.flash('warning', 'Login failed, please try again');
         }
@@ -37,6 +38,24 @@ module.exports = {
         return res.redirect('/projects');
       });
     })(req, res, next);
+  },
+
+  checkTempKey: (req, res, next) => {
+    User.findOne({ _id: req.params.userId, 'tempKey.value': req.params.tempKey }).then(user => {
+      if (user === null || user.tempKey.inUse === false) {
+        res.redirect('/users/login');
+      } else {
+        if (user.tempKey.expDate < new Date()) {
+          // eslint-disable-next-line quotes
+          req.flash('warning', `Your reset request is more than 24 hours old. Please use 'Forgot Password' to try again.`);
+          res.redirect('/users/forgot-password');
+        } else {
+          next();
+        }
+      }
+    }).catch(() => {
+      res.redirect('/users/login');
+    });
   },
 
   /**
@@ -78,7 +97,17 @@ module.exports = {
           middle: req.body.middleName,
           last: req.body.lastName
         },
-        email: req.body.email
+        email: req.body.email,
+
+        tempKey: {
+          value: genPassword.generate({
+            length: 20,
+            numbers: false,
+            symbols: false,
+          }).toString(),
+          inUse: false,
+          expDate: new Date()
+        }
       });
 
       User.register(newUser, req.body.password, function (err, user) {
@@ -137,6 +166,12 @@ module.exports = {
 
 
   },
+
+  // findUserByParams: (req, res, next) => {
+  //   User.findById(req.params.userId).then(user => {
+
+  //   })
+  // },
 
   /**
    * Middleware that redirects users when the access resources that shouldn't be visible when logged in.
@@ -210,59 +245,107 @@ module.exports = {
     }
   },
 
+
   /**
-   * Method starts by using express-validator on req parameter to sanitize the email.
-   * It then searches for the email, redirecting and updating flash message if it is NOT found.
-   * If email is found, it will generate a random password to send to the user, and saves the user model with
-   *  the new password.
-   * It finally redirects to the login page.
+   * Starts by sanitizing the email from the form, and checking that account exists
+   * Once User doc found, tempKey is updated with 20 letter string, inUse = true, and an expiration date
+   * Finally sends a link to the user informing them that their password can be resent 
    */
-  sendPasswordReset: (req, res, next) => {
+  sendRecoverEmail: (req, res, next) => {
     req.sanitizeBody('email')
       .normalizeEmail({
         all_lowercase: true
       }).trim();
-    User.findOne({ 'email': req.body.email }).then(user => {
-      if (user === null) {
-        res.locals.redirectPath = '/users/forgot-password';
-        req.flash('warning', `The email '${req.body.email}'  did not match any in the system. Please try again`);
-        next();
-      } else {
-        const tempPass = genPassword.generate({
-          length: 15,
-          numbers: true,
-          symbols: true,
-        });
-        user.setPassword(tempPass).then(() => {
-          user.save();
-          res.locals.redirectPath = '/users/login';
-          req.flash('success', 'Temporary password has been sent');
-          const transport = nodemailer.createTransport(
-            nodemailerSendgrid({
-              apiKey: credentials.sendgridApiKey
-            })
-          );
-
-          transport.sendMail({
-            from: credentials.fromSendgridEmail,
-            to: user.email,
-            subject: 'Password reset for Project Journal',
-            html: `<h1>Howdy, here is your temporary password</h1>
-          <br/>
-          <p>${tempPass}</p>`
-          }).catch(err => {
-            console.log('nodemailer error : ' + err.message);
-          });
-          next();
-        }).catch(err => {
-          console.log('forgotPassword user setPassword err: ' + err.message);
-          next(err);
-        });
+    const expDate = new Date();
+    expDate.setDate(expDate.getDate() + 1); // Takes current date and adds one day (24 hour expiration)
+    User.findOneAndUpdate({ 'email': req.body.email }, {
+      tempKey: {
+        value: genPassword.generate({
+          length: 20,
+          numbers: false,
+          symbols: false,
+        }),
+        inUse: true,
+        expDate: expDate
       }
+      // eslint-disable-next-line no-unused-vars
+    }, { new: true }, function (err, doc) { // Callback telling mongoose to execute update
+      if (err) {
+        console.log('Callback error ' + err.message);
+        next(err);
+      }
+      // console.log(`http://localhost:3005/users/${doc._id}/${doc.tempKey.value}`);
+      const transport = nodemailer.createTransport(
+        nodemailerSendgrid({
+          apiKey: credentials.sendgridApiKey
+        })
+      );
+      let html = `<h1>Howdy, here is your recovery link</h1>
+      <br/>
+      <p><a clicktracking=off href='http://localhost:3005/users/${doc._id}/${doc.tempKey.value}'>Verify my Account</a></p>`;
+      transport.sendMail({
+        from: credentials.fromSendgridEmail,
+        to: doc.email,
+        subject: 'Password reset for Skriftr',
+        html: html
+      }).catch(err => {
+        console.log('nodemailer error : ' + err.message);
+      });
+      next();
     }).catch(err => {
-      console.log('sendPassword reset error, User.findOne: ' + err);
+      console.log('sendRecoverEmail findbyIdandUpdate error ' + err.message);
       next(err);
     });
+  },
+
+  /**
+   * Skips if the validate middleware fails tells it too, redirects back to the page.
+   * Otherwise, finds a user by id, uses passport-local-mongoose pluggins to resetAttempts,
+   * set the new submitted password, then updates the User doc to remove the tempKey string and inUse to false.
+   * Then passes on to redirect user to login page.
+   * 
+   */
+  setPassword: (req, res, next) => {
+    if (res.locals.skip === true) {
+      res.locals.redirectPath = `/users/${req.params.userId}/${req.params.tempKey}`;
+      next();
+    } else {
+      User.findById(req.params.userId).then(user => {
+        user.resetAttempts(function (err) {
+          if (err) {
+            console.log('setPassword user.resetAttempts error ' + err.message);
+            next(err);
+          }
+        });
+        user.setPassword(req.body.newPassword, function (err) {
+          if (err) {
+            console.log('setPassword user.setPassword error ' + err.message);
+            next(err);
+          }
+          user.save();
+        });
+      }).then(() => {
+        User.findByIdAndUpdate(req.params.userId, {
+          tempKey: {
+            value: ' ',
+            inUse: false
+          }
+          // eslint-disable-next-line no-unused-vars
+        }, function (err) {
+          if (err) {
+            console.log('setPassword User.findbyIdandUpdate error ' + err.message);
+            next(err);
+          }
+        }).then(() => {
+          res.locals.redirectPath = '/users/login';
+          req.flash('success', 'Password saved.');
+          next();
+        });
+      }).catch(err => {
+        console.log('setPassword User.findbyID error ' + err.message);
+        next(err);
+      });
+    }
   },
 
   showDeleteUser: (req, res) => {
@@ -278,6 +361,12 @@ module.exports = {
    */
   showLogin: (req, res) => {
     res.render('users/loginUser');
+  },
+
+  showTempKey: (req, res) => {
+    res.locals.userId = req.params.userId;
+    res.locals.tempKey = req.params.tempKey;
+    res.render('users/tempKey');
   },
 
   /**
@@ -299,6 +388,7 @@ module.exports = {
    * before passing it on to be used as the main password
    */
   validatePassword: (req, res, next) => {
+    console.log('Ran validate');
     if (req.body.newPassword !== req.body.newPasswordConfirm) {
       req.flash('danger', 'Your passwords did not match. Please try again.');
       res.locals.skip = true;

@@ -1,0 +1,33 @@
+<div class="row h-100" id="reset-password-container">
+  <div class="col-sm-12 my-auto d-flex justify-content-center">
+    <div class="d-flex flex-column">
+      <h1 class="align-self-center">Password reset</h1>
+      <p class="align-self-center">It is recommended that you don't use repeat passwords - here, or anywhere else!</p>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center">
+    <form class="d-flex w-25 flex-column" action="/users/<%= userId %>/<%= tempKey %>" method='POST'
+      onkeyup="return passwordCheck(this)">
+      <label for="newPassword">New Password</label>
+      <input type="password" id="newPassword" name="newPassword" placeholder="required">
+      <label for="newPasswordConfirm">Re-enter new password (must match)</label>
+      <input type="password" id="newPasswordConfirm" name="newPasswordConfirm" placeholder="required" required>
+      <br />
+      <button id='matchPassWarn' class="btn btn-danger" disabled hidden>Your new passwords must match</button>
+      <button id="resetPassSubmit" class="btn btn-primary" type="submit">Change Password</button>
+    </form>
+  </div>
+</div>
+
+<!-- <script type="text/javascript" src="/js/passwordCheck.js"></script> -->
+<script>
+  function passwordCheck(form) {
+    if (form.newPassword.value !== form.newPasswordConfirm.value) {
+      form.resetPassSubmit.disabled = true;
+      form.matchPassWarn.hidden = false;
+    } else {
+      form.resetPassSubmit.disabled = false;
+      form.matchPassWarn.hidden = true;
+    }
+  }
+</script>

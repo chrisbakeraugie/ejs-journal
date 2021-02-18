@@ -25,8 +25,21 @@ const userSchema = mongoose.Schema({
 
   projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
 
-  entries: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Entry' }]
-  
+  entries: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Entry' }],
+
+  tempKey: {
+    value: {
+      type: String,
+      unique: true
+    },
+    inUse: {
+      type: Boolean
+    },
+    expDate: {
+      type: Date
+    }
+  }
+
 },
   { timestamps: true });
 
