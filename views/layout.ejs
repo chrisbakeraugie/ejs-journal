@@ -3,10 +3,12 @@
 
 <head>
   <title>Skriftr</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" type="text/css" href="/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="/journal.css">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/journal.css">
+
 </head>
 
 <nav class="navbar navbar-expand navbar-light bg-light">
@@ -31,7 +33,7 @@
         <a href="/users/login" class="nav-link">Log In?</a>
       </li>
       <% } %>
-      <li class="flashes nav-item">
+      <li class="flashes nav-item" id="flashes-nav">
         <% if(flashMessage[Object.keys(flashMessage)]) { %>
         <div class="flash nav-link alert-<%=Object.keys(flashMessage)%>" role="alert">
           <%=flashMessage[Object.keys(flashMessage)]%></div>
@@ -39,6 +41,12 @@
     </ul>
   </div>
 </nav>
+<div class="flashes" id="flashes-under">
+  <% if(flashMessage[Object.keys(flashMessage)]) { %>
+  <div class="flash nav-link alert-<%=Object.keys(flashMessage)%>" role="alert">
+    <%=flashMessage[Object.keys(flashMessage)]%></div>
+  <% } %>
+</div>
 
 <body id="main-container">
   <%- body %>

@@ -20,7 +20,7 @@
   --bs-white: #fff;
   --bs-gray: #6c757dea;
   --bs-gray-dark: #343a40ea;
-  --bs-primary: #0d6efdea;
+  --bs-primary: #0d6dfddc;
   --bs-secondary: #6c757dea;
   --bs-success: #198754ea;
   --bs-info: #0dcaf0ea;
@@ -2754,8 +2754,8 @@ textarea.form-control-lg {
 
 .btn-success {
   color: #fff;
-  background-color: #198754;
-  border-color: #198754
+  background-color: var(--bs-success);
+  border-color: var(--bs-success)
 }
 
 .btn-success:hover {
@@ -2766,8 +2766,8 @@ textarea.form-control-lg {
 
 .btn-check:focus+.btn-success, .btn-success:focus {
   color: #fff;
-  background-color: #157347;
-  border-color: #146c43;
+  background-color: var(--bs-success);
+  border-color: var(--bs-success);
   box-shadow: 0 0 0 .25rem rgba(60, 153, 110, .5)
 }
 

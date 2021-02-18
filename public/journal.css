@@ -37,6 +37,12 @@ h1 {
   background-size: cover;
 }
 
+@media screen and (max-width: 450px) {
+  .row {
+    margin: 0;
+  }
+}
+
 /* ----------- Home page ----------- */
 
 .frosted-background {
@@ -94,12 +100,49 @@ nav {
   padding: 5px;
 }
 
+@media screen and (max-width: 450px) {
+  nav {
+    height: 7vh;
+    font-size: small;
+  }
+
+  ul.mb-2{
+    margin-bottom: 0;
+    margin: auto;
+  }
+
+  ul.me-auto {
+    margin-top: auto!important;
+    margin-bottom: auto!important;
+    padding: 0;
+  }
+
+  .navbar-brand {
+    font-size: .8rem;
+  }
+}
+
 /* ----------- Flashes ----------- */
 
 .flashes {
   /* position: absolute;
   width: 25vw; */
   /* max-height: 10px; */
+}
+
+#flashes-under{
+  display: none;
+  text-align: center;
+}
+
+@media screen and (max-width: 450px) {
+  #flashes-under{
+    display: inline;
+  } 
+
+  #flashes-nav{
+    display: none;
+  }
 }
 
 /* ----------- User ----------- */
@@ -122,12 +165,12 @@ nav {
   text-decoration: underline;
 }
 
-#user-delete-account-div{
+#user-delete-account-div {
   max-width: 50vw;
   text-align: center;
 }
 
-#user-delete-account-header{
+#user-delete-account-header {
   color: var(--journal-danger);
 }
 
@@ -252,6 +295,10 @@ nav {
   padding: 15px;
 }
 
+#new-project-header{
+  margin-top: 10px;
+}
+
 #new-entry-div {
   padding: 0;
   margin: 0;
@@ -277,7 +324,23 @@ nav {
 
 #start-new-project-button {
   margin: auto;
+  margin-top: 10px;
   max-width: 75vw;
+}
+
+@media screen and (max-width: 450px) {
+  form.w-50 {
+   width: 95vw!important;
+  }
+  #start-new-project-button {
+    max-width: 90vw;
+    margin: auto;
+    margin-top: 10px;
+  }
+
+  .project-card {
+    max-width: 95vw;
+  }
 }
 
 /* ----------- Edit Entry Page ----------- */
