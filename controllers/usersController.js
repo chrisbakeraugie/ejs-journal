@@ -15,8 +15,9 @@ module.exports = {
         let infoArr = info.toString().split(': ');
         if (infoArr[0] === 'IncorrectPasswordError' || infoArr[0] === 'IncorrectUsernameError') {
           req.flash('warning', 'Incorrect password and/or email. Please try again');
-        } else if (infoArr[0] === 'TooManyAttemptsError'){
-          req.flash('danger', 'Your account has been locked for too many failed attempts. An email has been sent with instructions');
+        } else if (infoArr[0] === 'TooManyAttemptsError') {
+          // eslint-disable-next-line quotes
+          req.flash('danger', `Your account has been locked for too many failed attempts. Please use the 'Forgot Password' link`);
         } else {
           req.flash('warning', 'Login failed, please try again');
         }
@@ -37,6 +38,24 @@ module.exports = {
         return res.redirect('/projects');
       });
     })(req, res, next);
+  },
+
+  checkTempKey: (req, res, next) => {
+    User.findOne({ _id: req.params.userId, 'tempKey.value': req.params.tempKey }).then(user => {
+      if (user === null || user.tempKey.inUse === false) {
+        res.redirect('/users/login');
+      } else {
+        if (user.tempKey.expDate < new Date()) {
+          // eslint-disable-next-line quotes
+          req.flash('warning', `Your reset request is more than 24 hours old. PLease use 'Forgot Password' to try again.`);
+          res.redirect('/users/forgot-password');
+        } else {
+          next();
+        }
+      }
+    }).catch(() => {
+      res.redirect('/users/login');
+    });
   },
 
   /**
@@ -78,7 +97,17 @@ module.exports = {
           middle: req.body.middleName,
           last: req.body.lastName
         },
-        email: req.body.email
+        email: req.body.email,
+
+        tempKey: {
+          value: genPassword.generate({
+            length: 20,
+            numbers: false,
+            symbols: false,
+          }).toString(),
+          inUse: false,
+          expDate: new Date()
+        }
       });
 
       User.register(newUser, req.body.password, function (err, user) {
@@ -137,6 +166,12 @@ module.exports = {
 
 
   },
+
+  // findUserByParams: (req, res, next) => {
+  //   User.findById(req.params.userId).then(user => {
+
+  //   })
+  // },
 
   /**
    * Middleware that redirects users when the access resources that shouldn't be visible when logged in.
@@ -217,52 +252,105 @@ module.exports = {
    *  the new password.
    * It finally redirects to the login page.
    */
-  sendPasswordReset: (req, res, next) => {
+  // sendPasswordReset: (req, res, next) => {
+  //   req.sanitizeBody('email')
+  //     .normalizeEmail({
+  //       all_lowercase: true
+  //     }).trim();
+  //   User.findOne({ 'email': req.body.email }).then(user => {
+  //     if (user === null) {
+  //       res.locals.redirectPath = '/users/forgot-password';
+  //       req.flash('warning', `The email '${req.body.email}'  did not match any in the system. Please try again`);
+  //       next();
+  //     } else {
+  //       const tempPass = genPassword.generate({
+  //         length: 15,
+  //         numbers: true,
+  //         symbols: true,
+  //       });
+  //       user.setPassword(tempPass).then(() => {
+  //         user.save();
+  //         res.locals.redirectPath = '/users/login';
+  //         req.flash('success', 'Temporary password has been sent');
+  //         const transport = nodemailer.createTransport(
+  //           nodemailerSendgrid({
+  //             apiKey: credentials.sendgridApiKey
+  //           })
+  //         );
+
+  //         transport.sendMail({
+  //           from: credentials.fromSendgridEmail,
+  //           to: user.email,
+  //           subject: 'Password reset for Skriftr',
+  //           html: `<h1>Howdy, here is your temporary password</h1>
+  //         <br/>
+  //         <p>${tempPass}</p>`
+  //         }).catch(err => {
+  //           console.log('nodemailer error : ' + err.message);
+  //         });
+  //         next();
+  //       }).catch(err => {
+  //         console.log('forgotPassword user setPassword err: ' + err.message);
+  //         next(err);
+  //       });
+  //     }
+  //   }).catch(err => {
+  //     console.log('sendPassword reset error, User.findOne: ' + err);
+  //     next(err);
+  //   });
+  // },
+
+  /**
+   * Starts by sanitizing the email from the form, and checking that account exists
+   * Once User doc found, tempKey is updated with 20 letter string, inUse = true, and an expiration date
+   * Finally sends a link to the user informing them that their password can be resent 
+   */
+  sendRecoverEmail: (req, res, next) => {
     req.sanitizeBody('email')
       .normalizeEmail({
         all_lowercase: true
       }).trim();
-    User.findOne({ 'email': req.body.email }).then(user => {
-      if (user === null) {
-        res.locals.redirectPath = '/users/forgot-password';
-        req.flash('warning', `The email '${req.body.email}'  did not match any in the system. Please try again`);
-        next();
-      } else {
-        const tempPass = genPassword.generate({
-          length: 15,
-          numbers: true,
-          symbols: true,
-        });
-        user.setPassword(tempPass).then(() => {
-          user.save();
-          res.locals.redirectPath = '/users/login';
-          req.flash('success', 'Temporary password has been sent');
-          const transport = nodemailer.createTransport(
-            nodemailerSendgrid({
-              apiKey: credentials.sendgridApiKey
-            })
-          );
-
-          transport.sendMail({
-            from: credentials.fromSendgridEmail,
-            to: user.email,
-            subject: 'Password reset for Skriftr',
-            html: `<h1>Howdy, here is your temporary password</h1>
-          <br/>
-          <p>${tempPass}</p>`
-          }).catch(err => {
-            console.log('nodemailer error : ' + err.message);
-          });
-          next();
-        }).catch(err => {
-          console.log('forgotPassword user setPassword err: ' + err.message);
-          next(err);
-        });
+    const expDate = new Date();
+    expDate.setDate(expDate.getDate() + 1); // Takes current date and adds one day (24 hour expiration)
+    User.findOneAndUpdate({ 'email': req.body.email }, {
+      tempKey: {
+        value: genPassword.generate({
+          length: 20,
+          numbers: false,
+          symbols: false,
+        }),
+        inUse: true,
+        expDate: expDate
       }
-    }).catch(err => {
-      console.log('sendPassword reset error, User.findOne: ' + err);
-      next(err);
-    });
+    // eslint-disable-next-line no-unused-vars
+    }, function (err, doc) { // Callback telling mongoose to execute update
+      if(err){
+        console.log('Callback error ' + err.message);
+        next(err);
+      }
+    }).then(user => {
+      const transport = nodemailer.createTransport(
+        nodemailerSendgrid({
+          apiKey: credentials.sendgridApiKey
+        })
+      );
+      let html = `<h1>Howdy, here is your recovery link</h1>
+      <br/>
+      <p><a clicktracking=off href='http://localhost:3005/users/${user._id}/${user.tempKey.value}'>Verify my Account</a></p>`;
+      transport.sendMail({
+        from: credentials.fromSendgridEmail,
+        to: user.email,
+        subject: 'Password reset for Skriftr',
+        html: html
+      }).catch(err => {
+        console.log('nodemailer error : ' + err.message);
+      });
+      next();
+      })
+      .catch(err => {
+        console.log('sendRecoverEmail findbyIdandUpdate error ' + err.message);
+        next(err);
+      });
   },
 
   showDeleteUser: (req, res) => {
@@ -278,6 +366,12 @@ module.exports = {
    */
   showLogin: (req, res) => {
     res.render('users/loginUser');
+  },
+
+  showTempKey: (req, res) => {
+    res.locals.user = req.params.userId;
+    res.locals.tempKey = req.params.tempKey;
+    res.render('users/tempKey');
   },
 
   /**

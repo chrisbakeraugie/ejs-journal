@@ -1,0 +1,12 @@
+<div class="row h-100 home-container">
+  <div class="col-sm-12 my-auto d-flex justify-content-center">
+    <div class="d-flex flex-column frosted-background">
+      <h2 class="align-self-center" id="login-title">New Password</h2>
+      <form class="d-flex flex-column" id="login-form" action="/users/<%= user._id %>/<%= tempKey %>" method="POST">
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <br />
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </form>
+      </div>
+    </div>
+  </div>
