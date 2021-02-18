@@ -357,9 +357,9 @@ path.domain {
   color: var(--journal-info);
 }
 
-/* ----------- Reset Password Page ----------- */
+/* ----------- Change Password Page ----------- */
 
-#reset-password-container {
+#change-password-container {
   min-height: 60vh;
 }
 

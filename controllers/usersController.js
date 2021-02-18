@@ -40,6 +40,11 @@ module.exports = {
     })(req, res, next);
   },
 
+  /**
+   * Finds the user and confirms a matching tempKey value.
+   * Then redirects if the key is expired,
+   * passes if all criteria met
+   */
   checkTempKey: (req, res, next) => {
     User.findOne({ _id: req.params.userId, 'tempKey.value': req.params.tempKey }).then(user => {
       if (user === null || user.tempKey.inUse === false) {
@@ -218,16 +223,16 @@ module.exports = {
    * Method to reset the password for an account. Uses the local-mongoose plugin
    * (see user model)
    */
-  resetPassword: (req, res, next) => {
+  changePassword: (req, res, next) => {
     if (res.locals.skip === true) {
-      res.locals.redirectPath = '/users/reset-password';
+      res.locals.redirectPath = '/users/change-password';
       next();
     } else {
       User.findById(res.locals.currentUser._id).then((user) => {
         user.changePassword(req.body.currentPassword, req.body.newPassword, function (err) {
           if (err) {
             if (err.message === 'Password or username is incorrect') {
-              res.locals.redirectPath = '/users/reset-password';
+              res.locals.redirectPath = '/users/change-password';
               req.flash('danger', 'Your current password was incorrect. Please try again.');
               next();
             }
@@ -239,7 +244,7 @@ module.exports = {
           }
         });
       }).catch(err => {
-        console.log('Error: resetPassword User.findById: ' + err.message);
+        console.log('Error: changePassword User.findById: ' + err.message);
         next(err);
       });
     }
@@ -379,8 +384,8 @@ module.exports = {
   /**
    * Display reset password page
    */
-  showResetPassword: (req, res) => {
-    res.render('users/resetPassword');
+  showChangePassword: (req, res) => {
+    res.render('users/changePassword');
   },
 
   /**
@@ -388,7 +393,6 @@ module.exports = {
    * before passing it on to be used as the main password
    */
   validatePassword: (req, res, next) => {
-    console.log('Ran validate');
     if (req.body.newPassword !== req.body.newPasswordConfirm) {
       req.flash('danger', 'Your passwords did not match. Please try again.');
       res.locals.skip = true;
