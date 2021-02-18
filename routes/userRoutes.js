@@ -9,7 +9,6 @@ router.get('/logout', usersController.logout, usersController.redirectPath);
 router.get('/new-user', usersController.loggedInRedirect, usersController.newUserView);
 router.post('/new-user', usersController.loggedInRedirect, usersController.validateUser, usersController.createNewUser, usersController.redirectPath);
 router.get('/forgot-password', usersController.loggedInRedirect, usersController.showForgotPassword);
-// router.post('/forgot-password',usersController.loggedInRedirect, usersController.sendPasswordReset, usersController.redirectPath);
 router.post('/forgot-password', usersController.loggedInRedirect, usersController.sendRecoverEmail, usersController.redirectPath);
 router.get('/:userId/:tempKey', usersController.checkTempKey, usersController.showTempKey);
 router.post('/:userId/:tempKey', usersController.validatePassword, usersController.setPassword, usersController.redirectPath);
