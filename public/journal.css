@@ -170,6 +170,11 @@ nav {
   min-height: 60vh;
 }
 
+#new-user-form{
+  margin: auto;
+  width: 25vw;
+}
+
 #new-user-to-login-link {
   color: var(--journal-gray);
   text-decoration: underline;
@@ -215,6 +220,9 @@ nav {
 }
 
 @media screen and (max-width: 450px) {
+  #new-user-form{
+    width: 100%;
+  }
   #user-profile-container {
     padding: 15px;
   }

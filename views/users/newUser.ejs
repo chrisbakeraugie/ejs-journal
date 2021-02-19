@@ -1,28 +1,29 @@
-<div class="row h-100" id="new-user-container">
-  <div class="col-sm-12 my-auto d-flex justify-content-center">
-    <div class="d-flex flex-column">
-      <h1 class="align-self-center">Create and account through email</h1>
-      <p class="align-self-center">This website is for personal use - no information will be used for anything </p>
+
+  <div class="row h-100 home-container">
+      <div class="col-sm-12 my-auto d-flex justify-content-center">
+        <div class="d-flex flex-column frosted-background" id="user-delete-account-div">
+            <h1 class="align-self-center">Create and account through email</h1>
+            <p class="align-self-center">This website is for personal use - no information will be used for anything </p>
+            <form class="d-flex flex-column" id="new-user-form" action='/users/new-user' method='POST'>
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" name="firstName" placeholder="required" required>
+              <label for="middleName">Middle Name (optional)</label>
+              <input type="text" id="middleName" name="middleName">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" name="lastName" placeholder="required" required>
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder='required' required>
+              <label for="password">Password</label>
+              <input type="password" name="password" placeholder="required" required>
+              <br />
+              <button class="btn btn-primary" type="submit">Sign Up</button>
+            </form>
+            <div class="col-sm-12 my-auto d-flex justify-content-center" >
+                <a href="/users/login" id="new-user-to-login-link">Actually, I have an account...</a>
+            </div>  
+          
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="d-flex justify-content-center">
-    <form class="d-flex w-25 flex-column" action='/users/new-user' method='POST'>
-      <label for="firstName">First Name</label>
-      <input type="text" id="firstName" name="firstName" placeholder="required" required>
-      <label for="middleName">Middle Name (optional)</label>
-      <input type="text" id="middleName" name="middleName">
-      <label for="lastName">Last Name</label>
-      <input type="text" id="lastName" name="lastName" placeholder="required" required>
-      <label for="email">Email Address</label>
-      <input type="email" id="email" name="email" placeholder='required' required>
-      <label for="password">Password</label>
-      <input type="password" name="password" placeholder="required" required>
-      <br />
-      <button class="btn btn-primary" type="submit">Sign Up</button>
-    </form>
-  </div>
-  <div class="col-sm-12 my-auto d-flex justify-content-center" >
-      <a href="/users/login" id="new-user-to-login-link">Actually, I have an account...</a>
-  </div>  
 
 </div>
