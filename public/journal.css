@@ -41,8 +41,7 @@ h1 {
   .row {
     margin: 0;
   }
-
-  html{
+  html {
     font-size: .85em;
   }
 }
@@ -204,6 +203,15 @@ nav {
   margin-top: 10px;
 }
 
+@media screen and (max-width: 450px) {
+  #user-profile-container {
+    padding: 15px;
+  }
+  #user-profile-title {
+    text-align: center;
+  }
+}
+
 /* ----------- Login ----------- */
 
 #login-container {
@@ -329,7 +337,7 @@ nav {
 }
 
 @media screen and (max-width: 450px) {
-  div.w-50{
+  div.w-50 {
     width: 95vw!important;
   }
   #confidence-tracker-btn {
@@ -338,7 +346,7 @@ nav {
   form.w-50 {
     width: 95vw!important;
   }
-  .entry-card{
+  .entry-card {
     margin: 10px;
   }
   #entry-description {
