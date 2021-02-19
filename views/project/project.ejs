@@ -17,7 +17,7 @@
           <div class="card-text" id="entry-description"><textarea id="description" type="text" name="description"
               placeholder="Talk about what you accomplished and how you did it" required></textarea></div>
           <div class="card-text" id="entry-range">
-            <label for="mood-range" id="confidence-tracker-label">Confidence</label>
+            <label for="mood-range" id="confidence-range-label">Confidence</label>
             <input class="range" type="range" min="1" max="100" value="50" name="mood" id="mood-range">
           </div>
           <button class="btn btn-primary" id="entry-submit" type="submit">Post</button>
@@ -25,7 +25,7 @@
       </form>
     </div>
     <div class="col-sm my-auto" >
-      <a class="btn btn-info" href="/projects/<%= project._id %>/data">Confidence Tracker</a>
+      <a class="btn btn-info" id="confidence-tracker-btn" href="/projects/<%= project._id %>/data">Confidence Tracker</a>
     </div>
   </div>
 

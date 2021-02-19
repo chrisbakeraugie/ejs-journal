@@ -41,6 +41,10 @@ h1 {
   .row {
     margin: 0;
   }
+
+  html{
+    font-size: .85em;
+  }
 }
 
 /* ----------- Home page ----------- */
@@ -105,20 +109,17 @@ nav {
     height: 7vh;
     font-size: small;
   }
-
-  ul.mb-2{
+  ul.mb-2 {
     margin-bottom: 0;
     margin: auto;
   }
-
   ul.me-auto {
     margin-top: auto!important;
     margin-bottom: auto!important;
     padding: 0;
   }
-
   .navbar-brand {
-    font-size: .8rem;
+    font-size: 1em;
   }
 }
 
@@ -130,17 +131,16 @@ nav {
   /* max-height: 10px; */
 }
 
-#flashes-under{
+#flashes-under {
   display: none;
   text-align: center;
 }
 
 @media screen and (max-width: 450px) {
-  #flashes-under{
+  #flashes-under {
     display: inline;
-  } 
-
-  #flashes-nav{
+  }
+  #flashes-nav {
     display: none;
   }
 }
@@ -229,7 +229,7 @@ nav {
 
 /* ----------- Projects ----------- */
 
-#confidence-tracker-label {
+#confidence-range-label {
   margin: 10px 10px 0px 10px;
 }
 
@@ -295,7 +295,7 @@ nav {
   padding: 15px;
 }
 
-#new-project-header{
+#new-project-header {
   margin-top: 10px;
 }
 
@@ -315,7 +315,7 @@ nav {
 
 #project-page-title {
   margin: auto;
-  margin-bottom: 15px;
+  margin: 10px 0 15px 0;
 }
 
 #project-second-row {
@@ -329,17 +329,43 @@ nav {
 }
 
 @media screen and (max-width: 450px) {
+  div.w-50{
+    width: 95vw!important;
+  }
+  #confidence-tracker-btn {
+    margin-top: 15px;
+  }
   form.w-50 {
-   width: 95vw!important;
+    width: 95vw!important;
+  }
+  .entry-card{
+    margin: 10px;
+  }
+  #entry-description {
+    margin: 0;
+  }
+  #entry-range {
+    margin: 15px 0 0 0;
+  }
+  #entry-submit {
+    margin-top: 25px;
+    min-width: 33%;
+  }
+  #entry-title {
+    margin: 0;
+    width: 85%;
+  }
+  #new-entry-card {
+    width: 95vw;
+    margin: auto;
+  }
+  .project-card {
+    max-width: 95vw;
   }
   #start-new-project-button {
     max-width: 90vw;
     margin: auto;
     margin-top: 10px;
-  }
-
-  .project-card {
-    max-width: 95vw;
   }
 }
 
