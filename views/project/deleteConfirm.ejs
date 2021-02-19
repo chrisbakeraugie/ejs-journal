@@ -1,31 +1,32 @@
-<div class="row h-100" style=" min-height: 60vh; text-align: center;">
-    <div class="col-sm-12 my-auto d-flex justify-content-center">
-      <div class="d-flex flex-column">
-        <h1 class="page-header" >To delete this project, '<%=project.title%>', please type the title and press "Delete Project" below</h1>
-        <p >Understand that this CANNOT be reversed<!</p>
-      </div>
-    </div>
-    <div class="d-flex justify-content-center">
-      <form class="d-flex w-25 flex-column" id="delete-project-form" action='/users/reset-password' method='POST' onkeyup="return titleCheck(this, `<%=project.title%>`)">
+<div class="row h-100 home-container">
+  <div class="col-sm-12 my-auto d-flex justify-content-center">
+    <div class="d-flex flex-column frosted-background" id="user-delete-account-div">
+      <h3 class="page-header">To delete this project, '<%=project.title%>', please type the title and press "Delete
+        Project" below</h3>
+      <p>Understand that this CANNOT be reversed<!</p> <form class="d-flex flex-column" id="delete-project-form"
+          action='/users/reset-password' method='POST' onkeyup="return titleCheck(this, `<%=project.title%>`)">
           <input type="text" id="projectToDelete" name="projectToDelete" placeholder="title" required>
-        <br />
-        <button id='matchProjectTitle' class="btn btn-danger" disabled hidden style='padding: 0; font-size: small;'>Your title must match</button>
-        <br />
-        <a href="#" class="btn btn-danger" id="deleteProject" onclick='return confirm(`Are you sure you want to delete "<%=project.title%>"? This cannot be reversed!`)'>Delete Project</a>
-      </form>
-      
+          <br />
+          <button id='matchProjectTitle' class="btn btn-danger" disabled hidden
+            style='padding: 0; font-size: small;'>Your title must match</button>
+          <br />
+          <a href="#" class="btn btn-danger" id="deleteProject"
+            onclick='return confirm(`Are you sure you want to delete "<%=project.title%>"? This cannot be reversed!`)'>Delete
+            Project</a>
+          </form>
     </div>
   </div>
+</div>
 <script>
-    function titleCheck(form, projectTitle){
-      if(projectTitle !== form.projectToDelete.value){
-        document.getElementById('deleteProject').href = "#";
-        document.getElementById('deleteProject').color = "blue";
-        form.matchProjectTitle.hidden = false;
-      } else {
-        form.matchProjectTitle.hidden = true;
-        document.getElementById('deleteProject').href = "/projects/<%= project._id%>/delete?_method=DELETE";
-        document.getElementById('deleteProject').color = "red";
-      }
+  function titleCheck(form, projectTitle) {
+    if (projectTitle !== form.projectToDelete.value) {
+      document.getElementById('deleteProject').href = "#";
+      document.getElementById('deleteProject').color = "blue";
+      form.matchProjectTitle.hidden = false;
+    } else {
+      form.matchProjectTitle.hidden = true;
+      document.getElementById('deleteProject').href = "/projects/<%= project._id%>/delete?_method=DELETE";
+      document.getElementById('deleteProject').color = "red";
     }
-  </script>
+  }
+</script>

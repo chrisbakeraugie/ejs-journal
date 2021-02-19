@@ -82,6 +82,13 @@ h1 {
   animation: animated-text 4s steps(43, end) 2.5s 1 normal both, animated-cursor-blink 1s steps(2, end) infinite;
 }
 
+@media screen and (max-width: 450px) {
+  .frosted-background{
+    min-width: 85vw;
+  
+  }
+}
+
 @keyframes animated-text {
   from {
     width: 0;
