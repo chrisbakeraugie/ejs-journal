@@ -30,7 +30,7 @@ h1 {
   margin: 10px;
 }
 
-.page-header{
+.page-header {
   margin: 10px 0 15px 0;
 }
 
@@ -245,10 +245,6 @@ nav {
   margin: 10px 10px 0px 10px;
 }
 
-#delete-project-form{
-  
-}
-
 .project-card {
   margin: 10px;
   /* min-height: 40vh; */
@@ -341,6 +337,9 @@ nav {
 }
 
 @media screen and (max-width: 450px) {
+  #delete-project-form {
+    min-width: 75vw;
+  }
   div.w-50 {
     width: 95vw!important;
   }
@@ -382,7 +381,8 @@ nav {
 }
 
 /* ----------- Edit Entry Page ----------- */
-#edit-entry{
+
+#edit-entry {
   margin-top: auto!important;
   margin-bottom: auto!important;
 }
@@ -410,6 +410,7 @@ g.tick {
     font-size: .5rem;
   }
 }
+
 /* 
 @media (max-width:450px) {
   .chartContainer{
@@ -420,6 +421,7 @@ g.tick {
     width: 100%
   }
 } */
+
 path.domain {
   stroke: none;
 }
