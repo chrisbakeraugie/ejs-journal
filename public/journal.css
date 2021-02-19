@@ -175,6 +175,7 @@ nav {
 }
 
 #new-user-to-login-link {
+  margin-top: 15px;
   color: var(--journal-gray);
   text-decoration: underline;
 }
