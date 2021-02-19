@@ -30,6 +30,10 @@ h1 {
   margin: 10px;
 }
 
+.page-header{
+  margin: 10px 0 15px 0;
+}
+
 #main-container {
   font-family: Comfortaa;
   /* background-image: url(/img/main-background.jpg); */
@@ -241,6 +245,10 @@ nav {
   margin: 10px 10px 0px 10px;
 }
 
+#delete-project-form{
+  
+}
+
 .project-card {
   margin: 10px;
   /* min-height: 40vh; */
@@ -301,10 +309,6 @@ nav {
 
 #new-project-card {
   padding: 15px;
-}
-
-#new-project-header {
-  margin-top: 10px;
 }
 
 #new-entry-div {
@@ -378,6 +382,10 @@ nav {
 }
 
 /* ----------- Edit Entry Page ----------- */
+#edit-entry{
+  margin-top: auto!important;
+  margin-bottom: auto!important;
+}
 
 #edit-entry-confidence-label {
   margin: 10px 10px 0px 10px;
@@ -402,7 +410,16 @@ g.tick {
     font-size: .5rem;
   }
 }
+/* 
+@media (max-width:450px) {
+  .chartContainer{
+    min-width: 95vw;
+  }
 
+  svg{
+    width: 100%
+  }
+} */
 path.domain {
   stroke: none;
 }

@@ -18,17 +18,50 @@ raw.forEach(object => {
   });
 });
 
-// Set margins
-let margin = {
-  top: 30,
-  right: 30,
-  bottom: 30,
-  left: 30
-};
+let margin = {};
+let height;
+let width;
+if (window.innerWidth <= 450) {
+  // Set margins
+  margin = {
+    top: 10,
+    right: 5,
+    bottom: 10,
+    left: 5
+  };
 
-// Set height and width of the graph
-let width = window.innerWidth - 100 - margin.left - margin.right;
-let height = 800 - margin.top - margin.bottom;
+  // Set height and width of the graph
+  width = window.innerWidth - 50 - margin.left - margin.right;
+  height = 700 - margin.top - margin.bottom;
+
+
+} else {
+  // Set margins
+  margin = {
+    top: 30,
+    right: 30,
+    bottom: 30,
+    left: 30
+  };
+
+  // Set height and width of the graph
+  width = window.innerWidth - 100 - margin.left - margin.right;
+  height = 800 - margin.top - margin.bottom;
+}
+console.log(window.innerWidth + " " + JSON.stringify(margin) + " " + width + " " + height);
+
+// // Set margins
+// let margin = {
+//   top: 30,
+//   right: 30,
+//   bottom: 30,
+//   left: 30
+// };
+
+// // Set height and width of the graph
+// let width = window.innerWidth - 100 - margin.left - margin.right;
+// let height = 800 - margin.top - margin.bottom;
+
 
 // Create a scale for the x (date) data. This is used to adjust the scale of the data
 const xScale = d3.scaleTime() // Tells d3 that this is a time scale
