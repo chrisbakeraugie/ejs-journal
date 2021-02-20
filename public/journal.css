@@ -265,6 +265,10 @@ nav {
   text-decoration: none;
 }
 
+#password-recovery-form{
+  max-width: 33vw;
+}
+
 @media screen and (max-width: 450px) {
   #login-form {
     width: 75vw;

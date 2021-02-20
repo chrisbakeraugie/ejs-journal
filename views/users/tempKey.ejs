@@ -1,21 +1,19 @@
-<div class="row h-100" id="reset-password-container">
+<div class="row h-100 home-container" style="background-image: url(/img/home-background-<%=Math.floor(Math.random() * 4)%>.jpg)">
   <div class="col-sm-12 my-auto d-flex justify-content-center">
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column frosted-background" id="password-recovery-form">
       <h1 class="align-self-center">Password reset</h1>
       <p class="align-self-center">It is recommended that you don't use repeat passwords - here, or anywhere else!</p>
+      <form class="d-flex flex-column" action="/users/<%= userId %>/<%= tempKey %>" method='POST'
+        onkeyup="return passwordCheck(this)">
+        <label for="newPassword">New Password</label>
+        <input type="password" id="newPassword" name="newPassword" placeholder="required">
+        <label for="newPasswordConfirm">Re-enter new password (must match)</label>
+        <input type="password" id="newPasswordConfirm" name="newPasswordConfirm" placeholder="required" required>
+        <br />
+        <button id='matchPassWarn' class="btn btn-danger" disabled hidden>Your new passwords must match</button>
+        <button id="resetPassSubmit" class="btn btn-primary" type="submit">Change Password</button>
+      </form>
     </div>
-  </div>
-  <div class="d-flex justify-content-center">
-    <form class="d-flex w-25 flex-column" action="/users/<%= userId %>/<%= tempKey %>" method='POST'
-      onkeyup="return passwordCheck(this)">
-      <label for="newPassword">New Password</label>
-      <input type="password" id="newPassword" name="newPassword" placeholder="required">
-      <label for="newPasswordConfirm">Re-enter new password (must match)</label>
-      <input type="password" id="newPasswordConfirm" name="newPasswordConfirm" placeholder="required" required>
-      <br />
-      <button id='matchPassWarn' class="btn btn-danger" disabled hidden>Your new passwords must match</button>
-      <button id="resetPassSubmit" class="btn btn-primary" type="submit">Change Password</button>
-    </form>
   </div>
 </div>
 
