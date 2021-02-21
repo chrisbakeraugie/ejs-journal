@@ -55,7 +55,7 @@ h1 {
 .frosted-background {
   background-color: rgba(255, 255, 255, .3);
   min-width: var(--animation-container-width);
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2);
   border-radius: 10px;
   backdrop-filter: blur(2px);
@@ -82,27 +82,87 @@ h1 {
   animation: animated-text 4s steps(43, end) 2.5s 1 normal both, animated-cursor-blink 1s steps(2, end) infinite;
 }
 
+#home-animation-mobile-top, #home-animation-mobile-bottom {
+  margin: 0;
+  display: none;
+  align-self: center;
+  font-family: monospace;
+  font-size: 1.3rem;
+  height: 1.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: solid 3px rgba(34, 34, 34, 0.75);
+}
+
+#home-animation-mobile-top {
+  margin-top: 20px;
+  animation: animation-mobile-top 2s steps(18, end) 2.5s 1 normal both, animated-cursor-blink-mobile-top 1s steps(2, end) 5 forwards;
+}
+
+#home-animation-mobile-bottom {
+  animation: animation-mobile-bottom 2s steps(24, end) 4.5s 1 normal both, animated-cursor-blink-mobile-bottom 1s steps(2, end) 4.5s infinite both;
+}
+
+@media screen and (min-width:451px) {
+  @keyframes animated-text {
+    from {
+      width: 0;
+    }
+    to {
+      width: var(--animation-width);
+    }
+  }
+  @keyframes animated-cursor-blink {
+    from {
+      border-right-color: rgba(7, 8, 7, 0.75);
+    }
+    to {
+      border-right-color: transparent;
+    }
+  }
+}
+
 @media screen and (max-width: 450px) {
+  #home-animation-mobile-top, #home-animation-mobile-bottom {
+    display: inline;
+  }
+  #home-animation{
+    display: none;
+  }
+  @keyframes animation-mobile-top {
+    from {
+      width: 0;
+    }
+    to {
+      width: 158px;
+    }
+  }
+  @keyframes animated-cursor-blink-mobile-top {
+    from {
+      border-right-color: rgba(7, 8, 7, 0.75);
+    }
+    to {
+      border-right: none;
+    }
+  }
+  @keyframes animation-mobile-bottom {
+    from {
+      width: 0;
+    }
+    to {
+      width: 210px;
+    }
+  }
+  @keyframes animated-cursor-blink-mobile-bottom {
+    from {
+      border-right: none;
+    }
+    to {
+      border-right-color: rgba(7, 8, 7, 0.75);
+    }
+  }
   .frosted-background {
     min-width: 85vw;
-  }
-}
-
-@keyframes animated-text {
-  from {
-    width: 0;
-  }
-  to {
-    width: var(--animation-width);
-  }
-}
-
-@keyframes animated-cursor-blink {
-  from {
-    border-right-color: rgba(7, 8, 7, 0.75);
-  }
-  to {
-    border-right-color: transparent;
   }
 }
 
@@ -265,7 +325,7 @@ nav {
   text-decoration: none;
 }
 
-#password-recovery-form{
+#password-recovery-form {
   max-width: 33vw;
 }
 
