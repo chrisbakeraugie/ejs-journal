@@ -167,6 +167,9 @@ module.exports = {
         }
         if (user) {
           console.log(`Successfully created ${user.fullName}'s account.`);
+          Confirmation.findByIdAndRemove(req.params.confirmId).catch(err => {
+            console.log('Error: Confirmation removal error: ' + err.message);
+          })
           req.flash('success', 'Account Created! Login, then visit the \'About\' page to learn about this website.');
           res.locals.redirectPath = '/users/login';
           next();
