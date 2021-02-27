@@ -103,9 +103,6 @@ app.use((req, res, next) => {
   res.locals.loggedIn = req.isAuthenticated();
   res.locals.currentUser = req.user;
   res.locals.flashMessage = req.flash();
-
-  // Array to be used for random images. NOT essential
-  res.locals.randImgs = ['/img/0.jpg', '/img/1.jpg', '/img/2.jpg', '/img/3.jpg', '/img/4.jpg', '/img/5.jpg', '/img/6.jpg', '/img/7.jpg', '/img/8.jpg'];
   next();
 });
 

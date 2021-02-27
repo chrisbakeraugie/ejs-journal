@@ -1,11 +1,38 @@
 const User = require('../models/user');
 const Project = require('../models/project');
 const Entry = require('../models/entry');
+const Confirmation = require('../models/confirmation');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
 const nodemailerSendgrid = require('nodemailer-sendgrid');
 const { credentials } = require('../config');
 const genPassword = require('generate-password');
+
+/**
+ * 
+ * @param {*} toAddr The address to send to
+ * @param {*} fromAddr The address sending from (this will require credentials)
+ * @param {*} subject Subject of email
+ * @param {*} html The html to display in the email
+ */
+function sendhtmlEmail(toAddr, fromAddr, subject, html) {
+  const transport = nodemailer.createTransport(
+    nodemailerSendgrid({
+      apiKey: credentials.sendgridApiKey
+    })
+  );
+  // let html = `<h1>Howdy, here is your recovery link</h1>
+  // <br/>
+  // <p><a clicktracking=off href='http://localhost:3005/users/${doc._id}/${doc.tempKey.value}'>Verify my Account</a></p>`;
+  transport.sendMail({
+    from: fromAddr,
+    to: toAddr,
+    subject: subject,
+    html: html
+  }).catch(err => {
+    console.log('nodemailer error : ' + err.message);
+  });
+}
 
 module.exports = {
 
@@ -38,6 +65,26 @@ module.exports = {
         return res.redirect('/projects');
       });
     })(req, res, next);
+  },
+
+  /**
+   * 
+   * @param confirmId is the confirmation document id
+   * Checks that confirmation exists
+   */
+  checkConfirmation: (req, res, next) => {
+    Confirmation.findById(req.params.confirmId).then(confirmation => {
+      if(confirmation === null){
+        req.flash('warning','Account being confirmed not found. Your confirmation link may have expired; please sign up again.');
+        res.redirect('/users/login');
+      } else {
+        res.locals.confirm = confirmation;
+        next();
+      }
+    }).catch(err => {
+      console.log('checkConfirmation Confirmation.findById error: ' + err.message);
+      next(err);
+    });
   },
 
   /**
@@ -115,7 +162,7 @@ module.exports = {
         }
       });
 
-      User.register(newUser, req.body.password, function (err, user) {
+      User.register(newUser, req.body.newPassword, function (err, user) {
         if (err) {
           console.log('Error: usersController.createNewUser register error: ' + err.message);
           req.flash('danger', 'User account not created. Please try again');
@@ -124,7 +171,7 @@ module.exports = {
         if (user) {
           console.log(`Successfully created ${user.fullName}'s account.`);
           req.flash('success', 'Account Created! Login, then visit the \'About\' page to learn about this website.');
-          res.locals.redirectPath = '/';
+          res.locals.redirectPath = '/users/login';
           next();
         } else {
           console.log(`Error: Failed to create user account because: ${err.message}.`);
@@ -132,6 +179,49 @@ module.exports = {
           res.locals.redirectPath = '/users/new-user';
           next();
         }
+      });
+    }
+  },
+
+  /**
+   * This checks the posted information against the current User collection
+   * and confirms that a current user doesn't share that email. Then it sends a confirmation
+   * link to the email for confirmation.
+   */
+  confirmUser: (req, res, next) => {
+    if (res.locals.skip === true) {
+      next();
+    } else {
+      User.findOne({ email: req.body.email }).then(user => {
+        if (user) {
+          req.flash('warning', 'That email is already registered.');
+          res.locals.redirectPath = '/users/new-user';
+          next();
+        } else {
+          Confirmation.create({
+            name: {
+              first: req.body.firstName,
+              middle: req.body.middleName,
+              last: req.body.lastName
+            },
+            email: req.body.email,
+  
+          }).then((doc) => {
+            let html = `<h1>Howdy!</h1>
+            <h3>Go ahead and just click that link below to finish registering your account</h3>
+            <p><a clicktracking=off href='http://localhost:3005/users/confirm/${doc._id}'>Confirm my account</a></p>`;
+            sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Your Skriftr confirmation link', html);
+            req.flash('success', 'Confirmation email has been sent!');
+            res.locals.redirectPath = '/users/login';
+            next();
+          }).catch(err => {
+            console.log('Confirmation User.find one error ' + err);
+            next(err);
+          });
+        }
+      }).catch(err => {
+        console.log('confirmUser User.find one error ' + err);
+        next(err);
       });
     }
   },
@@ -280,22 +370,10 @@ module.exports = {
         next(err);
       }
       // console.log(`http://localhost:3005/users/${doc._id}/${doc.tempKey.value}`);
-      const transport = nodemailer.createTransport(
-        nodemailerSendgrid({
-          apiKey: credentials.sendgridApiKey
-        })
-      );
       let html = `<h1>Howdy, here is your recovery link</h1>
       <br/>
-      <p><a clicktracking=off href='http://localhost:3005/users/${doc._id}/${doc.tempKey.value}'>Verify my Account</a></p>`;
-      transport.sendMail({
-        from: credentials.fromSendgridEmail,
-        to: doc.email,
-        subject: 'Password reset for Skriftr',
-        html: html
-      }).catch(err => {
-        console.log('nodemailer error : ' + err.message);
-      });
+      <p><a clicktracking=off href='http://localhost:3005/users/${doc._id}/${doc.tempKey.value}'>Reset my password</a></p>`;
+      sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Skriftr account password reset', html);
       next();
     }).catch(err => {
       console.log('sendRecoverEmail findbyIdandUpdate error ' + err.message);
@@ -351,6 +429,11 @@ module.exports = {
         next(err);
       });
     }
+  },
+
+  showCreatePassword: (req, res) => {
+    res.locals.confirmId = req.params.confirmId;
+    res.render('users/createPassword');
   },
 
   showDeleteUser: (req, res) => {
@@ -420,7 +503,7 @@ module.exports = {
    * This method "cleans" the data before it is passed to the createNewUser function,
    * which is vital in ensuring that data is uniform before submitting.
    */
-  validateUser: (req, res, next) => {
+  validateEmail: (req, res, next) => {
     req.sanitizeBody('email')
       .normalizeEmail({
         all_lowercase: true
@@ -428,15 +511,6 @@ module.exports = {
       .trim();
 
     req.check('email', 'Email is invalid').isEmail();
-    // req.check('password', 'Password cannot be empty').notEmpty();
-    req.check('password')
-      .isLength({ min: 8, max: 15 })
-      .withMessage('your password should have min and max length between 8-15')
-      .matches(/\d/)
-      .withMessage('your password should have at least one number')
-      .matches(/[!@#$%^&*(),.?":{}|<>]/)
-      .withMessage('your password should have at least one special character');
-    // 
     req.getValidationResult().then(err => {
       if (!err.isEmpty()) {
         let messages = err.array().map(e => e.msg);

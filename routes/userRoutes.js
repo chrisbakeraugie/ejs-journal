@@ -7,7 +7,10 @@ router.get('/login', usersController.loggedInRedirect, usersController.showLogin
 router.post('/login', usersController.loggedInRedirect, usersController.authenticate);
 router.get('/logout', usersController.logout, usersController.redirectPath);
 router.get('/new-user', usersController.loggedInRedirect, usersController.newUserView);
-router.post('/new-user', usersController.loggedInRedirect, usersController.validateUser, usersController.createNewUser, usersController.redirectPath);
+// router.post('/new-user', usersController.loggedInRedirect, usersController.validateUser, usersController.createNewUser, usersController.redirectPath);
+router.post('/new-user', usersController.loggedInRedirect, usersController.validateEmail, usersController.confirmUser, usersController.redirectPath);
+router.get('/confirm/:confirmId', usersController.checkConfirmation, usersController.showCreatePassword);
+router.post('/confirm/:confirmId', usersController.validatePassword, usersController.validateEmail, usersController.createNewUser, usersController.redirectPath);
 router.get('/forgot-password', usersController.loggedInRedirect, usersController.showForgotPassword);
 router.post('/forgot-password', usersController.loggedInRedirect, usersController.sendRecoverEmail, usersController.redirectPath);
 router.get('/:userId/:tempKey', usersController.checkTempKey, usersController.showTempKey);

@@ -7,8 +7,7 @@
   <% if(typeof projects[projectIndex] != 'undefined') { %>
   <div class="col-sm-6">
     <div class="card project-card">
-      <!-- <img class="card-img-top project-image" src="<%=randImgs[Math.floor(Math.random() * (randImgs.length + 1) + 0)]%>"
-        style="max-height: 500px; max-width: 500px;"> -->
+
       <div class="card-body row">
         <h4 class="card-title"><%= projects[projectIndex].title %></h4>
         <a class="btn btn-primary" href="projects/<%=projects[projectIndex]._id%>">Work on
@@ -20,8 +19,7 @@
   <% if(typeof projects[projectIndex + 1] != 'undefined') { %>
   <div class="col-sm-6">
     <div class="card project-card card">
-      <!-- <img class="card-img-top project-image" src="<%=randImgs[Math.floor(Math.random() * (randImgs.length + 1) + 0)]%>"
-        style="max-height: 500px; max-width: 500px;"> -->
+
       <div class="card-body row">
         <h4 class="card-title"><%= projects[projectIndex + 1].title %></h4>
         <a class="btn btn-primary" href="projects/<%=projects[projectIndex + 1]._id%>">Work on
