@@ -137,6 +137,7 @@ module.exports = {
 
   createNewUser: (req, res, next) => {
     if (res.locals.skip === true) {
+      res.locals.redirectPath = '/users/confirm/'+ req.params.confirmId;
       next();
     } else {
       let newUser = new User({
