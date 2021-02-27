@@ -21,9 +21,6 @@ function sendhtmlEmail(toAddr, fromAddr, subject, html) {
       apiKey: credentials.sendgridApiKey
     })
   );
-  // let html = `<h1>Howdy, here is your recovery link</h1>
-  // <br/>
-  // <p><a clicktracking=off href='http://localhost:3005/users/${doc._id}/${doc.tempKey.value}'>Verify my Account</a></p>`;
   transport.sendMail({
     from: fromAddr,
     to: toAddr,
@@ -68,7 +65,6 @@ module.exports = {
   },
 
   /**
-   * 
    * @param confirmId is the confirmation document id
    * Checks that confirmation exists
    */
@@ -261,12 +257,6 @@ module.exports = {
 
 
   },
-
-  // findUserByParams: (req, res, next) => {
-  //   User.findById(req.params.userId).then(user => {
-
-  //   })
-  // },
 
   /**
    * Middleware that redirects users when the access resources that shouldn't be visible when logged in.
@@ -488,7 +478,9 @@ module.exports = {
       .matches(/\d/)
       .withMessage('your password should have at least one number')
       .matches(/[!@#$%^&*(),.?":{}|<>]/)
-      .withMessage('your password should have at least one special character');
+      .withMessage('your password should have at least one special character')
+      .matches(/[A-Za-z]/)
+      .withMessage('your password must contain at lease one letter');
     req.getValidationResult().then(err => {
       if (!err.isEmpty()) {
         let messages = err.array().map(e => e.msg);

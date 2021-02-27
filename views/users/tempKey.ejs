@@ -3,6 +3,13 @@
     <div class="d-flex flex-column frosted-background" id="password-recovery-form">
       <h1 class="align-self-center">Password reset</h1>
       <p class="align-self-center">It is recommended that you don't use repeat passwords - here, or anywhere else!</p>
+      <p>Password requirements:</p>
+      <ul>
+        <li>At least 8 characters long, maximum of 15</li>
+        <li>At least 1 special character</li>
+        <li>At least 1 number</li>
+        <li>At least 1 letter</li>
+      </ul>
       <form class="d-flex flex-column" action="/users/<%= userId %>/<%= tempKey %>" method='POST'
         onkeyup="return passwordCheck(this)">
         <label for="newPassword">New Password</label>
