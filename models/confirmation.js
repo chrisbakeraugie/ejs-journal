@@ -25,7 +25,7 @@ const confirmation = mongoose.Schema({
 },
   { timestamps: true });
 
-confirmation.index({ createdAt: 1 }, { expireAfterSeconds: 600 });
+confirmation.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
 
 const Confirmation = mongoose.model('Confirmation', confirmation);
 
