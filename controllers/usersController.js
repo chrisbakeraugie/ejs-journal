@@ -70,8 +70,8 @@ module.exports = {
    */
   checkConfirmation: (req, res, next) => {
     Confirmation.findById(req.params.confirmId).then(confirmation => {
-      if(confirmation === null){
-        req.flash('warning','Account being confirmed not found. Your confirmation link may have expired; please sign up again.');
+      if (confirmation === null) {
+        req.flash('warning', 'Account being confirmed not found. Your confirmation link may have expired; please sign up again.');
         res.redirect('/users/login');
       } else {
         res.locals.confirm = confirmation;
@@ -137,7 +137,7 @@ module.exports = {
 
   createNewUser: (req, res, next) => {
     if (res.locals.skip === true) {
-      res.locals.redirectPath = '/users/confirm/'+ req.params.confirmId;
+      res.locals.redirectPath = '/users/confirm/' + req.params.confirmId;
       next();
     } else {
       let newUser = new User({
@@ -205,7 +205,7 @@ module.exports = {
               last: req.body.lastName
             },
             email: req.body.email,
-  
+
           }).then((doc) => {
             let html = `<h1>Howdy!</h1>
             <h3>Go ahead and just click that link below to finish registering your account</h3>
@@ -341,38 +341,56 @@ module.exports = {
    * Finally sends a link to the user informing them that their password can be resent 
    */
   sendRecoverEmail: (req, res, next) => {
-    req.sanitizeBody('email')
-      .normalizeEmail({
-        all_lowercase: true
-      }).trim();
-    const expDate = new Date();
-    expDate.setDate(expDate.getDate() + 1); // Takes current date and adds one day (24 hour expiration)
-    User.findOneAndUpdate({ 'email': req.body.email }, {
-      tempKey: {
-        value: genPassword.generate({
-          length: 20,
-          numbers: false,
-          symbols: false,
-        }),
-        inUse: true,
-        expDate: expDate
-      }
-      // eslint-disable-next-line no-unused-vars
-    }, { new: true }, function (err, doc) { // Callback telling mongoose to execute update
-      if (err) {
-        console.log('Callback error ' + err.message);
-        next(err);
-      }
-      // console.log(`http://localhost:3005/users/${doc._id}/${doc.tempKey.value}`);
-      let html = `<h1>Howdy, here is your recovery link</h1>
+    if (res.locals.skip === true) {
+      res.locals.redirectPath = '/users/forgot-password';
+      next();
+    } else {
+
+
+      User.exists({ email: req.body.email }, function (err, doc) {
+        if (err) {
+          console.log('sendRecoveryEmail exists error: ' + err.message);
+          next(err);
+        } else {
+          if (doc === false) {
+            req.flash('warning', 'Email address not found, please try again');
+            res.locals.redirectPath = '/users/forgot-password';
+            next();
+          } else {
+            const expDate = new Date();
+            expDate.setDate(expDate.getDate() + 1); // Takes current date and adds one day (24 hour expiration)
+            User.findOneAndUpdate({ 'email': req.body.email }, {
+              tempKey: {
+                value: genPassword.generate({
+                  length: 20,
+                  numbers: false,
+                  symbols: false,
+                }),
+                inUse: true,
+                expDate: expDate
+              }
+              // eslint-disable-next-line no-unused-vars
+            }, { new: true }, function (err, doc) { // Callback telling mongoose to execute update
+              if (err) {
+                console.log('Callback error ' + err.message);
+                next(err);
+              }
+              // console.log(`http://localhost:3005/users/${doc._id}/${doc.tempKey.value}`);
+              let html = `<h1>Howdy, here is your recovery link</h1>
       <br/>
       <p><a clicktracking=off href='http://localhost:3005/users/${doc._id}/${doc.tempKey.value}'>Reset my password</a></p>`;
-      sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Skriftr account password reset', html);
-      next();
-    }).catch(err => {
-      console.log('sendRecoverEmail findbyIdandUpdate error ' + err.message);
-      next(err);
-    });
+              sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Skriftr account password reset', html);
+              req.flash('success', 'Please check your email for recovery email. It may take some time. Remember to check your spam folder!');
+              res.locals.redirectPath = '/users/login';
+              next();
+            }).catch(err => {
+              console.log('sendRecoverEmail findbyIdandUpdate error ' + err.message);
+              next(err);
+            });
+          }
+        }
+      });
+    }
   },
 
   /**
@@ -506,13 +524,12 @@ module.exports = {
       })
       .trim();
 
-    req.check('email', 'Email is invalid').isEmail();
+    req.check('email', 'Entered email is invalid').isEmail();
     req.getValidationResult().then(err => {
       if (!err.isEmpty()) {
         let messages = err.array().map(e => e.msg);
         req.flash('warning', messages.join(' and '));
         res.locals.skip = true;
-        res.locals.redirectPath = '/users/new-user';
       }
       next();
     });

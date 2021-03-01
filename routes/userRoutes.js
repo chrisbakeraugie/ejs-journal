@@ -12,7 +12,7 @@ router.post('/new-user', usersController.loggedInRedirect, usersController.valid
 router.get('/confirm/:confirmId', usersController.checkConfirmation, usersController.showCreatePassword);
 router.post('/confirm/:confirmId', usersController.validatePassword, usersController.validateEmail, usersController.createNewUser, usersController.redirectPath);
 router.get('/forgot-password', usersController.loggedInRedirect, usersController.showForgotPassword);
-router.post('/forgot-password', usersController.loggedInRedirect, usersController.sendRecoverEmail, usersController.redirectPath);
+router.post('/forgot-password', usersController.loggedInRedirect, usersController.validateEmail, usersController.sendRecoverEmail, usersController.redirectPath);
 router.get('/:userId/:tempKey', usersController.checkTempKey, usersController.showTempKey);
 router.post('/:userId/:tempKey', usersController.validatePassword, usersController.setPassword, usersController.redirectPath);
 router.use((req, res, next) => {
