@@ -48,7 +48,6 @@ module.exports = {
       } else {
         if (doesExist) {
           console.log(`projectController.createProject: Project title "${req.body.title}" already in use.`);
-          res.locals.redirectStatus = httpStatus.SEE_OTHER;
           res.locals.redirectPath = '/projects/new-project';
           req.flash('danger', 'A project with that title already exists in your account. Please choose a unique title');
           next();

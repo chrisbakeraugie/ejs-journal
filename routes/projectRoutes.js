@@ -2,7 +2,7 @@ const router = require('express').Router();
 const projectController = require('../controllers/projectController');
 
 router.get('', projectController.getAllProjects, projectController.showAllProjects);
-router.get('/new-project', projectController.newProject);
+router.get('/new-project', projectController.getAllProjects, projectController.newProject);
 router.post('/new-project', projectController.createProject, projectController.redirectPath);
 router.get('/:entryId/edit', projectController.authenticateUser, projectController.getSingleEntry, projectController.showEditEntry);
 router.put('/:entryId/edit', projectController.authenticateUser, projectController.updateEntry, projectController.redirectPath);
