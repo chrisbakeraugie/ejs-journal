@@ -7,6 +7,8 @@ const nodemailer = require('nodemailer');
 const nodemailerSendgrid = require('nodemailer-sendgrid');
 const { credentials } = require('../config');
 const genPassword = require('generate-password');
+const filePath = require('path');
+const ejs = require('ejs');
 
 /**
  * 
@@ -207,13 +209,20 @@ module.exports = {
             email: req.body.email,
 
           }).then((doc) => {
-            let html = `<h1>Howdy!</h1>
-            <h3>Go ahead and just click that link below to finish registering your account</h3>
-            <p><a clicktracking=off href='http://localhost:3005/users/confirm/${doc._id}'>Confirm my account</a></p>`;
-            sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Your Skriftr confirmation link', html);
-            req.flash('success', 'Confirmation email has been sent!');
-            res.locals.redirectPath = '/users/login';
-            next();
+            // let html = `<h1>Howdy!</h1>
+            // <h3>Go ahead and just click that link below to finish registering your account</h3>
+            // <p><a clicktracking=off href='http://localhost:3005/users/confirm/${doc._id}'>Confirm my account</a></p>`;
+            // sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Your Skriftr confirmation link', html);
+            ejs.renderFile(filePath.join(__dirname, '../views/email/confirmation.ejs'), {docId: doc._id}, function (err, htmlStr) {
+              if (err) {
+                console.log('Error creating html string ' + err.message);
+              } else {
+                req.flash('success', 'Confirmation email has been sent!');
+                res.locals.redirectPath = '/users/login';
+                sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Your Skriftr confirmation link', htmlStr);
+                next();
+              }
+            });
           }).catch(err => {
             console.log('Confirmation User.find one error ' + err);
             next(err);
