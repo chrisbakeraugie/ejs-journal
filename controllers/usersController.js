@@ -263,7 +263,26 @@ module.exports = {
         next(err);
       });
     }
+  },
 
+  /**
+   * Sends html email to the skriftr feedback address
+   * Uses form contents to create message, skips if ski === true
+   */
+  feedbackMessage: (req, res, next) => {
+    if (res.locals.skip === true) {
+      res.locals.redirectPath = '/about';
+      req.flash('warning', ' sorry! Please try again.');
+      next();
+    } else {
+      let html = `<h3>${req.body.email} sent a ${req.body.contactType}:</h3>
+    <br />
+    <p>${req.body.description}</p>`;
+      sendhtmlEmail(credentials.toSkriftrFeedbackEmail, credentials.fromSendgridEmail, req.body.contactType, html);
+      req.flash('success', 'Email sent, thank you for your feedback!');
+      res.locals.redirectPath = '/about';
+      next();
+    }
 
   },
 
