@@ -209,11 +209,7 @@ module.exports = {
             email: req.body.email,
 
           }).then((doc) => {
-            // let html = `<h1>Howdy!</h1>
-            // <h3>Go ahead and just click that link below to finish registering your account</h3>
-            // <p><a clicktracking=off href='http://localhost:3005/users/confirm/${doc._id}'>Confirm my account</a></p>`;
-            // sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Your Skriftr confirmation link', html);
-            ejs.renderFile(filePath.join(__dirname, '../views/email/confirmation.ejs'), {docId: doc._id}, function (err, htmlStr) {
+            ejs.renderFile(filePath.join(__dirname, '../views/email/confirmation.ejs'), { docId: doc._id }, function (err, htmlStr) {
               if (err) {
                 console.log('Error creating html string ' + err.message);
               } else {
@@ -384,14 +380,18 @@ module.exports = {
                 console.log('Callback error ' + err.message);
                 next(err);
               }
-              // console.log(`http://localhost:3005/users/${doc._id}/${doc.tempKey.value}`);
-              let html = `<h1>Howdy, here is your recovery link</h1>
-      <br/>
-      <p><a clicktracking=off href='http://localhost:3005/users/${doc._id}/${doc.tempKey.value}'>Reset my password</a></p>`;
-              sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Skriftr account password reset', html);
-              req.flash('success', 'Please check your email for recovery email. It may take some time. Remember to check your spam folder!');
-              res.locals.redirectPath = '/users/login';
-              next();
+              ejs.renderFile(filePath.join(__dirname, '../views/email/forgot.ejs'), { docId: doc._id, tempKey: doc.tempKey.value }, function (err, htmlStr) {
+                if (err) {
+                  console.log('Error creating html string ' + err.message);
+                } else {
+                  req.flash('success', 'Confirmation email has been sent!');
+                  res.locals.redirectPath = '/users/login';
+                  sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Skriftr account password reset', htmlStr);
+                  req.flash('success', 'Please check your email for recovery email. It may take some time. Remember to check your spam folder!');
+                  res.locals.redirectPath = '/users/login';
+                  next();
+                }
+              });
             }).catch(err => {
               console.log('sendRecoverEmail findbyIdandUpdate error ' + err.message);
               next(err);
