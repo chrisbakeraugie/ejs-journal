@@ -209,6 +209,7 @@ module.exports = {
             email: req.body.email,
 
           }).then((doc) => {
+            // eslint-disable-next-line no-undef
             ejs.renderFile(filePath.join(__dirname, '../views/email/confirmation.ejs'), { docId: doc._id }, function (err, htmlStr) {
               if (err) {
                 console.log('Error creating html string ' + err.message);
@@ -399,6 +400,7 @@ module.exports = {
                 console.log('Callback error ' + err.message);
                 next(err);
               }
+              // eslint-disable-next-line no-undef
               ejs.renderFile(filePath.join(__dirname, '../views/email/forgot.ejs'), { docId: doc._id, tempKey: doc.tempKey.value }, function (err, htmlStr) {
                 if (err) {
                   console.log('Error creating html string ' + err.message);
