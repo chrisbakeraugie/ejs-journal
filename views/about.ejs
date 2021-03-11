@@ -12,7 +12,7 @@
         <div class="col">
           <img src="/img/step-one-project-start.png" class="about-page-img-desktop"
             alt="A screenshot of the new project page, with 'Creating a React.JS front end for my website' in the title and 'This project is about implementing a React.JS front end for my website, including Redux. This way, I can become more proficient in Single Page Application development in Node.JS' in the description">
-            <img src="/img/step-one-project-start-mobile.png" class="about-page-img-mobile"
+          <img src="/img/step-one-project-start-mobile.png" class="about-page-img-mobile"
             alt="A screenshot of the new project page, with 'Creating a React.JS front end for my website' in the title and 'This project is about implementing a React.JS front end for my website, including Redux. This way, I can become more proficient in Single Page Application development in Node.JS' in the description">
         </div>
       </div>
@@ -24,19 +24,20 @@
         <div class="col">
           <img src="/img/step-two-update-daily.png" class="about-page-img-desktop"
             alt="An example with two entries on the project page, each with a title, description, and date visible. Borders of the pages have the project description, project title, and a button for the confidence tracker">
-            <img src="/img/step-two-update-daily-mobile.png" class="about-page-img-mobile"
+          <img src="/img/step-two-update-daily-mobile.png" class="about-page-img-mobile"
             alt="An example with two entries on the project page, each with a title, description, and date visible. Borders of the pages have the project description, project title, and a button for the confidence tracker">
         </div>
       </div>
       <div class="row about-row">
         <div class="col">
           <h4>3. Check the "Confidence Tracker"</h4>
-          <p class="about-paragraph">As you post more entries, you should start seeing confidence rise and fall over time.</p>
+          <p class="about-paragraph">As you post more entries, you should start seeing confidence rise and fall over
+            time.</p>
         </div>
         <div class="col">
           <img src="/img/step-three-track-progress.png" class="about-page-img-desktop"
             alt="The confidence tracker; a line graph sporadically rising starting in March and ending in August">
-            <img src="/img/step-three-track-progress-mobile.png" class="about-page-img-mobile"
+          <img src="/img/step-three-track-progress-mobile.png" class="about-page-img-mobile"
             alt="The confidence tracker; a line graph sporadically rising starting in March and ending in August">
         </div>
       </div>
@@ -45,7 +46,8 @@
       <h2>What is Skriftr?</h2>
       <h6>Skriftr is an online journal and progress tracker proof-of-concept, intended for users who are learning new
         skills.</h6>
-      <p class="about-paragraph">In the midst of the Covid-19 pandemic, many people began learning new skills and started self improvement
+      <p class="about-paragraph">In the midst of the Covid-19 pandemic, many people began learning new skills and
+        started self improvement
         journeys. At the same time, they had to do those things in relatively isolated conditions. The combination of
         stress and isolation is not conducive to learning anything, and can leave anyone feeling like their goals are
         unachievable. Skriftr is a personal project created in that environment; it's a place for tracking progress
@@ -56,13 +58,15 @@
     </div>
     <div class="row about-row">
       <h4>The goals of Skriftr</h4>
-      <p class="about-paragraph">Skriftr is a personal project. This website <i> does not collect data, share data, or operate as a business in
+      <p class="about-paragraph">Skriftr is a personal project. This website <i> does not collect data, share data, or
+          operate as a business in
           any way.</i> And it is totally free! It was created as a personal way to produce a full stack web application,
         while learning along the way.</p>
     </div>
     <div class="row about-row">
       <h3 id="about-warning">A warning.</h3>
-      <p class="about-paragraph">While anyone is invited to use skrifter, this is a small amateur project. <i>Accounts can be hacked,
+      <p class="about-paragraph">While anyone is invited to use skrifter, this is a small amateur project. <i>Accounts
+          can be hacked,
           information
           can be lost, and systems can break.</i> I do not have the resources to account for every possibility, and do
         not
@@ -94,6 +98,28 @@
     <div class="row about-row">
       <h5>Contact</h5>
       <p class="about-paragraph">Interested in Skriftr? Have a recommendation (features, bugs, etc.)? Let me know.</p>
+      <form action="" class="about-paragraph d-flex flex-column" id="contact-form" method="POST">
+        <label for="email">Your email</label>
+        <% if (loggedIn) { %>
+        <input type="email" name="email" id="contact-email" disabled value="<%=currentUser.email%>" required>
+        <% } else { %>
+        <input type="email" name="email" id="contact-email" placeholder="contact@email.com" required>
+        <% } %>
+        <div class="radio-left">
+          <input type="radio" id="bug" name="contactType" value="bug" required>
+          <label for="bug">Bug</label>
+        </div>
+        <div class="radio-left">
+          <input type="radio" id="recommendation" name="contactType" value="recommendation">
+          <label for="recommendation">Recommendation</label>
+        </div>
+        <div class="radio-left">
+          <input type="radio" id="other" name="contactType" value="other">
+          <label for="other">Other</label>
+        </div>
+        <textarea name="description" id="contact-description" cols="30" rows="3" placeholder="What's up?" required></textarea>
+        <button type="submit" class="btn btn-success" id="contact-submit">Contact</button>
+      </form>
     </div>
   </div>
 </div>

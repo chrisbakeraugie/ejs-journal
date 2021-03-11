@@ -569,6 +569,27 @@ path.domain {
   margin-top: 20px;
 }
 
+#contact-email {
+  max-width: 50%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#contact-description {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#contact-form {
+  margin-bottom: 30px;
+  max-width: 50vw;
+}
+
+#contact-submit{
+  margin: auto;
+  min-width: 25%;
+}
+
 .credit-list {
   list-style: none;
 }
@@ -579,21 +600,17 @@ path.domain {
 }
 
 @media screen and (max-width: 450px) {
-  
   #about-page-container {
     padding: 15px;
     text-align: center;
   }
-
   #about-page-steps {
     margin: 0;
     margin-top: 15px;
   }
-
   .about-paragraph {
     margin-left: 0;
   }
-
   .about-page-img-desktop {
     display: none;
   }
@@ -602,7 +619,23 @@ path.domain {
   }
   .about-row {
     max-width: 100vw;
+  }
+  #contact-email {
+    max-width: 100%;
+  }
+  #contact-description {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  #contact-form {
+    margin-bottom: 30px;
+    max-width: 95vw;
+  }
+  #contact-submit{
 
+  }
+  .radio-left{
+    text-align: left;
   }
 }
 
