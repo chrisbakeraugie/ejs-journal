@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const projectRoutes = require('./projectRoutes');
 const userRoutes = require('./userRoutes');
+const usersController = require('../controllers/usersController');
 
 router.use('/users', userRoutes);
 /**
@@ -10,6 +11,7 @@ router.use('/users', userRoutes);
 router.get('/about', (req, res) => {
   res.render('about');
 });
+router.post('/about', usersController.validateEmail, usersController.feedbackMessage, usersController.redirectPath);
 router.use((req, res, next) => {
   if (res.locals.loggedIn) {
     next();
