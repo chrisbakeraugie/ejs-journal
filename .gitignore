@@ -6,4 +6,4 @@
 
 .credentials.*
 
-.env
+*.env

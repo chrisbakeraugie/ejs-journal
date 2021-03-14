@@ -5,7 +5,7 @@ const Confirmation = require('../models/confirmation');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
 const nodemailerSendgrid = require('nodemailer-sendgrid');
-const { credentials } = require('../config');
+// const { credentials } = require('../config');
 const genPassword = require('generate-password');
 const filePath = require('path');
 const ejs = require('ejs');
@@ -20,7 +20,7 @@ const ejs = require('ejs');
 function sendhtmlEmail(toAddr, fromAddr, subject, html) {
   const transport = nodemailer.createTransport(
     nodemailerSendgrid({
-      apiKey: credentials.sendgridApiKey
+      apiKey: process.env.SENDGRIDAPIKEY
     })
   );
   transport.sendMail({
@@ -216,7 +216,7 @@ module.exports = {
               } else {
                 req.flash('success', 'Confirmation email has been sent!');
                 res.locals.redirectPath = '/users/login';
-                sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Your Skriftr confirmation link', htmlStr);
+                sendhtmlEmail(doc.email, process.env.FROMSENDGRIDEMAIL, 'Your Skriftr confirmation link', htmlStr);
                 next();
               }
             });
@@ -279,7 +279,7 @@ module.exports = {
       let html = `<h3>${req.body.email} sent a ${req.body.contactType}:</h3>
     <br />
     <p>${req.body.description}</p>`;
-      sendhtmlEmail(credentials.toSkriftrFeedbackEmail, credentials.fromSendgridEmail, req.body.contactType, html);
+      sendhtmlEmail(process.env.TOSKRIFTRFEEDBACKEMAIL, process.env.FROMSENDGRIDEMAIL, req.body.contactType, html);
       req.flash('success', 'Email sent, thank you for your feedback!');
       res.locals.redirectPath = '/about';
       next();
@@ -407,7 +407,7 @@ module.exports = {
                 } else {
                   req.flash('success', 'Confirmation email has been sent!');
                   res.locals.redirectPath = '/users/login';
-                  sendhtmlEmail(doc.email, credentials.fromSendgridEmail, 'Skriftr account password reset', htmlStr);
+                  sendhtmlEmail(doc.email, process.env.FROMSENDGRIDEMAIL, 'Skriftr account password reset', htmlStr);
                   req.flash('success', 'Please check your email for recovery email. It may take some time. Remember to check your spam folder!');
                   res.locals.redirectPath = '/users/login';
                   next();

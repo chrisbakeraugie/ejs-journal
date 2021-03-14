@@ -24,7 +24,7 @@ const expressValidator = require('express-validator');
  * Use mongoose to connect to mongoDB
  * Change the connection string to use env variables in the future
  */
-mongoose.connect('mongodb://localhost:27017/journal_db', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.once('open', () => {
   console.log('\nConnection to mongoDB successful!\n');
@@ -52,9 +52,9 @@ app.use(express.urlencoded({ extended: true }));
 /**
  * Creating a session to be used by passportJS after login authentication
  */
-app.use(cookieParser(credentials.cookieSecret));
+app.use(cookieParser(process.env.COOKIESECRET));
 app.use(expressSession({
-  secret: credentials.cookieSecret,
+  secret: process.env.COOKIESECRET,
   cookie: {
     maxAge: 1000 * 60 * 60 * 2 // About two hours in milliseconds
   },
