@@ -200,29 +200,38 @@ module.exports = {
           res.locals.redirectPath = '/users/new-user';
           next();
         } else {
-          Confirmation.create({
-            name: {
-              first: req.body.firstName,
-              middle: req.body.middleName,
-              last: req.body.lastName
-            },
-            email: req.body.email,
+          Confirmation.exists({ 'email': req.body.email }, function (err, doc) {
+            if (doc === true) {
+              req.flash('success', 'Confirmation for that email has already been sent, please check your email');
+              res.locals.redirectPath = '/users/login';
+              next();
+            } else {
+              Confirmation.create({
+                name: {
+                  first: req.body.firstName,
+                  middle: req.body.middleName,
+                  last: req.body.lastName
+                },
+                email: req.body.email,
 
-          }).then((doc) => {
-            // eslint-disable-next-line no-undef
-            ejs.renderFile(filePath.join(__dirname, '../views/email/confirmation.ejs'), { docId: doc._id }, function (err, htmlStr) {
-              if (err) {
-                console.log('Error creating html string ' + err.message);
-              } else {
-                req.flash('success', 'Confirmation email has been sent!');
-                res.locals.redirectPath = '/users/login';
-                sendhtmlEmail(doc.email, process.env.FROMSENDGRIDEMAIL, 'Your Skriftr confirmation link', htmlStr);
-                next();
-              }
-            });
-          }).catch(err => {
-            console.log('Confirmation User.find one error ' + err);
-            next(err);
+              }).then((doc) => {
+                // eslint-disable-next-line no-undef
+                ejs.renderFile(filePath.join(__dirname, '../views/email/confirmation.ejs'), { docId: doc._id }, function (err, htmlStr) {
+                  if (err) {
+                    console.log('Error creating html string ' + err.message);
+                  } else {
+                    req.flash('success', 'Confirmation email has been sent!');
+                    res.locals.redirectPath = '/users/login';
+                    sendhtmlEmail(doc.email, process.env.FROMSENDGRIDEMAIL, 'Your Skriftr confirmation link', htmlStr);
+                    next();
+                  }
+                });
+              }).catch(err => {
+                console.log('Confirmation User.find one error ' + err);
+                next(err);
+              });
+            }
+
           });
         }
       }).catch(err => {
