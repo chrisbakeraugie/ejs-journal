@@ -48,7 +48,6 @@ if (window.innerWidth <= 450) {
   width = window.innerWidth - 100 - margin.left - margin.right;
   height = 800 - margin.top - margin.bottom;
 }
-console.log(window.innerWidth + " " + JSON.stringify(margin) + " " + width + " " + height);
 
 // // Set margins
 // let margin = {
