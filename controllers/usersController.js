@@ -20,6 +20,7 @@ const ejs = require('ejs');
 function sendhtmlEmail(toAddr, fromAddr, subject, html) {
   const transport = nodemailer.createTransport(
     nodemailerSendgrid({
+      // eslint-disable-next-line no-undef
       apiKey: process.env.SENDGRIDAPIKEY
     })
   );
@@ -222,6 +223,7 @@ module.exports = {
                   } else {
                     req.flash('success', 'Confirmation email has been sent!');
                     res.locals.redirectPath = '/users/login';
+                    // eslint-disable-next-line no-undef
                     sendhtmlEmail(doc.email, process.env.FROMSENDGRIDEMAIL, 'Your Skriftr confirmation link', htmlStr);
                     next();
                   }
@@ -288,6 +290,7 @@ module.exports = {
       let html = `<h3>${req.body.email} sent a ${req.body.contactType}:</h3>
     <br />
     <p>${req.body.description}</p>`;
+      // eslint-disable-next-line no-undef
       sendhtmlEmail(process.env.TOSKRIFTRFEEDBACKEMAIL, process.env.FROMSENDGRIDEMAIL, req.body.contactType, html);
       req.flash('success', 'Email sent, thank you for your feedback!');
       res.locals.redirectPath = '/about';
@@ -416,6 +419,7 @@ module.exports = {
                 } else {
                   req.flash('success', 'Confirmation email has been sent!');
                   res.locals.redirectPath = '/users/login';
+                  // eslint-disable-next-line no-undef
                   sendhtmlEmail(doc.email, process.env.FROMSENDGRIDEMAIL, 'Skriftr account password reset', htmlStr);
                   req.flash('success', 'Please check your email for recovery email. It may take some time. Remember to check your spam folder!');
                   res.locals.redirectPath = '/users/login';
