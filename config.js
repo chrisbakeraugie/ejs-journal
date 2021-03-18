@@ -3,9 +3,11 @@
  */
 // eslint-disable-next-line no-undef
 const filePath = require('path');
+// eslint-disable-next-line no-undef
 const env = process.env.NODE_ENV || 'development';
+// eslint-disable-next-line no-undef
 const envPath = filePath.join(__dirname, `${env}.env`);
-const resultENV = require('dotenv').config({ path: envPath });
+require('dotenv').config({ path: envPath });
 console.log('Operating on ' + env + ' environment variables');
 // const credentials = require(`./.credentials.${env}.env`);
 
