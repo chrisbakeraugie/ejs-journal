@@ -24,7 +24,8 @@ const expressValidator = require('express-validator');
  * Use mongoose to connect to mongoDB
  * Change the connection string to use env variables in the future
  */
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+// eslint-disable-next-line no-undef
+mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@skriftrcloud.yrx80.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.once('open', () => {
   console.log('\nConnection to mongoDB successful!\n');
