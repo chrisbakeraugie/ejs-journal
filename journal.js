@@ -6,8 +6,10 @@
  */
 const express = require('express'); // Initialize our express app
 const app = express();
+// eslint-disable-next-line no-unused-vars
 const {credentials} = require('./config');
-const port = 3005; // Basic port setup. Updated later
+// eslint-disable-next-line no-undef
+const port = process.env.PORT || 3000;
 const routes = require('./routes/index'); // Moving routes away from our main (journal.js) file
 const expressLayout = require('express-ejs-layouts');
 const mongoose = require('mongoose'); // Handles models/Schemas, connections to mongoDB
@@ -53,8 +55,10 @@ app.use(express.urlencoded({ extended: true }));
 /**
  * Creating a session to be used by passportJS after login authentication
  */
+// eslint-disable-next-line no-undef
 app.use(cookieParser(process.env.COOKIESECRET));
 app.use(expressSession({
+  // eslint-disable-next-line no-undef
   secret: process.env.COOKIESECRET,
   cookie: {
     maxAge: 1000 * 60 * 60 * 2 // About two hours in milliseconds
