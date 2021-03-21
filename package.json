@@ -5,7 +5,7 @@
   "main": "journal.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon journal.js"
+    "start": "node journal.js"
   },
   "keywords": [
     "journal",
