@@ -7,7 +7,7 @@
 const express = require('express'); // Initialize our express app
 const app = express();
 // eslint-disable-next-line no-unused-vars
-const {credentials} = require('./config');
+const { credentials } = require('./config');
 // eslint-disable-next-line no-undef
 const port = process.env.PORT || 3000;
 const routes = require('./routes/index'); // Moving routes away from our main (journal.js) file
@@ -18,7 +18,7 @@ const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
 const User = require('./models/user');
 const errorController = require('./controllers/errorController');
-const connectFlash  = require('connect-flash');
+const connectFlash = require('connect-flash');
 const methodOverride = require('method-override');// Required to handle different HTTP verbs like PUT or DELETE
 const expressValidator = require('express-validator');
 const path = require('path');
@@ -28,7 +28,12 @@ const path = require('path');
  * Change the connection string to use env variables in the future
  */
 // eslint-disable-next-line no-undef
-mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@skriftrcloud.yrx80.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true });
+if(process.env.NODE_ENV === 'production'){
+  // eslint-disable-next-line no-undef
+  mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@skriftrcloud.yrx80.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true });
+} else {
+  mongoose.connect('mongodb://localhost:27017/journal_db', { useNewUrlParser: true });
+}
 const db = mongoose.connection;
 db.once('open', () => {
   console.log('\nConnection to mongoDB successful!\n');
@@ -114,6 +119,20 @@ app.use((req, res, next) => {
   res.locals.flashMessage = req.flash();
   next();
 });
+
+/**
+ * Redirect middleware that checks heroku's version of 
+ */
+// eslint-disable-next-line no-undef
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https') {
+      res.redirect(`https://${req.header('host')}${req.url}`)
+    } else {
+      next();
+    }
+  });
+}
 
 /**
  * This route will render the homepage, and any other routes will match with
