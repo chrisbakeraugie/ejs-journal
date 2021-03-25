@@ -22,6 +22,7 @@ const connectFlash = require('connect-flash');
 const methodOverride = require('method-override');// Required to handle different HTTP verbs like PUT or DELETE
 const expressValidator = require('express-validator');
 const path = require('path');
+const helmet = require('helmet');
 
 /**
  * Use mongoose to connect to mongoDB
@@ -40,13 +41,18 @@ db.once('open', () => {
 });
 
 /**
+ * Helmet.js for Express security. handles some better-known
+ * HTTP header security issues.
+ */
+app.use(helmet());
+
+/**
  * These adjustments to the app prepare the app for use
  * with an EJS layout. 
  */
 app.set('view engine', 'ejs');
 // eslint-disable-next-line no-undef
 app.set('views', path.join(__dirname + '/views'));
-console.log(path.join(__dirname + '/views'));
 app.use(expressLayout);
 
 /**
