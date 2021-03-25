@@ -48,7 +48,6 @@ app.use(helmet());
 app.set('view engine', 'ejs');
 // eslint-disable-next-line no-undef
 app.set('views', path.join(__dirname + '/views'));
-console.log(path.join(__dirname + '/views'));
 app.use(expressLayout);
 
 /**
