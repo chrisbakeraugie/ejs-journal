@@ -22,6 +22,7 @@ const connectFlash  = require('connect-flash');
 const methodOverride = require('method-override');// Required to handle different HTTP verbs like PUT or DELETE
 const expressValidator = require('express-validator');
 const path = require('path');
+const helmet = require('helmet');
 
 /**
  * Use mongoose to connect to mongoDB
@@ -33,6 +34,12 @@ const db = mongoose.connection;
 db.once('open', () => {
   console.log('\nConnection to mongoDB successful!\n');
 });
+
+/**
+ * Helmet.js for Express security. handles some better-known
+ * HTTP header security issues.
+ */
+app.use(helmet());
 
 /**
  * These adjustments to the app prepare the app for use
