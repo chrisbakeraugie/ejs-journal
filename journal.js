@@ -28,12 +28,14 @@ const helmet = require('helmet');
  * Use mongoose to connect to mongoDB
  * Change the connection string to use env variables in the future
  */
+let cspDevelopment;
 // eslint-disable-next-line no-undef
 if(process.env.NODE_ENV === 'production'){
   // eslint-disable-next-line no-undef
   mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@skriftrcloud.yrx80.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true });
 } else {
   mongoose.connect('mongodb://localhost:27017/journal_db', { useNewUrlParser: true });
+  cspDevelopment = [`http://localhost:${port}/`];
 }
 const db = mongoose.connection;
 db.once('open', () => {
@@ -45,6 +47,21 @@ db.once('open', () => {
  * HTTP header security issues.
  */
 app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    'default-src': ['\'self\''],
+    'base-uri': [ '\'self\'' ],
+    'block-all-mixed-content': [],
+    'font-src': [ '\'self\'', 'https:', 'data:' ],
+    'frame-ancestors': [ '\'self\'' ],
+    'img-src': [ '\'self\'', 'data:' ],
+    'object-src': [ '\'none\'' ],
+    'script-src': [ '\'self\'' ].concat(cspDevelopment),
+    'script-src-attr': [ '\'none\'' ],
+    'style-src': [ '\'self\'', 'https:', '\'unsafe-inline\'' ],
+    'upgrade-insecure-requests': []
+  }
+}));
 
 /**
  * These adjustments to the app prepare the app for use

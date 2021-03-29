@@ -2,7 +2,6 @@
 /**
  * This page is linked to Mood Data 
  */
-
 // Pulls data from the input tag, where values are be defined
 let raw = d3.select('input#entryData').attr('value');
 
