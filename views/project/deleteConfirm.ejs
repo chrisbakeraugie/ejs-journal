@@ -3,30 +3,21 @@
     <div class="d-flex flex-column frosted-background" id="user-delete-account-div">
       <h3 class="page-header">To delete this project, '<%=project.title%>', please type the title and press "Delete
         Project" below</h3>
-      <p>Understand that this CANNOT be reversed<!</p> <form class="d-flex flex-column" id="delete-project-form"
-          action='/users/reset-password' method='POST' onkeyup="return titleCheck(this, `<%=project.title%>`)">
+      <p>Understand that this CANNOT be reversed<!</p>
+       <form class="d-flex flex-column" id="delete-project-form"
+          action='/users/reset-password' method='POST'>
+          <input type="hidden" id="project-title-to-delete" readonly value="<%=project.title%>">
+          <input type="hidden" id="project-id-to-delete" readonly
+            value="/projects/<%= project._id%>/delete?_method=DELETE">
           <input type="text" id="projectToDelete" name="projectToDelete" placeholder="title" required>
           <br />
           <button id='matchProjectTitle' class="btn btn-danger" disabled hidden
             style='padding: 0; font-size: small;'>Your title must match</button>
           <br />
-          <a href="#" class="btn btn-danger" id="deleteProject"
-            onclick='return confirm(`Are you sure you want to delete "<%=project.title%>"? This cannot be reversed!`)'>Delete
-            Project</a>
-          </form>
+          <a href="#" class="btn btn-danger" id="deleteProject">Delete Project</a>
+        </form>
     </div>
   </div>
 </div>
-<script>
-  function titleCheck(form, projectTitle) {
-    if (projectTitle !== form.projectToDelete.value) {
-      document.getElementById('deleteProject').href = "#";
-      document.getElementById('deleteProject').color = "blue";
-      form.matchProjectTitle.hidden = false;
-    } else {
-      form.matchProjectTitle.hidden = true;
-      document.getElementById('deleteProject').href = "/projects/<%= project._id%>/delete?_method=DELETE";
-      document.getElementById('deleteProject').color = "red";
-    }
-  }
+<script type="text/javascript" src="/js/pages/deleteConfirm.js">
 </script>
