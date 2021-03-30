@@ -1,4 +1,5 @@
-<div class="row h-100 home-container" style="background-image: url(/img/home-background-<%=Math.floor(Math.random() * 4)%>.jpg)">
+<div class="row h-100 home-container"
+  style="background-image: url(/img/home-background-<%=Math.floor(Math.random() * 4)%>.jpg)">
   <div class="col-sm-12 my-auto d-flex justify-content-center">
     <div class="d-flex flex-column frosted-background" id="password-recovery-form">
       <h1 class="align-self-center">Password reset</h1>
@@ -10,29 +11,20 @@
         <li>At least 1 number</li>
         <li>At least 1 letter</li>
       </ul>
-      <form class="d-flex flex-column" action="/users/<%= userId %>/<%= tempKey %>" method='POST'
-        onkeyup="return passwordCheck(this)">
+      <form class="d-flex flex-column" action="/users/<%= userId %>/<%= tempKey %>" method='POST' id="tempKeyForm">
         <label for="newPassword">New Password</label>
         <input type="password" id="newPassword" name="newPassword" placeholder="required">
         <label for="newPasswordConfirm">Re-enter new password (must match)</label>
         <input type="password" id="newPasswordConfirm" name="newPasswordConfirm" placeholder="required" required>
         <br />
-        <button id='matchPassWarn' class="btn btn-danger" type="button" disabled hidden>Your new passwords must match</button>
+        <button id='matchPassWarn' class="btn btn-danger" type="button" disabled hidden>Your new passwords must
+          match</button>
         <button id="resetPassSubmit" class="btn btn-primary" type="submit">Change Password</button>
       </form>
     </div>
   </div>
 </div>
 
-<!-- <script type="text/javascript" src="/js/passwordCheck.js"></script> -->
-<script>
-  function passwordCheck(form) {
-    if (form.newPassword.value !== form.newPasswordConfirm.value) {
-      form.resetPassSubmit.disabled = true;
-      form.matchPassWarn.hidden = false;
-    } else {
-      form.resetPassSubmit.disabled = false;
-      form.matchPassWarn.hidden = true;
-    }
-  }
+<script type="text/javascript" src="/js/pages/tempKey.js">
+
 </script>
