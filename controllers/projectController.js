@@ -156,7 +156,7 @@ module.exports = {
     Entry.create({
       title: req.body.title,
       description: req.body.description,
-      writtenDate: new Date(),
+      writtenDate: Date.parse(req.body.clientInputDate),
       project: req.params.projectId,
       mood: req.body.mood,
       owner: res.locals.currentUser._id

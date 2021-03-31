@@ -20,6 +20,7 @@
             <label for="mood-range" id="confidence-range-label">Confidence</label>
             <input class="range" type="range" min="1" max="100" value="50" name="mood" id="mood-range">
           </div>
+          <input type="hidden" name="clientInputDate" id="client-date-input" hidden required>
           <button class="btn btn-primary" id="entry-submit" type="submit">Post</button>
         </div>
       </form>
@@ -46,3 +47,5 @@
     <%}); %>
   </div>
 </div>
+
+<script type="text/javascript" src="/js/getClientDate.js"></script>
