@@ -53,7 +53,7 @@ h1 {
 /* ----------- Home page ----------- */
 
 .frosted-background {
-  background-color: rgba(255, 255, 255, .3);
+  background-color: rgba(255, 255, 255, .6);
   min-width: var(--animation-container-width);
   padding: 10px;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2);
