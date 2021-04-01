@@ -15,6 +15,7 @@ const expressLayout = require('express-ejs-layouts');
 const mongoose = require('mongoose'); // Handles models/Schemas, connections to mongoDB
 const passport = require('passport');
 const expressSession = require('express-session');
+const MongodbStore = require('connect-mongodb-session')(expressSession);
 const cookieParser = require('cookie-parser');
 const User = require('./models/user');
 const errorController = require('./controllers/errorController');
@@ -29,18 +30,40 @@ const helmet = require('helmet');
  * Change the connection string to use env variables in the future
  */
 let cspDevelopment;
+
+/**
+ * Storage for express-session in production environment. 
+ */
+let cookieStore;
+
 // eslint-disable-next-line no-undef
-if(process.env.NODE_ENV === 'production'){
+if (process.env.NODE_ENV === 'production') {
   // eslint-disable-next-line no-undef
   mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@skriftrcloud.yrx80.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true });
+
+  cookieStore = new MongodbStore({
+    // eslint-disable-next-line no-undef
+    uri: `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@skriftrcloud.yrx80.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
+    collection: 'skriftSessions'
+  });
+  cookieStore.on('error', function (err) {
+    console.log('cookieStore error: ' + err);
+  });
 } else {
   mongoose.connect('mongodb://localhost:27017/journal_db', { useNewUrlParser: true });
+
+  //Adds localhost to safe domains (for development env ONLY)
   cspDevelopment = [`http://localhost:${port}/`];
+
+  //express-session store value remains default 
+  cookieStore = null;
 }
+
 const db = mongoose.connection;
 db.once('open', () => {
   console.log('\nConnection to mongoDB successful!\n');
 });
+
 
 /**
  * Helmet.js for Express security. handles some better-known
@@ -50,15 +73,15 @@ app.use(helmet());
 app.use(helmet.contentSecurityPolicy({
   directives: {
     'default-src': ['\'self\''],
-    'base-uri': [ '\'self\'' ],
+    'base-uri': ['\'self\''],
     'block-all-mixed-content': [],
-    'font-src': [ '\'self\'', 'https:', 'data:' ],
-    'frame-ancestors': [ '\'self\'' ],
-    'img-src': [ '\'self\'', 'data:' ],
-    'object-src': [ '\'none\'' ],
-    'script-src': [ '\'self\'' ].concat(cspDevelopment),
-    'script-src-attr': [ '\'none\'' ],
-    'style-src': [ '\'self\'', 'https:', '\'unsafe-inline\'' ],
+    'font-src': ['\'self\'', 'https:', 'data:'],
+    'frame-ancestors': ['\'self\''],
+    'img-src': ['\'self\'', 'data:'],
+    'object-src': ['\'none\''],
+    'script-src': ['\'self\''].concat(cspDevelopment),
+    'script-src-attr': ['\'none\''],
+    'style-src': ['\'self\'', 'https:', '\'unsafe-inline\''],
     'upgrade-insecure-requests': []
   }
 }));
@@ -95,6 +118,7 @@ app.use(expressSession({
   cookie: {
     maxAge: 1000 * 60 * 60 * 2 // About two hours in milliseconds
   },
+  store: cookieStore,
   resave: false,
   saveUninitialized: false
 }));
