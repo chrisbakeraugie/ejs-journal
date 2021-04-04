@@ -8,7 +8,7 @@ router.get('/:entryId/edit', projectController.authenticateUser, projectControll
 router.put('/:entryId/edit', projectController.authenticateUser, projectController.updateEntry, projectController.redirectPath);
 router.get('/:projectId/data', projectController.authenticateUser, projectController.getAllEntries, projectController.getMoodData);
 router.get('/:projectId', projectController.authenticateUser, projectController.getAllEntries, projectController.showAllEntries);
-router.post('/:projectId', projectController.authenticateUser, projectController.entryPost, projectController.getAllEntries, projectController.showAllEntries);
+router.post('/:projectId', projectController.authenticateUser, projectController.entryValidate, projectController.entryPost, projectController.getAllEntries, projectController.showAllEntries);
 router.get('/:projectId/delete-confirm', projectController.authenticateUser, projectController.getSingleProject, projectController.showDeleteConfirm);
 router.delete('/:projectId/delete', projectController.authenticateUser, projectController.deleteProject, projectController.redirectPath);
 router.delete('/:projectId/:entryId', projectController.authenticateUser, projectController.deleteEntry, projectController.redirectPath);

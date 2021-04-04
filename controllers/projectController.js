@@ -153,28 +153,51 @@ module.exports = {
    * was posted from, and calls the next middleware
    */
   entryPost: (req, res, next) => {
-    Entry.create({
-      title: req.body.title,
-      description: req.body.description,
-      writtenDate: Date.parse(req.body.clientInputDate),
-      project: req.params.projectId,
-      mood: req.body.mood,
-      owner: res.locals.currentUser._id
-    }).then(newEntry => {
-      Project.findByIdAndUpdate(req.params.projectId, { $push: { entries: newEntry._id } }).catch(err => {
-        console.log('projectController.entryPost Project update error ' + err.message);
-        next(err);
-      });
-      User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { entries: newEntry._id } }).then(() => {
-        next();
+    if (res.locals.skip === true) {
+      next();
+    } else {
+      Entry.create({
+        title: req.body.title,
+        description: req.body.description,
+        writtenDate: Date.parse(req.body.clientInputDate),
+        project: req.params.projectId,
+        mood: req.body.mood,
+        owner: res.locals.currentUser._id
+      }).then(newEntry => {
+        Project.findByIdAndUpdate(req.params.projectId, { $push: { entries: newEntry._id } }).catch(err => {
+          console.log('projectController.entryPost Project update error ' + err.message);
+          next(err);
+        });
+        User.findByIdAndUpdate(res.locals.currentUser._id, { $push: { entries: newEntry._id } }).then(() => {
+          next();
+        }).catch(err => {
+          console.log('projectController.entryPost User update error ' + err.message);
+          next(err);
+        });
       }).catch(err => {
-        console.log('projectController.entryPost User update error ' + err.message);
+        console.log('projectController.entryPost error ' + err.message);
         next(err);
       });
-    }).catch(err => {
-      console.log('projectController.entryPost error ' + err.message);
-      next(err);
+    }
+  },
+
+  /**
+   * Sanitizes and validates entries
+   */
+  entryValidate: (req, res, next) => {
+    req.check('title').isString().trim().isLength({ max: 100 });
+    req.check('description').isString().trim().isLength({ max: 1330 });
+    req.check('mood').isInt({min: 0, max: 100});
+
+    req.getValidationResult().then(err => {
+      if (!err.isEmpty()) {
+        req.flash('warning', 'Error processing your post, please try again');
+        res.redirect('/projects/' + req.params.projectId);
+      } else {
+        next();
+      }
     });
+
   },
 
   /**
