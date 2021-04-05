@@ -187,7 +187,7 @@ module.exports = {
   entryValidate: (req, res, next) => {
     req.check('title').isString().trim().isLength({ max: 100 });
     req.check('description').isString().trim().isLength({ max: 1330 });
-    req.check('mood').isInt({min: 0, max: 100});
+    req.check('mood').isInt({ min: 0, max: 100 });
 
     req.getValidationResult().then(err => {
       if (!err.isEmpty()) {
@@ -305,6 +305,23 @@ module.exports = {
 
   newProject: (req, res) => {
     res.render('project/newProject');
+  },
+
+  /**
+   * Sanitizes and validates data for a new project
+   */
+  projectValidate: (req, res, next) => {
+    req.check('title').isString().trim().isLength({ max: 100 });
+    req.check('description').isString().trim().isLength({ max: 710});
+
+    req.getValidationResult().then(err => {
+      if (!err.isEmpty()) {
+        req.flash('warning', 'Error processing your project, please try again');
+        res.redirect('/projects/new-project');
+      } else {
+        next();
+      }
+    });
   },
 
   /**

@@ -3,9 +3,9 @@
   <form class="card w-50 entry-card" id="new-project-card" action="/projects/new-project" method="POST">
     <input type="hidden" name="projects" id="projects" value="<%=JSON.stringify(projects)%>">
     <label for="title">Title</label>
-    <input id="title" type="text" name="title" required>
+    <input id="title" type="text" name="title" maxlength="100" required>
     <label for="description">Description</label>
-    <textarea name="description" id="new-project-description" cols="30" rows="10"
+    <textarea name="description" id="new-project-description" cols="30" rows="10" maxlength="700"
       placeholder="What is this project? What are your goals? Why are you undertaking it? Describe your project!"></textarea>
     <button class="btn btn-danger" id="warning" disabled hidden>Title cannot match another project title (case
       sensitive)</button>
