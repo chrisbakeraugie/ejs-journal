@@ -2,6 +2,30 @@
   <div class="container align-items-center" id="about-page-container">
     <div id="about-page-steps">
       <div class="row about-row">
+        <h2>What is Skriftr?</h2>
+        <h6>Skriftr is an online journal and proof-of-concept.</h6>
+        <p class="about-paragraph">While learning how to create full-stack applications, I realized that it can be hard
+          to
+          learn new skills when progress isn't tangible. Additionally, I needed a "sandbox" to practice releasing an
+          actual Node.JS application. So, over the course of three months, I created Skriftr.
+          <br>
+          <br>
+          For a server, Skriftr is built with Express.JS in a Model-View-Controller (MVC) pattern. The storage is
+          handled
+          using
+          MongoDB, managed through in Mongoose.JS. The views (currently) are handled in Embedded JavaScript (EJS), a
+          simple and
+          lightweight server-side rendering of HTML. Styling is a combination of a Bootstrap framework and vanilla CSS,
+          as
+          well as D3.JS for SVG visuals. In the future, the app will be updated to use a full MERN (MongoDB, Express.JS,
+          React.JS, Node.JS) stack.
+          <br>
+          <br>
+          Security: Skriftr adheres to SSL/TLS protocol and uses Helmet.JS, data validation/sanitization, CSP (Content
+          Security Policy) to address threats from XSS (Cross Site Scripting), CORS (Cross-Origin Resource Sharing).
+        </p>
+      </div>
+      <div class="row about-row">
         <h2>How to use Skriftr</h2>
       </div>
       <div class="row about-row">
@@ -19,7 +43,7 @@
       <div class="row about-row">
         <div class="col">
           <h4>2. Update Daily</h4>
-          <p class="about-paragraph">Post progress and entries as you make progress</p>
+          <p class="about-paragraph">Post progress and entries as you work</p>
         </div>
         <div class="col">
           <img src="/img/step-two-update-daily.png" class="about-page-img-desktop"
@@ -43,20 +67,6 @@
       </div>
     </div>
     <div class="row about-row">
-      <h2>What is Skriftr?</h2>
-      <h6>Skriftr is an online journal and progress tracker proof-of-concept, intended for users who are learning new
-        skills.</h6>
-      <p class="about-paragraph">In the midst of the Covid-19 pandemic, many people began learning new skills and
-        started self improvement
-        journeys. At the same time, they had to do those things in relatively isolated conditions. The combination of
-        stress and isolation is not conducive to learning anything, and can leave anyone feeling like their goals are
-        unachievable. Skriftr is a personal project created in that environment; it's a place for tracking progress
-        in a personal way, where users can reflect on their efforts in human and personal terms rather than in
-        terms of "points" or "achievement". In short, Skriftr is an application where users can track their
-        progress and feelings privately, and even visualize their confidence with their progress over time while they
-        learn.</p>
-    </div>
-    <div class="row about-row">
       <h4>The goals of Skriftr</h4>
       <p class="about-paragraph">Skriftr is a personal project. This website <i> does not collect data, share data, or
           operate as a business in
@@ -70,7 +80,7 @@
           information
           can be lost, and systems can break.</i> I do not have the resources to account for every possibility, and do
         not
-        want anyone using this application to feel mislead. So please, experiment and use this website as much as you'd
+        want anyone using this application to feel misled. So please, experiment and use this website as much as you'd
         like! But protect yourself by not using a repeat password, use a long password, and never make any journal
         entries
         that include personal information. Thank you.</p>
@@ -117,7 +127,8 @@
           <input type="radio" id="other" name="contactType" value="other">
           <label for="other">Other</label>
         </div>
-        <textarea name="description" id="contact-description" cols="30" rows="3" placeholder="What's up?" required></textarea>
+        <textarea name="description" id="contact-description" cols="30" rows="3" placeholder="What's up?"
+          required></textarea>
         <button type="submit" class="btn btn-success" id="contact-submit">Contact</button>
       </form>
     </div>

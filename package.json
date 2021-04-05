@@ -16,7 +16,7 @@
     "express.js"
   ],
   "author": "Chris Baker",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "dependencies": {
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^2.4.1",
