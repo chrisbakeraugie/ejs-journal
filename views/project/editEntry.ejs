@@ -5,9 +5,9 @@
   <form class="card w-50" id="edit-entry" action="/projects/<%= entry._id %>/edit?_method=PUT" method="POST">
     <div class="card-body">
       <div class="card-text" id="entry-title"><input id="title" type="text" name="title"
-          value="<%= entry.title %>" >
+          value="<%= entry.title %>" maxlength="100">
       </div>
-      <div class="card-text" id="entry-description"><textarea id="description" type="text" name="description"><%= entry.description %></textarea></div>
+      <div class="card-text" id="entry-description"><textarea id="description" type="text" name="description" maxlength="1310"><%= entry.description %></textarea></div>
       <div class="card-text" id="entry-range">
         <label for="mood-range" id="edit-entry-confidence-label">Confidence</label>
         <input class="range" type="range" min="1" max="100" value="<%= entry.mood %>" name="mood" id="mood-range">
